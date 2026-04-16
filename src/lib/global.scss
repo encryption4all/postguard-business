@@ -94,12 +94,15 @@ h4,
 h5,
 a,
 p,
+span,
 li,
 label,
 td,
 tr,
-summary {
-	font-family: 'Overpass';
+th,
+summary,
+div {
+	font-family: 'Overpass', sans-serif;
 	font-style: normal;
 	color: var(--pg-text);
 }
