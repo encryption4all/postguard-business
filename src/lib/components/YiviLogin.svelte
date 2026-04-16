@@ -34,6 +34,7 @@
 			const yivi = new YiviCore({
 				debugging: false,
 				element: '#yivi-login-container',
+				language: 'en',
 				session: {
 					url: '/irma',
 					start: {
