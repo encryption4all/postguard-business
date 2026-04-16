@@ -6,7 +6,10 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			// yivi-css has "main": "dist/yivi.min.css" which Vite 8 can't resolve as a JS import
-			'@privacybydesign/yivi-css': '@privacybydesign/yivi-css/dist/yivi.css'
+			'@privacybydesign/yivi-css': '@privacybydesign/yivi-css/dist/yivi.css',
+			// eventsource@1 (yivi-client dep) uses Node's util.inherits which breaks in browser.
+			// Browsers have native EventSource, so stub the polyfill.
+			eventsource: '/src/lib/stubs/eventsource.ts'
 		}
 	},
 	server: {
