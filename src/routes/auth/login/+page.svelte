@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
+	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
+	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import type { PageData } from './$types';
@@ -17,6 +19,13 @@
 <SEO title="Login" description="Log in to your PostGuard for Business account." />
 
 <section class="login-page">
+	<div class="login-header">
+		<a href="/" class="logo">
+			<Icon icon="mdi:shield-lock" width="24" height="24" />
+			<span>PostGuard</span>
+		</a>
+		<ThemeSwitcher />
+	</div>
 	<div class="login-card">
 		<h1>Log in</h1>
 		<p class="login-subtitle">
@@ -37,21 +46,37 @@
 <style lang="scss">
 	.login-page {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		align-items: center;
-		min-height: 80vh;
-		padding: 3rem 1.5rem;
-		background: linear-gradient(
-			180deg,
-			var(--pg-soft-background) 0%,
-			var(--pg-general-background) 100%
-		);
+		min-height: 100vh;
+		padding: 0 1.5rem 3rem;
+		background: var(--pg-general-background);
+	}
+
+	.login-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		max-width: 440px;
+		padding: 1.5rem 0;
+	}
+
+	.logo {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		text-decoration: none;
+		color: var(--pg-text);
+		font-family: var(--pg-font-family);
+		font-weight: var(--pg-font-weight-extrabold);
+		font-size: var(--pg-font-size-lg);
 	}
 
 	.login-card {
 		width: 100%;
 		max-width: 440px;
-		background: var(--pg-general-background);
+		background: var(--pg-soft-background);
 		border: 1px solid var(--pg-strong-background);
 		border-radius: var(--pg-border-radius-lg);
 		padding: 2.5rem 2rem;
