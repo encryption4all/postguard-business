@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
+import path from 'path';
 
 export default defineConfig({
 	plugins: [sveltekit()],
@@ -9,8 +10,17 @@ export default defineConfig({
 			'@privacybydesign/yivi-css': '@privacybydesign/yivi-css/dist/yivi.css',
 			// eventsource@1 (yivi-client dep) uses Node's util.inherits which breaks in browser.
 			// Browsers have native EventSource, so stub the polyfill.
-			eventsource: '/src/lib/stubs/eventsource.ts'
+			eventsource: path.resolve('src/lib/stubs/eventsource.ts')
 		}
+	},
+	optimizeDeps: {
+		// Force yivi packages through pre-bundling so CJS→ESM conversion happens,
+		// and include the eventsource stub so the alias is resolved during pre-bundling.
+		include: [
+			'@privacybydesign/yivi-core',
+			'@privacybydesign/yivi-web',
+			'@privacybydesign/yivi-client'
+		]
 	},
 	server: {
 		// HMR through nginx proxy on port 8080
