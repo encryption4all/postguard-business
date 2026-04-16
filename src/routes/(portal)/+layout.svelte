@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import logoLight from '$lib/assets/images/logo.svg';
+	import logoDark from '$lib/assets/images/logo-dark.svg';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import type { LayoutData } from './$types';
 
@@ -37,7 +39,7 @@
 	<aside class="sidebar" class:open={sidebarOpen}>
 		<div class="sidebar-header">
 			<a href="/" class="sidebar-logo">
-				<Icon icon="mdi:shield-lock" width="24" height="24" />
+				<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
 				<span>PostGuard</span>
 			</a>
 			<button class="sidebar-close desktop-hide" onclick={() => (sidebarOpen = false)}>

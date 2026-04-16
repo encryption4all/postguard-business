@@ -3,6 +3,8 @@
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
 	import Icon from '@iconify/svelte';
+	import logoLight from '$lib/assets/images/logo.svg';
+	import logoDark from '$lib/assets/images/logo-dark.svg';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import type { PageData } from './$types';
@@ -21,7 +23,7 @@
 <section class="login-page">
 	<div class="login-header">
 		<a href="/" class="logo">
-			<Icon icon="mdi:shield-lock" width="24" height="24" />
+			<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
 			<span>PostGuard</span>
 		</a>
 		<ThemeSwitcher />

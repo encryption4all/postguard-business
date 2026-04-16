@@ -79,6 +79,18 @@ body {
 	.invert {
 		filter: invert(100%);
 	}
+
+	.light-only {
+		display: none !important;
+	}
+}
+
+.dark-only {
+	display: none !important;
+}
+
+.dark .dark-only {
+	display: block !important;
 }
 
 *,

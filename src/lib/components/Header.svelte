@@ -1,6 +1,8 @@
 <script lang="ts">
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
 	import Icon from '@iconify/svelte';
+	import logoLight from '$lib/assets/images/logo.svg';
+	import logoDark from '$lib/assets/images/logo-dark.svg';
 
 	let {
 		showPricing = true,
@@ -26,8 +28,8 @@
 <header>
 	<div class="header-inner">
 		<a href="/" class="logo" aria-label="PostGuard for Business home">
-			<Icon icon="mdi:shield-lock" width="28" height="28" />
-			<span class="logo-text">PostGuard</span>
+			<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="28" />
+			<img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="28" />
 			<span class="logo-badge">Business</span>
 		</a>
 
@@ -85,12 +87,6 @@
 		gap: 0.5rem;
 		text-decoration: none;
 		color: var(--pg-text);
-	}
-
-	.logo-text {
-		font-family: var(--pg-font-family);
-		font-weight: var(--pg-font-weight-extrabold);
-		font-size: var(--pg-font-size-lg);
 	}
 
 	.logo-badge {
