@@ -8,20 +8,14 @@ services:
       - .:/app
       - /app/node_modules
       - /app/.svelte-kit
+    env_file:
+      - .env
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgres://devuser:devpassword@postgres:5432/postguard_business
       - YIVI_SERVER_URL=http://irma-server:8088
       - YIVI_DEMO_ATTRIBUTES=true
       - ORIGIN=http://localhost:8080
-      - FF_PRICING_PAGE=true
-      - FF_REGISTRATION=true
-      - FF_PORTAL_API_KEYS=true
-      - FF_PORTAL_ORG_INFO=true
-      - FF_PORTAL_EMAIL_LOG=true
-      - FF_PORTAL_DNS=true
-      - FF_ADMIN_PANEL=true
-      - FF_ADMIN_IMPERSONATION=true
     networks:
       - pgb-network
     depends_on:
