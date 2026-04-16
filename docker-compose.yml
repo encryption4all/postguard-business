@@ -23,6 +23,26 @@ services:
     networks:
       - pgb-network
     depends_on:
+      db-setup:
+        condition: service_completed_successfully
+
+  # Pushes the Drizzle schema and seeds the database on first run
+  db-setup:
+    build:
+      context: .
+      dockerfile: docker/dev.Dockerfile
+    container_name: pgb-db-setup
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=postgres://devuser:devpassword@postgres:5432/postguard_business
+    env_file:
+      - .env
+    entrypoint: ["sh", "-c", "npx drizzle-kit push && npx tsx scripts/seed.ts"]
+    networks:
+      - pgb-network
+    depends_on:
       postgres:
         condition: service_healthy
 
