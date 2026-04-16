@@ -12,7 +12,7 @@
 		/>
 		<h1>{page.status}</h1>
 		<p>{page.error?.message || 'Something went wrong'}</p>
-		<a href="/" class="secondary-btn">Back to home</a>
+		<button class="secondary-btn" onclick={() => history.back()}>Go back</button>
 	</div>
 </div>
 
