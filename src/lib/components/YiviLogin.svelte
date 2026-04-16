@@ -1,5 +1,10 @@
 <script lang="ts">
+	import '@privacybydesign/yivi-css';
 	import Icon from '@iconify/svelte';
+
+	const ATTR_EMAIL = 'pbdf.sidn-pbdf.email.email';
+	const ATTR_FULLNAME = 'pbdf.gemeente.personalData.fullname';
+	const ATTR_PHONE = 'pbdf.sidn-pbdf.mobilenumber.mobilenumber';
 
 	let {
 		type = 'org',
@@ -9,100 +14,104 @@
 		onSuccess: (data: { userType: string }) => void;
 	} = $props();
 
-	let status = $state<'idle' | 'loading' | 'waiting' | 'success' | 'error'>('idle');
+	let status = $state<'idle' | 'running' | 'success' | 'error'>('idle');
 	let errorMessage = $state('');
-	let yiviToken = $state('');
-	let sessionPtr = $state<unknown>(null);
-	let pollInterval = $state<ReturnType<typeof setInterval> | null>(null);
+	let irmaToken = $state('');
 
-	async function startSession() {
-		status = 'loading';
+	async function startYiviFlow() {
+		status = 'running';
 		errorMessage = '';
+		irmaToken = '';
 
 		try {
-			const response = await fetch('/api/auth/yivi/start', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ type })
+			const YiviCore = (await import('@privacybydesign/yivi-core')).default;
+			const YiviWeb = (await import('@privacybydesign/yivi-web')).default;
+			const YiviClient = (await import('@privacybydesign/yivi-client')).default;
+
+			const disclose =
+				type === 'admin'
+					? [[[ATTR_EMAIL]], [[ATTR_FULLNAME]], [[ATTR_PHONE]]]
+					: [[[ATTR_EMAIL]]];
+
+			const yivi = new YiviCore({
+				debugging: false,
+				element: '#yivi-login-container',
+				session: {
+					url: '/irma',
+					start: {
+						url: (o: { url: string }) => `${o.url}/session`,
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							'@context': 'https://irma.app/ld/request/disclosure/v2',
+							disclose
+						})
+					},
+					mapping: {
+						sessionPtr: (r: { sessionPtr: unknown }) => r.sessionPtr,
+						sessionToken: (r: { token: string }) => {
+							// Capture the session token for our callback
+							irmaToken = r.token;
+							return r.token;
+						},
+						frontendRequest: (r: { frontendRequest?: unknown }) => r.frontendRequest
+					}
+				}
 			});
 
-			if (!response.ok) throw new Error('Failed to start Yivi session');
+			yivi.use(YiviWeb);
+			yivi.use(YiviClient);
 
-			const data = await response.json();
-			yiviToken = data.token;
-			sessionPtr = data.sessionPtr;
-			status = 'waiting';
+			// yivi.start() resolves when the IRMA disclosure is complete
+			// The result is fetched from /irma/session/{token}/result by yivi-client
+			await yivi.start();
 
-			// Poll for result
-			pollInterval = setInterval(checkResult, 2000);
-		} catch {
-			status = 'error';
-			errorMessage = 'Could not start Yivi session. Please try again.';
-		}
-	}
-
-	async function checkResult() {
-		if (!yiviToken) return;
-
-		try {
+			// Now send the IRMA session token to our backend to verify and create a session
 			const response = await fetch('/api/auth/yivi/callback', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ token: yiviToken, type })
+				body: JSON.stringify({ irmaSessionToken: irmaToken, type })
 			});
 
 			if (response.ok) {
-				if (pollInterval) clearInterval(pollInterval);
 				status = 'success';
 				const data = await response.json();
 				onSuccess(data);
-			} else if (response.status === 401) {
-				// Still waiting for disclosure
 			} else {
-				if (pollInterval) clearInterval(pollInterval);
 				const err = await response.json();
 				status = 'error';
 				errorMessage = err.message ?? 'Authentication failed';
 			}
-		} catch {
-			// Network error, keep polling
+		} catch (e: unknown) {
+			if (status === 'running') {
+				status = 'error';
+				errorMessage =
+					e instanceof Error ? e.message : 'Yivi session failed. Please try again.';
+			}
 		}
 	}
 
-	function cancel() {
-		if (pollInterval) clearInterval(pollInterval);
+	function retry() {
 		status = 'idle';
-		yiviToken = '';
-		sessionPtr = null;
+		errorMessage = '';
 	}
 </script>
 
 <div class="yivi-login">
 	{#if status === 'idle'}
-		<button class="primary-btn yivi-btn" onclick={startSession}>
+		<button class="primary-btn yivi-btn" onclick={startYiviFlow}>
 			<Icon icon="mdi:qrcode-scan" width="20" height="20" />
 			{type === 'admin' ? 'Login as admin with Yivi' : 'Login with Yivi'}
 		</button>
-	{:else if status === 'loading'}
-		<div class="yivi-status">
-			<Icon icon="mdi:loading" width="32" height="32" class="spin" />
-			<p>Starting Yivi session...</p>
-		</div>
-	{:else if status === 'waiting'}
-		<div class="yivi-status">
-			<div class="qr-placeholder">
-				<Icon icon="mdi:qrcode" width="120" height="120" />
-				<p class="qr-hint">Scan with your Yivi app</p>
-			</div>
-			<p class="waiting-text">
-				{#if type === 'admin'}
-					Please disclose your name, email, and phone number.
-				{:else}
-					Please disclose your organization email address.
-				{/if}
-			</p>
-			<button class="secondary-btn" onclick={cancel}>Cancel</button>
-		</div>
+	{:else if status === 'running'}
+		<div id="yivi-login-container" class="yivi-container"></div>
+		<p class="waiting-text">
+			{#if type === 'admin'}
+				Please disclose your name, email, and phone number.
+			{:else}
+				Please disclose your organization email address.
+			{/if}
+		</p>
 	{:else if status === 'success'}
 		<div class="yivi-status success">
 			<Icon icon="mdi:check-circle" width="48" height="48" />
@@ -112,7 +121,7 @@
 		<div class="yivi-status error">
 			<Icon icon="mdi:alert-circle" width="32" height="32" />
 			<p>{errorMessage}</p>
-			<button class="secondary-btn" onclick={startSession}>Try again</button>
+			<button class="secondary-btn" onclick={retry}>Try again</button>
 		</div>
 	{/if}
 </div>
@@ -126,6 +135,19 @@
 
 	.yivi-btn {
 		gap: 0.5rem;
+	}
+
+	.yivi-container {
+		min-width: 260px;
+		min-height: 260px;
+	}
+
+	.waiting-text {
+		max-width: 300px;
+		text-align: center;
+		line-height: 1.5;
+		color: var(--pg-text-secondary);
+		margin-top: 1rem;
 	}
 
 	.yivi-status {
@@ -150,40 +172,6 @@
 
 		&.error p {
 			color: var(--pg-input-error);
-		}
-	}
-
-	.qr-placeholder {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 1.5rem;
-		background: var(--pg-soft-background);
-		border-radius: var(--pg-border-radius-lg);
-		color: var(--pg-text-secondary);
-	}
-
-	.qr-hint {
-		font-size: var(--pg-font-size-sm);
-		font-weight: var(--pg-font-weight-medium);
-	}
-
-	.waiting-text {
-		max-width: 300px;
-		line-height: 1.5;
-	}
-
-	:global(.spin) {
-		animation: spin 1s linear infinite;
-	}
-
-	@keyframes spin {
-		from {
-			transform: rotate(0deg);
-		}
-		to {
-			transform: rotate(360deg);
 		}
 	}
 </style>

@@ -2,58 +2,32 @@ import { env } from '$env/dynamic/private';
 
 const YIVI_SERVER_URL = env.YIVI_SERVER_URL ?? 'http://localhost:8088';
 
-interface YiviSessionResult {
-	proofStatus: string;
-	disclosed: Array<Array<{ id: string; rawvalue: string }>>;
-}
-
 // Attribute identifiers used in Yivi/IRMA
-const ATTR = {
+export const ATTR = {
 	email: 'pbdf.sidn-pbdf.email.email',
 	fullName: 'pbdf.gemeente.personalData.fullname',
 	phone: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber'
 } as const;
 
-export interface YiviDisclosureRequest {
-	type: 'org' | 'admin';
+interface YiviSessionResult {
+	proofStatus: string;
+	disclosed: Array<Array<{ id: string; rawvalue: string }>>;
 }
 
-export async function startYiviSession(type: 'org' | 'admin'): Promise<{ sessionPtr: unknown; token: string }> {
-	// IRMA disclose format: string[][][] (disjunctions of conjunctions of attribute IDs)
-	// Outer array = AND (all must be satisfied)
-	// Middle array = OR (one conjunction must be satisfied)
-	// Inner array = AND (all attributes in the conjunction)
-	const disclose =
-		type === 'admin'
-			? [[[ATTR.email]], [[ATTR.fullName]], [[ATTR.phone]]]
-			: [[[ATTR.email]]];
-
-	const response = await fetch(`${YIVI_SERVER_URL}/session`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({
-			'@context': 'https://irma.app/ld/request/disclosure/v2',
-			disclose
-		})
-	});
-
-	if (!response.ok) {
-		throw new Error(`Failed to start Yivi session: ${response.status}`);
-	}
-
-	return response.json();
-}
-
-export async function getYiviSessionResult(token: string): Promise<{
+/**
+ * Verify a completed Yivi session by fetching the result from the IRMA server.
+ * Called after the Yivi frontend SDK completes the disclosure flow.
+ */
+export async function verifyYiviSession(irmaSessionToken: string): Promise<{
 	valid: boolean;
 	attributes: Record<string, string>;
 }> {
-	const response = await fetch(`${YIVI_SERVER_URL}/session/${token}/result`, {
+	const response = await fetch(`${YIVI_SERVER_URL}/session/${irmaSessionToken}/result`, {
 		method: 'GET'
 	});
 
 	if (!response.ok) {
-		throw new Error(`Failed to get Yivi result: ${response.status}`);
+		return { valid: false, attributes: {} };
 	}
 
 	const result: YiviSessionResult = await response.json();
@@ -65,7 +39,6 @@ export async function getYiviSessionResult(token: string): Promise<{
 	const attributes: Record<string, string> = {};
 	for (const discon of result.disclosed) {
 		for (const attr of discon) {
-			// Map full attribute ID to short key
 			if (attr.id === ATTR.email) attributes.email = attr.rawvalue;
 			else if (attr.id === ATTR.fullName) attributes.fullName = attr.rawvalue;
 			else if (attr.id === ATTR.phone) attributes.phone = attr.rawvalue;

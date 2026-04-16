@@ -1,6 +1,6 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getYiviSessionResult } from '$lib/server/auth/yivi';
+import { verifyYiviSession } from '$lib/server/auth/yivi';
 import {
 	createSession,
 	findOrgByEmail,
@@ -9,13 +9,16 @@ import {
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
-	const { token, type } = body as { token: string; type: 'org' | 'admin' };
+	const { irmaSessionToken, type } = body as {
+		irmaSessionToken: string;
+		type: 'org' | 'admin';
+	};
 
-	if (!token || (type !== 'org' && type !== 'admin')) {
-		error(400, 'Missing token or invalid type');
+	if (!irmaSessionToken || (type !== 'org' && type !== 'admin')) {
+		error(400, 'Missing irmaSessionToken or invalid type');
 	}
 
-	const result = await getYiviSessionResult(token);
+	const result = await verifyYiviSession(irmaSessionToken);
 
 	if (!result.valid) {
 		error(401, 'Yivi verification failed');
