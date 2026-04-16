@@ -1,5 +1,5 @@
 import type { Actions, PageServerLoad } from './$types';
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import {
 	listOrganizations,
 	listPendingRequests,
@@ -16,11 +16,16 @@ export const load: PageServerLoad = async () => {
 		listPendingRequests()
 	]);
 
-	return { organizations: orgs, pendingRequests };
+	return {
+		organizations: orgs,
+		pendingRequests,
+		orgStatusEnabled: isEnabled('adminOrgStatus')
+	};
 };
 
 export const actions: Actions = {
 	activate: async ({ request, locals }) => {
+		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
@@ -31,6 +36,7 @@ export const actions: Actions = {
 		await logAdminAction(adminId, 'activate_org', 'organization', orgId, {}, null);
 	},
 	suspend: async ({ request, locals }) => {
+		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();

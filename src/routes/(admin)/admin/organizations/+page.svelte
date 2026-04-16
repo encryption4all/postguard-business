@@ -40,9 +40,9 @@
 					<th>Name</th>
 					<th>Domain</th>
 					<th>Email</th>
-					<th>Status</th>
+					{#if data.orgStatusEnabled}<th>Status</th>{/if}
 					<th>Created</th>
-					<th></th>
+					{#if data.orgStatusEnabled}<th></th>{/if}
 				</tr>
 			</thead>
 			<tbody>
@@ -51,30 +51,34 @@
 						<td><a href="/admin/organizations/{org.id}" class="org-link">{org.name}</a></td>
 						<td>{org.domain}</td>
 						<td>{org.email}</td>
-						<td>
-							<span class="status" class:active={org.status === 'active'} class:pending={org.status === 'pending'} class:suspended={org.status === 'suspended'}>
-								{org.status}
-							</span>
-						</td>
+						{#if data.orgStatusEnabled}
+							<td>
+								<span class="status" class:active={org.status === 'active'} class:pending={org.status === 'pending'} class:suspended={org.status === 'suspended'}>
+									{org.status}
+								</span>
+							</td>
+						{/if}
 						<td>{new Date(org.createdAt).toLocaleDateString()}</td>
-						<td class="actions">
-							{#if org.status === 'pending'}
-								<form method="POST" action="?/activate" use:enhance>
-									<input type="hidden" name="orgId" value={org.id} />
-									<button type="submit" class="action-btn approve">Activate</button>
-								</form>
-							{:else if org.status === 'active'}
-								<form method="POST" action="?/suspend" use:enhance>
-									<input type="hidden" name="orgId" value={org.id} />
-									<button type="submit" class="action-btn suspend">Suspend</button>
-								</form>
-							{:else}
-								<form method="POST" action="?/activate" use:enhance>
-									<input type="hidden" name="orgId" value={org.id} />
-									<button type="submit" class="action-btn approve">Reactivate</button>
-								</form>
-							{/if}
-						</td>
+						{#if data.orgStatusEnabled}
+							<td class="actions">
+								{#if org.status === 'pending'}
+									<form method="POST" action="?/activate" use:enhance>
+										<input type="hidden" name="orgId" value={org.id} />
+										<button type="submit" class="action-btn approve">Activate</button>
+									</form>
+								{:else if org.status === 'active'}
+									<form method="POST" action="?/suspend" use:enhance>
+										<input type="hidden" name="orgId" value={org.id} />
+										<button type="submit" class="action-btn suspend">Suspend</button>
+									</form>
+								{:else}
+									<form method="POST" action="?/activate" use:enhance>
+										<input type="hidden" name="orgId" value={org.id} />
+										<button type="submit" class="action-btn approve">Reactivate</button>
+									</form>
+								{/if}
+							</td>
+						{/if}
 					</tr>
 				{/each}
 			</tbody>
