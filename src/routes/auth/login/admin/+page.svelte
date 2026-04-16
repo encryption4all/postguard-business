@@ -2,35 +2,27 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const redirectTo = $derived(page.url.searchParams.get('redirect') ?? '/portal/dashboard');
-
 	function handleSuccess() {
-		goto(redirectTo);
+		goto('/admin/organizations');
 	}
 </script>
 
-<SEO title="Login" description="Log in to your PostGuard for Business account." />
+<SEO title="Admin Login" />
 
 <section class="login-page">
 	<div class="login-card">
-		<h1>Log in</h1>
+		<h1>Admin Login</h1>
 		<p class="login-subtitle">
-			Authenticate with your Yivi app to access your organization portal.
+			Disclose your full name, email address, and phone number to log in as an administrator.
 		</p>
 
 		<div class="login-content">
-			<p class="login-hint">Disclose your organization email address to log in.</p>
-			<YiviLogin type="org" attrs={data.yiviAttrs} onSuccess={handleSuccess} />
+			<YiviLogin type="admin" attrs={data.yiviAttrs} onSuccess={handleSuccess} />
 		</div>
-
-		<p class="login-footer">
-			Don't have an account? <a href="/register">Register your organization</a>
-		</p>
 	</div>
 </section>
 
@@ -65,27 +57,10 @@
 	.login-subtitle {
 		color: var(--pg-text-secondary);
 		margin-bottom: 1.5rem;
+		line-height: 1.5;
 	}
 
 	.login-content {
 		padding: 1rem 0;
-	}
-
-	.login-hint {
-		color: var(--pg-text-secondary);
-		font-size: var(--pg-font-size-sm);
-		margin-bottom: 1.5rem;
-		line-height: 1.5;
-	}
-
-	.login-footer {
-		margin-top: 1.5rem;
-		font-size: var(--pg-font-size-sm);
-		color: var(--pg-text-secondary);
-
-		a {
-			color: var(--pg-primary);
-			font-weight: var(--pg-font-weight-medium);
-		}
 	}
 </style>

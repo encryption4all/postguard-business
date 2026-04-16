@@ -6,11 +6,11 @@ import { eq } from 'drizzle-orm';
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
 	if (!locals.session || locals.session.userType !== 'admin') {
-		redirect(303, `/auth/login?redirect=${encodeURIComponent(url.pathname)}`);
+		redirect(303, '/auth/login/admin');
 	}
 
 	const adminId = locals.session.adminId;
-	if (!adminId) redirect(303, '/auth/login');
+	if (!adminId) redirect(303, '/auth/login/admin');
 
 	const admins = await db
 		.select()
@@ -19,7 +19,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 		.limit(1);
 
 	const admin = admins[0];
-	if (!admin) redirect(303, '/auth/login');
+	if (!admin) redirect(303, '/auth/login/admin');
 
 	return {
 		admin: {
