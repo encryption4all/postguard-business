@@ -1,5 +1,5 @@
 import type { Actions, PageServerLoad } from './$types';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import {
 	getOrganizationWithRequests,
 	approveChangeRequest,
@@ -65,6 +65,6 @@ export const actions: Actions = {
 		if (!isEnabled('adminImpersonation')) return fail(404);
 		if (!locals.session) return fail(401);
 		await setImpersonation(locals.session.id, params.id);
-		return { impersonating: true };
+		redirect(303, '/portal/dashboard');
 	}
 };

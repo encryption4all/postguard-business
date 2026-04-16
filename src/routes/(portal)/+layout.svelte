@@ -23,6 +23,16 @@
 	]);
 </script>
 
+{#if data.isImpersonating}
+	<div class="impersonation-bar">
+		<Icon icon="mdi:eye" width="16" height="16" />
+		<span>Viewing as <strong>{data.organization.name}</strong></span>
+		<form method="POST" action="/api/admin/impersonate/stop">
+			<button type="submit" class="stop-btn">Stop impersonating</button>
+		</form>
+	</div>
+{/if}
+
 <div class="portal">
 	<aside class="sidebar" class:open={sidebarOpen}>
 		<div class="sidebar-header">
@@ -80,6 +90,36 @@
 {/if}
 
 <style lang="scss">
+	.impersonation-bar {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		background: #b45309;
+		color: #fff;
+		padding: 0.5rem;
+		font-size: var(--pg-font-size-sm);
+		font-family: var(--pg-font-family);
+
+		:global(svg) {
+			color: #fff;
+		}
+	}
+
+	.stop-btn {
+		background: rgba(255, 255, 255, 0.2);
+		color: #fff;
+		font-size: var(--pg-font-size-xs);
+		padding: 2px 10px;
+		border-radius: 100px;
+		font-family: var(--pg-font-family);
+		font-weight: var(--pg-font-weight-medium);
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.3);
+		}
+	}
+
 	.portal {
 		display: flex;
 		min-height: 100vh;

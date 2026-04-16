@@ -6,11 +6,20 @@ import { eq } from 'drizzle-orm';
 import { isEnabled } from '$lib/feature-flags';
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
-	if (!locals.session || locals.session.userType !== 'org') {
+	if (!locals.session) {
 		redirect(303, `/auth/login?redirect=${encodeURIComponent(url.pathname)}`);
 	}
 
-	const orgId = locals.session.orgId;
+	// Allow org users directly, or admins who are impersonating
+	const isOrgUser = locals.session.userType === 'org';
+	const isImpersonating =
+		locals.session.userType === 'admin' && locals.session.impersonatingOrgId;
+
+	if (!isOrgUser && !isImpersonating) {
+		redirect(303, `/auth/login?redirect=${encodeURIComponent(url.pathname)}`);
+	}
+
+	const orgId = isImpersonating ? locals.session.impersonatingOrgId : locals.session.orgId;
 	if (!orgId) {
 		redirect(303, '/auth/login');
 	}
@@ -33,6 +42,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 			kvkNumber: org.kvkNumber,
 			status: org.status
 		},
+		isImpersonating: !!isImpersonating,
 		featureFlags: {
 			apiKeys: isEnabled('portalApiKeys'),
 			orgInfo: isEnabled('portalOrgInfo'),
