@@ -1,8 +1,10 @@
 import type { Actions, PageServerLoad } from './$types';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { listEmailLogs, revokeEmail } from '$lib/server/services/email-log';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ parent, url }) => {
+	if (!isEnabled('portalEmailLog')) error(404, 'Not found');
 	const { organization } = await parent();
 	const page = parseInt(url.searchParams.get('page') ?? '1', 10);
 	const search = url.searchParams.get('search') ?? undefined;

@@ -3,6 +3,7 @@ import type { LayoutServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { organizations } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
 	if (!locals.session || locals.session.userType !== 'org') {
@@ -31,6 +32,9 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 			phone: org.phone,
 			kvkNumber: org.kvkNumber,
 			status: org.status
+		},
+		featureFlags: {
+			emailLog: isEnabled('portalEmailLog')
 		}
 	};
 };

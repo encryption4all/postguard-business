@@ -6,13 +6,15 @@
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 	let sidebarOpen = $state(false);
 
-	const navItems = [
+	const navItems = $derived([
 		{ href: '/portal/dashboard', label: 'Dashboard', icon: 'mdi:view-dashboard' },
 		{ href: '/portal/api-keys', label: 'API Keys', icon: 'mdi:key-variant' },
 		{ href: '/portal/organization', label: 'Organization', icon: 'mdi:office-building' },
-		{ href: '/portal/email-log', label: 'Email Log', icon: 'mdi:email-search' },
+		...(data.featureFlags.emailLog
+			? [{ href: '/portal/email-log', label: 'Email Log', icon: 'mdi:email-search' }]
+			: []),
 		{ href: '/portal/dns', label: 'DNS Verification', icon: 'mdi:dns' }
-	];
+	]);
 </script>
 
 <div class="portal">
