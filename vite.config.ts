@@ -3,6 +3,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	resolve: {
+		alias: {
+			// yivi-css has "main": "dist/yivi.min.css" which Vite 8 can't resolve as a JS import
+			'@privacybydesign/yivi-css': '@privacybydesign/yivi-css/dist/yivi.css'
+		}
+	},
 	test: {
 		projects: [
 			{

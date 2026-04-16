@@ -1,11 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import '@privacybydesign/yivi-css';
 	import Icon from '@iconify/svelte';
-
-	onMount(() => {
-		// Load Yivi CSS in the browser only
-		import('@privacybydesign/yivi-css/dist/yivi.css');
-	});
 
 	const ATTR_EMAIL = 'pbdf.sidn-pbdf.email.email';
 	const ATTR_FULLNAME = 'pbdf.gemeente.personalData.fullname';
