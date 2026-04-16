@@ -51,11 +51,20 @@
 					mapping: {
 						sessionPtr: (r: { sessionPtr: unknown }) => r.sessionPtr,
 						sessionToken: (r: { token: string }) => {
-							// Capture the session token for our callback
 							irmaToken = r.token;
 							return r.token;
 						},
 						frontendRequest: (r: { frontendRequest?: unknown }) => r.frontendRequest
+					}
+				},
+				state: {
+					// Disable SSE — native EventSource doesn't support Authorization headers,
+					// causing 403 from IRMA server. Polling with fetch works fine.
+					serverSentEvents: false,
+					polling: {
+						endpoint: 'status',
+						interval: 1000,
+						startState: 'INITIALIZED'
 					}
 				}
 			});
