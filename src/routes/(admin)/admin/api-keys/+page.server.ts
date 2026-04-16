@@ -1,9 +1,11 @@
 import type { Actions, PageServerLoad } from './$types';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { listAllApiKeys, adminRevokeApiKey, logAdminAction } from '$lib/server/services/admin';
 import { createApiKey } from '$lib/server/services/api-keys';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async () => {
+	if (!isEnabled('adminPanel')) error(404, 'Not found');
 	const keys = await listAllApiKeys();
 	return { keys };
 };

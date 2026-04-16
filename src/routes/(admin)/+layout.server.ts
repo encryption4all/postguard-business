@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { adminAccounts } from '$lib/server/db/schema';
@@ -28,6 +28,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 			fullName: admin.fullName,
 			email: admin.email
 		},
-		impersonatingOrgId: isEnabled('adminImpersonation') ? locals.session.impersonatingOrgId : null
+		impersonatingOrgId: isEnabled('adminImpersonation') ? locals.session.impersonatingOrgId : null,
+		adminPanelEnabled: isEnabled('adminPanel')
 	};
 };

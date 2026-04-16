@@ -1,4 +1,5 @@
 import type { Actions, PageServerLoad } from './$types';
+import { error } from '@sveltejs/kit';
 import {
 	listOrganizations,
 	listPendingRequests,
@@ -6,8 +7,10 @@ import {
 	suspendOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async () => {
+	if (!isEnabled('adminPanel')) error(404, 'Not found');
 	const [orgs, pendingRequests] = await Promise.all([
 		listOrganizations(),
 		listPendingRequests()

@@ -10,6 +10,7 @@ import { setImpersonation } from '$lib/server/auth/session';
 import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ params }) => {
+	if (!isEnabled('adminPanel')) error(404, 'Not found');
 	const result = await getOrganizationWithRequests(params.id);
 	if (!result) error(404, 'Organization not found');
 	return { ...result, impersonationEnabled: isEnabled('adminImpersonation') };
