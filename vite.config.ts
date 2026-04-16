@@ -9,6 +9,16 @@ export default defineConfig({
 			'@privacybydesign/yivi-css': '@privacybydesign/yivi-css/dist/yivi.css'
 		}
 	},
+	optimizeDeps: {
+		// These are dynamically imported in YiviLogin.svelte so Vite won't discover
+		// them at startup. Force pre-bundling to avoid runtime failures.
+		include: [
+			'@privacybydesign/yivi-core',
+			'@privacybydesign/yivi-web',
+			'@privacybydesign/yivi-client',
+			'deepmerge'
+		]
+	},
 	server: {
 		// HMR through nginx proxy on port 8080
 		hmr: {
