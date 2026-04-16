@@ -1,6 +1,9 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
+	import type { PageData } from './$types';
+
+	let { data }: { data: PageData } = $props();
 </script>
 
 <SEO
@@ -18,7 +21,9 @@
 		</p>
 		<div class="hero-actions">
 			<a href="/register" class="primary-btn">Get started</a>
-			<a href="/pricing" class="secondary-btn">View pricing</a>
+			{#if data.marketingFlags.pricing}
+				<a href="/pricing" class="secondary-btn">View pricing</a>
+			{/if}
 		</div>
 	</div>
 </section>

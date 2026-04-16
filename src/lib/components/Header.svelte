@@ -2,17 +2,25 @@
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
 	import Icon from '@iconify/svelte';
 
+	let {
+		showPricing = true,
+		showRegister = true
+	}: {
+		showPricing?: boolean;
+		showRegister?: boolean;
+	} = $props();
+
 	let menuOpen = $state(false);
 
 	function toggleMenu() {
 		menuOpen = !menuOpen;
 	}
 
-	const navLinks = [
+	const navLinks = $derived([
 		{ href: '/', label: 'Home' },
-		{ href: '/pricing', label: 'Pricing' },
-		{ href: '/register', label: 'Register' }
-	];
+		...(showPricing ? [{ href: '/pricing', label: 'Pricing' }] : []),
+		...(showRegister ? [{ href: '/register', label: 'Register' }] : [])
+	]);
 </script>
 
 <header>
