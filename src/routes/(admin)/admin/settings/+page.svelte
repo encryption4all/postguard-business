@@ -46,9 +46,6 @@
 					<span class="flag-key">{flag}</span>
 				</div>
 				<div class="flag-controls">
-					{#if info.source === 'override'}
-						<span class="override-badge">override</span>
-					{/if}
 					<button
 						class="toggle"
 						class:on={info.value}
@@ -123,16 +120,6 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-	}
-
-	.override-badge {
-		font-family: var(--pg-font-family);
-		font-size: var(--pg-font-size-xs);
-		font-weight: var(--pg-font-weight-medium);
-		color: #b45309;
-		background: rgba(180, 83, 9, 0.1);
-		padding: 2px 6px;
-		border-radius: var(--pg-border-radius-sm);
 	}
 
 	.toggle {
