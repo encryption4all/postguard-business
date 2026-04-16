@@ -39,23 +39,23 @@
 
 		<div class="feature-card">
 			<div class="feature-icon">
-				<Icon icon="mdi:dns" width="32" height="32" />
+				<Icon icon="mdi:server-security" width="32" height="32" />
 			</div>
-			<h3>DNS Verification</h3>
+			<h3>Hosted in the EU</h3>
 			<p>
-				Verify your domain ownership and configure DNS records so PostGuard can sign emails on
-				your behalf.
+				All data is stored and processed within the European Union, ensuring full GDPR
+				compliance and data sovereignty.
 			</p>
 		</div>
 
 		<div class="feature-card">
 			<div class="feature-icon">
-				<Icon icon="mdi:clipboard-text-clock" width="32" height="32" />
+				<Icon icon="mdi:email-remove" width="32" height="32" />
 			</div>
-			<h3>Email Audit Log</h3>
+			<h3>Email Revocation <span class="coming-soon">Coming soon</span></h3>
 			<p>
-				Full audit trail of every signed email. Revoke emails, track read receipts, and export
-				compliance reports.
+				Revoke signed emails after sending. Recipients will be notified that the email is
+				no longer valid.
 			</p>
 		</div>
 
@@ -188,6 +188,17 @@
 			font-size: var(--pg-font-size-md);
 			line-height: 1.5;
 		}
+	}
+
+	.coming-soon {
+		font-size: var(--pg-font-size-xs);
+		font-weight: var(--pg-font-weight-bold);
+		background: var(--pg-strong-background);
+		color: var(--pg-text-secondary);
+		padding: 2px 8px;
+		border-radius: 100px;
+		vertical-align: middle;
+		margin-left: 0.25rem;
 	}
 
 	.feature-icon {
