@@ -34,7 +34,10 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 			status: org.status
 		},
 		featureFlags: {
-			emailLog: isEnabled('portalEmailLog')
+			apiKeys: isEnabled('portalApiKeys'),
+			orgInfo: isEnabled('portalOrgInfo'),
+			emailLog: isEnabled('portalEmailLog'),
+			dns: isEnabled('portalDns')
 		}
 	};
 };

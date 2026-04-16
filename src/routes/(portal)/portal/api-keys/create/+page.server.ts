@@ -1,6 +1,11 @@
 import type { Actions } from './$types';
-import { fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { createApiKey } from '$lib/server/services/api-keys';
+import { isEnabled } from '$lib/feature-flags';
+
+export function load() {
+	if (!isEnabled('portalApiKeys')) error(404, 'Not found');
+}
 
 export const actions: Actions = {
 	default: async ({ request, parent }) => {

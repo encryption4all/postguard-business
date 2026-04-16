@@ -8,12 +8,18 @@
 
 	const navItems = $derived([
 		{ href: '/portal/dashboard', label: 'Dashboard', icon: 'mdi:view-dashboard' },
-		{ href: '/portal/api-keys', label: 'API Keys', icon: 'mdi:key-variant' },
-		{ href: '/portal/organization', label: 'Organization', icon: 'mdi:office-building' },
+		...(data.featureFlags.apiKeys
+			? [{ href: '/portal/api-keys', label: 'API Keys', icon: 'mdi:key-variant' }]
+			: []),
+		...(data.featureFlags.orgInfo
+			? [{ href: '/portal/organization', label: 'Organization', icon: 'mdi:office-building' }]
+			: []),
 		...(data.featureFlags.emailLog
 			? [{ href: '/portal/email-log', label: 'Email Log', icon: 'mdi:email-search' }]
 			: []),
-		{ href: '/portal/dns', label: 'DNS Verification', icon: 'mdi:dns' }
+		...(data.featureFlags.dns
+			? [{ href: '/portal/dns', label: 'DNS Verification', icon: 'mdi:dns' }]
+			: [])
 	]);
 </script>
 

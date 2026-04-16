@@ -1,8 +1,10 @@
 import type { Actions, PageServerLoad } from './$types';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { createChangeRequest, listChangeRequests } from '$lib/server/services/organizations';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ parent }) => {
+	if (!isEnabled('portalOrgInfo')) error(404, 'Not found');
 	const { organization } = await parent();
 	const requests = await listChangeRequests(organization.id);
 	return { requests };
