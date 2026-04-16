@@ -11,59 +11,71 @@
 <h1>Dashboard</h1>
 
 <div class="stats-grid">
-	<div class="stat-card">
-		<div class="stat-icon">
-			<Icon icon="mdi:key-variant" width="24" height="24" />
+	{#if data.featureFlags.apiKeys}
+		<div class="stat-card">
+			<div class="stat-icon">
+				<Icon icon="mdi:key-variant" width="24" height="24" />
+			</div>
+			<div class="stat-info">
+				<p class="stat-value">{data.stats.activeKeys}</p>
+				<p class="stat-label">Active API keys</p>
+			</div>
+			<a href="/portal/api-keys" class="stat-link">Manage</a>
 		</div>
-		<div class="stat-info">
-			<p class="stat-value">{data.stats.activeKeys}</p>
-			<p class="stat-label">Active API keys</p>
-		</div>
-		<a href="/portal/api-keys" class="stat-link">Manage</a>
-	</div>
+	{/if}
 
-	<div class="stat-card">
-		<div class="stat-icon">
-			<Icon icon="mdi:email-check" width="24" height="24" />
+	{#if data.featureFlags.emailLog}
+		<div class="stat-card">
+			<div class="stat-icon">
+				<Icon icon="mdi:email-check" width="24" height="24" />
+			</div>
+			<div class="stat-info">
+				<p class="stat-value">{data.stats.emailsThisMonth}</p>
+				<p class="stat-label">Emails this month</p>
+			</div>
+			<a href="/portal/email-log" class="stat-link">View log</a>
 		</div>
-		<div class="stat-info">
-			<p class="stat-value">{data.stats.emailsThisMonth}</p>
-			<p class="stat-label">Emails this month</p>
-		</div>
-		<a href="/portal/email-log" class="stat-link">View log</a>
-	</div>
+	{/if}
 
-	<div class="stat-card">
-		<div class="stat-icon" class:verified={data.stats.dnsVerified}>
-			<Icon
-				icon={data.stats.dnsVerified ? 'mdi:check-circle' : 'mdi:alert-circle'}
-				width="24"
-				height="24"
-			/>
+	{#if data.featureFlags.dns}
+		<div class="stat-card">
+			<div class="stat-icon" class:verified={data.stats.dnsVerified}>
+				<Icon
+					icon={data.stats.dnsVerified ? 'mdi:check-circle' : 'mdi:alert-circle'}
+					width="24"
+					height="24"
+				/>
+			</div>
+			<div class="stat-info">
+				<p class="stat-value">{data.stats.dnsVerified ? 'Verified' : 'Pending'}</p>
+				<p class="stat-label">DNS status</p>
+			</div>
+			<a href="/portal/dns" class="stat-link">Configure</a>
 		</div>
-		<div class="stat-info">
-			<p class="stat-value">{data.stats.dnsVerified ? 'Verified' : 'Pending'}</p>
-			<p class="stat-label">DNS status</p>
-		</div>
-		<a href="/portal/dns" class="stat-link">Configure</a>
-	</div>
+	{/if}
 </div>
 
 <section class="quick-actions">
 	<h2>Quick actions</h2>
 	<div class="actions-row">
-		<a href="/portal/api-keys/create" class="action-card">
-			<Icon icon="mdi:key-plus" width="24" height="24" />
-			<span>Create API key</span>
-		</a>
-		<a href="/portal/organization" class="action-card">
-			<Icon icon="mdi:office-building-cog" width="24" height="24" />
-			<span>Edit organization</span>
-		</a>
-		<a href="/portal/email-log" class="action-card">
-			<Icon icon="mdi:file-document-outline" width="24" height="24" />
-			<span>Export audit log</span>
-		</a>
+		{#if data.featureFlags.apiKeys}
+			<a href="/portal/api-keys/create" class="action-card">
+				<Icon icon="mdi:key-plus" width="24" height="24" />
+				<span>Create API key</span>
+			</a>
+		{/if}
+		{#if data.featureFlags.orgInfo}
+			<a href="/portal/organization" class="action-card">
+				<Icon icon="mdi:office-building-cog" width="24" height="24" />
+				<span>Edit organization</span>
+			</a>
+		{/if}
+		{#if data.featureFlags.emailLog}
+			<a href="/portal/email-log" class="action-card">
+				<Icon icon="mdi:file-document-outline" width="24" height="24" />
+				<span>Export audit log</span>
+			</a>
+		{/if}
 	</div>
 </section>
 

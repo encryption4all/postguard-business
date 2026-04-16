@@ -2,6 +2,7 @@ import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { apiKeys, emailAuditLog, dnsVerifications } from '$lib/server/db/schema';
 import { eq, and, isNull, count, gte } from 'drizzle-orm';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { organization } = await parent();
@@ -29,6 +30,12 @@ export const load: PageServerLoad = async ({ parent }) => {
 			activeKeys: keyCount.count,
 			emailsThisMonth: emailCount.count,
 			dnsVerified: dnsResults[0]?.verified ?? false
+		},
+		featureFlags: {
+			apiKeys: isEnabled('portalApiKeys'),
+			orgInfo: isEnabled('portalOrgInfo'),
+			emailLog: isEnabled('portalEmailLog'),
+			dns: isEnabled('portalDns')
 		}
 	};
 };
