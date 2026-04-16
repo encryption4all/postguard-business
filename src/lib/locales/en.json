@@ -1,0 +1,61 @@
+{
+	"nav": {
+		"home": "Home",
+		"pricing": "Pricing",
+		"register": "Register",
+		"login": "Log in",
+		"logout": "Log out",
+		"dashboard": "Dashboard",
+		"apiKeys": "API Keys",
+		"organization": "Organization",
+		"emailLog": "Email Log",
+		"dns": "DNS Verification",
+		"admin": "Admin"
+	},
+	"hero": {
+		"title": "Secure email signing for your organization",
+		"subtitle": "PostGuard for Business lets your organization sign and encrypt emails with identity-verified attributes. Manage API keys, verify your domain, and maintain full audit trails.",
+		"cta": "Get started",
+		"pricing": "View pricing"
+	},
+	"features": {
+		"title": "Why PostGuard for Business?",
+		"apiKeys": {
+			"title": "API Key Management",
+			"description": "Create and manage API keys with granular control over which organizational attributes each key signs with."
+		},
+		"dns": {
+			"title": "DNS Verification",
+			"description": "Verify your domain ownership and configure DNS records so PostGuard can sign emails on your behalf."
+		},
+		"auditLog": {
+			"title": "Email Audit Log",
+			"description": "Full audit trail of every signed email. Revoke emails, track read receipts, and export compliance reports."
+		},
+		"identity": {
+			"title": "Identity-Based Signing",
+			"description": "Sign emails with your organization name, KVK number, phone, and email — verified through Yivi."
+		},
+		"encryption": {
+			"title": "End-to-End Encryption",
+			"description": "Emails are encrypted end-to-end. Only the intended recipient with the right identity attributes can decrypt."
+		},
+		"openSource": {
+			"title": "Open Source",
+			"description": "Built on the open-source PostGuard protocol. Full transparency, no vendor lock-in, community-driven."
+		}
+	},
+	"cta": {
+		"title": "Ready to secure your organization's email?",
+		"subtitle": "Register for PostGuard for Business and start signing emails in minutes.",
+		"button": "Register your organization"
+	},
+	"footer": {
+		"tagline": "Enterprise-grade identity-based email signing",
+		"product": "Product",
+		"resources": "Resources",
+		"personal": "PostGuard Personal",
+		"docs": "Documentation",
+		"copyright": "© {year} PostGuard. All rights reserved."
+	}
+}

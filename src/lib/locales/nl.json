@@ -1,0 +1,61 @@
+{
+	"nav": {
+		"home": "Home",
+		"pricing": "Prijzen",
+		"register": "Registreren",
+		"login": "Inloggen",
+		"logout": "Uitloggen",
+		"dashboard": "Dashboard",
+		"apiKeys": "API-sleutels",
+		"organization": "Organisatie",
+		"emailLog": "E-maillog",
+		"dns": "DNS-verificatie",
+		"admin": "Beheer"
+	},
+	"hero": {
+		"title": "Veilige e-mailondertekening voor uw organisatie",
+		"subtitle": "PostGuard for Business laat uw organisatie e-mails ondertekenen en versleutelen met identiteitsgecontroleerde attributen. Beheer API-sleutels, verifieer uw domein en houd volledige audittrails bij.",
+		"cta": "Aan de slag",
+		"pricing": "Bekijk prijzen"
+	},
+	"features": {
+		"title": "Waarom PostGuard for Business?",
+		"apiKeys": {
+			"title": "API-sleutelbeheer",
+			"description": "Maak en beheer API-sleutels met gedetailleerde controle over welke organisatiekenmerken elke sleutel ondertekent."
+		},
+		"dns": {
+			"title": "DNS-verificatie",
+			"description": "Verifieer uw domeineigendom en configureer DNS-records zodat PostGuard e-mails namens u kan ondertekenen."
+		},
+		"auditLog": {
+			"title": "E-mail auditlog",
+			"description": "Volledige audittrail van elke ondertekende e-mail. Trek e-mails in, volg leesbevestigingen en exporteer compliancerapporten."
+		},
+		"identity": {
+			"title": "Identiteitsgebaseerde ondertekening",
+			"description": "Onderteken e-mails met uw organisatienaam, KVK-nummer, telefoonnummer en e-mailadres — geverifieerd via Yivi."
+		},
+		"encryption": {
+			"title": "End-to-end versleuteling",
+			"description": "E-mails worden end-to-end versleuteld. Alleen de beoogde ontvanger met de juiste identiteitskenmerken kan ontsleutelen."
+		},
+		"openSource": {
+			"title": "Open source",
+			"description": "Gebouwd op het open-source PostGuard-protocol. Volledige transparantie, geen vendor lock-in, community-gedreven."
+		}
+	},
+	"cta": {
+		"title": "Klaar om de e-mail van uw organisatie te beveiligen?",
+		"subtitle": "Registreer voor PostGuard for Business en begin binnen minuten met het ondertekenen van e-mails.",
+		"button": "Registreer uw organisatie"
+	},
+	"footer": {
+		"tagline": "Enterprise-grade identiteitsgebaseerde e-mailondertekening",
+		"product": "Product",
+		"resources": "Bronnen",
+		"personal": "PostGuard Persoonlijk",
+		"docs": "Documentatie",
+		"copyright": "© {year} PostGuard. Alle rechten voorbehouden."
+	}
+}
