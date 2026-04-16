@@ -19,17 +19,21 @@ export interface YiviDisclosureRequest {
 }
 
 export async function startYiviSession(type: 'org' | 'admin'): Promise<{ sessionPtr: unknown; token: string }> {
-	const discon =
+	// IRMA disclose format: string[][][] (disjunctions of conjunctions of attribute IDs)
+	// Outer array = AND (all must be satisfied)
+	// Middle array = OR (one conjunction must be satisfied)
+	// Inner array = AND (all attributes in the conjunction)
+	const disclose =
 		type === 'admin'
-			? [[{ t: ATTR.email }, { t: ATTR.fullName }, { t: ATTR.phone }]]
-			: [[{ t: ATTR.email }]];
+			? [[[ATTR.email]], [[ATTR.fullName]], [[ATTR.phone]]]
+			: [[[ATTR.email]]];
 
 	const response = await fetch(`${YIVI_SERVER_URL}/session`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({
 			'@context': 'https://irma.app/ld/request/disclosure/v2',
-			disclose: discon
+			disclose
 		})
 	});
 
