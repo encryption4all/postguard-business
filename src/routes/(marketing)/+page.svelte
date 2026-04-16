@@ -107,8 +107,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 70vh;
-		padding: 4rem 1.5rem;
+		padding: 3rem 1.5rem;
 		background: linear-gradient(
 			180deg,
 			var(--pg-soft-background) 0%,
@@ -135,7 +134,7 @@
 		font-size: var(--pg-font-size-lg);
 		color: var(--pg-text-secondary);
 		line-height: 1.6;
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
 	}
 
 	.hero-actions {
@@ -148,7 +147,7 @@
 	.features {
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: 4rem 1.5rem;
+		padding: 2rem 1.5rem 4rem;
 	}
 
 	.section-title {
