@@ -50,7 +50,6 @@
 		</nav>
 
 		<div class="sidebar-footer">
-			<ThemeSwitcher />
 			<form method="POST" action="/auth/logout">
 				<button type="submit" class="nav-item logout-btn">
 					<Icon icon="mdi:logout" width="20" height="20" />
@@ -66,6 +65,9 @@
 				<Icon icon="mdi:menu" width="24" height="24" />
 			</button>
 			<h2 class="portal-title">{data.organization.name}</h2>
+			<div class="header-actions">
+				<ThemeSwitcher />
+			</div>
 		</header>
 		<div class="portal-content">
 			{@render children()}
@@ -203,6 +205,10 @@
 		position: sticky;
 		top: 0;
 		z-index: 50;
+	}
+
+	.header-actions {
+		margin-left: auto;
 	}
 
 	.portal-title {

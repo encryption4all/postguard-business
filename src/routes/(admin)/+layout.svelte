@@ -57,7 +57,6 @@
 		</nav>
 
 		<div class="sidebar-footer">
-			<ThemeSwitcher />
 			<form method="POST" action="/auth/logout">
 				<button type="submit" class="nav-item logout-btn">
 					<Icon icon="mdi:logout" width="20" height="20" />
@@ -73,6 +72,9 @@
 				<Icon icon="mdi:menu" width="24" height="24" />
 			</button>
 			<h2 class="header-title">Admin Panel</h2>
+			<div class="header-actions">
+				<ThemeSwitcher />
+			</div>
 		</header>
 		<div class="admin-content">
 			{@render children()}
@@ -214,6 +216,10 @@
 		position: sticky;
 		top: 0;
 		z-index: 50;
+	}
+
+	.header-actions {
+		margin-left: auto;
 	}
 
 	.header-title { font-size: var(--pg-font-size-lg); margin: 0; }
