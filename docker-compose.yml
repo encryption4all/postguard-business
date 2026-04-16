@@ -12,6 +12,7 @@ services:
       - NODE_ENV=development
       - DATABASE_URL=postgres://devuser:devpassword@postgres:5432/postguard_business
       - YIVI_SERVER_URL=http://irma-server:8088
+      - YIVI_DEMO_ATTRIBUTES=true
       - ORIGIN=http://localhost:8080
       - FF_PRICING_PAGE=true
       - FF_REGISTRATION=true
@@ -37,8 +38,6 @@ services:
       - /app/node_modules
     environment:
       - DATABASE_URL=postgres://devuser:devpassword@postgres:5432/postguard_business
-    env_file:
-      - .env
     entrypoint: ["sh", "-c", "npx drizzle-kit push --force && npx tsx scripts/seed.ts"]
     networks:
       - pgb-network

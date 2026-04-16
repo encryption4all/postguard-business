@@ -1,13 +1,23 @@
 import { env } from '$env/dynamic/private';
 
 const YIVI_SERVER_URL = env.YIVI_SERVER_URL ?? 'http://localhost:8088';
+const USE_DEMO_ATTRS = env.YIVI_DEMO_ATTRIBUTES === 'true';
 
-// Attribute identifiers used in Yivi/IRMA
-export const ATTR = {
+// Production attributes (pbdf scheme)
+const PROD_ATTR = {
 	email: 'pbdf.sidn-pbdf.email.email',
 	fullName: 'pbdf.gemeente.personalData.fullname',
 	phone: 'pbdf.sidn-pbdf.mobilenumber.mobilenumber'
 } as const;
+
+// Demo attributes (irma-demo scheme) — anyone can load these in the Yivi app
+const DEMO_ATTR = {
+	email: 'irma-demo.sidn-pbdf.email.email',
+	fullName: 'irma-demo.gemeente.personalData.fullname',
+	phone: 'irma-demo.sidn-pbdf.mobilenumber.mobilenumber'
+} as const;
+
+export const ATTR = USE_DEMO_ATTRS ? DEMO_ATTR : PROD_ATTR;
 
 interface YiviSessionResult {
 	proofStatus: string;

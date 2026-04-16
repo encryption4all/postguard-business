@@ -2,15 +2,13 @@
 	import '@privacybydesign/yivi-css';
 	import Icon from '@iconify/svelte';
 
-	const ATTR_EMAIL = 'pbdf.sidn-pbdf.email.email';
-	const ATTR_FULLNAME = 'pbdf.gemeente.personalData.fullname';
-	const ATTR_PHONE = 'pbdf.sidn-pbdf.mobilenumber.mobilenumber';
-
 	let {
 		type = 'org',
+		attrs,
 		onSuccess
 	}: {
 		type: 'org' | 'admin';
+		attrs: { email: string; fullName: string; phone: string };
 		onSuccess: (data: { userType: string }) => void;
 	} = $props();
 
@@ -24,15 +22,14 @@
 		irmaToken = '';
 
 		try {
-			// Dynamic imports — these packages are browser-only
 			const { YiviCore } = await import('@privacybydesign/yivi-core');
 			const { YiviWeb } = await import('@privacybydesign/yivi-web');
 			const { YiviClient } = await import('@privacybydesign/yivi-client');
 
 			const disclose =
 				type === 'admin'
-					? [[[ATTR_EMAIL]], [[ATTR_FULLNAME]], [[ATTR_PHONE]]]
-					: [[[ATTR_EMAIL]]];
+					? [[[attrs.email]], [[attrs.fullName]], [[attrs.phone]]]
+					: [[[attrs.email]]];
 
 			const yivi = new YiviCore({
 				debugging: false,
@@ -58,8 +55,6 @@
 					}
 				},
 				state: {
-					// Disable SSE — native EventSource doesn't support Authorization headers,
-					// causing 403 from IRMA server. Polling with fetch works fine.
 					serverSentEvents: false,
 					polling: {
 						endpoint: 'status',
@@ -72,11 +67,8 @@
 			yivi.use(YiviWeb);
 			yivi.use(YiviClient);
 
-			// yivi.start() resolves when the IRMA disclosure is complete
-			// The result is fetched from /irma/session/{token}/result by yivi-client
 			await yivi.start();
 
-			// Now send the IRMA session token to our backend to verify and create a session
 			const response = await fetch('/api/auth/yivi/callback', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

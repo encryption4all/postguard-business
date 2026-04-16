@@ -18,43 +18,51 @@ if (!DATABASE_URL) {
 const client = postgres(DATABASE_URL, { max: 1 });
 const db = drizzle(client);
 
+// Default demo credentials — load these as irma-demo attributes in your Yivi app
+const DEMO_ADMIN = {
+	email: 'admin@postguard.eu',
+	fullName: 'Jan de Admin',
+	phone: '0612345678'
+};
+
+const DEMO_ORG_EMAIL = 'info@acme.example.nl';
+
 async function main() {
 	console.log('Seeding database...\n');
 
-	// 1. Admin account from environment variables
-	const adminEmail = process.env.ADMIN_EMAIL;
-	const adminName = process.env.ADMIN_FULL_NAME;
-	const adminPhone = process.env.ADMIN_PHONE;
+	// 1. Admin account — use env vars if set, otherwise demo defaults
+	const adminEmail = process.env.ADMIN_EMAIL || DEMO_ADMIN.email;
+	const adminName = process.env.ADMIN_FULL_NAME || DEMO_ADMIN.fullName;
+	const adminPhone = process.env.ADMIN_PHONE || DEMO_ADMIN.phone;
 
-	if (adminEmail && adminName && adminPhone) {
-		await db
-			.insert(adminAccounts)
-			.values({
-				email: adminEmail,
-				fullName: adminName,
-				phone: adminPhone,
-				isActive: true
-			})
-			.onConflictDoUpdate({
-				target: adminAccounts.email,
-				set: { fullName: adminName, phone: adminPhone, isActive: true }
-			});
+	await db
+		.insert(adminAccounts)
+		.values({
+			email: adminEmail,
+			fullName: adminName,
+			phone: adminPhone,
+			isActive: true
+		})
+		.onConflictDoUpdate({
+			target: adminAccounts.email,
+			set: { fullName: adminName, phone: adminPhone, isActive: true }
+		});
 
-		console.log('Admin account:');
-		console.log(`  Email:     ${adminEmail}`);
-		console.log(`  Full name: ${adminName}`);
-		console.log(`  Phone:     ${adminPhone}\n`);
-	} else {
-		console.log('Skipping admin account (set ADMIN_EMAIL, ADMIN_FULL_NAME, ADMIN_PHONE)\n');
-	}
+	console.log('Admin account:');
+	console.log(`  Email:     ${adminEmail}`);
+	console.log(`  Full name: ${adminName}`);
+	console.log(`  Phone:     ${adminPhone}`);
+	console.log('  Load these as irma-demo attributes in your Yivi app to log in.\n');
 
 	// 2. Example organization
+	const orgEmail = process.env.ORG_EMAIL || DEMO_ORG_EMAIL;
+
 	const [org] = await db
 		.insert(organizations)
 		.values({
 			name: 'Acme B.V.',
 			domain: 'acme.example.nl',
-			email: 'admin@acme.example.nl',
+			email: orgEmail,
 			contactName: 'Jan de Vries',
 			phone: '+31612345678',
 			kvkNumber: '12345678',
@@ -67,9 +75,10 @@ async function main() {
 		console.log('Example organization:');
 		console.log('  Name:    Acme B.V.');
 		console.log('  Domain:  acme.example.nl');
-		console.log('  Email:   admin@acme.example.nl');
+		console.log(`  Email:   ${orgEmail}`);
 		console.log('  Status:  active');
-		console.log('  KVK:     12345678\n');
+		console.log('  KVK:     12345678');
+		console.log(`  Log in as org by disclosing email: ${orgEmail}\n`);
 
 		// 3. Example API key
 		const rawKey = `PG-${randomBytes(24).toString('base64url')}`;
@@ -88,8 +97,7 @@ async function main() {
 		console.log('Example API key:');
 		console.log(`  Name:    Production Mailer`);
 		console.log(`  Key:     ${rawKey}`);
-		console.log(`  Prefix:  ${keyPrefix}...`);
-		console.log(`  Signs:   orgName, kvkNumber, email\n`);
+		console.log(`  Prefix:  ${keyPrefix}...\n`);
 
 		// 4. DNS verification record
 		await db

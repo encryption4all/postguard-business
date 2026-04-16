@@ -3,7 +3,9 @@
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import type { PageData } from './$types';
 
+	let { data }: { data: PageData } = $props();
 	let loginType = $state<'org' | 'admin'>('org');
 
 	const redirectTo = $derived(page.url.searchParams.get('redirect') ?? '/portal/dashboard');
@@ -55,7 +57,7 @@
 				</p>
 			{/if}
 
-			<YiviLogin type={loginType} onSuccess={handleSuccess} />
+			<YiviLogin type={loginType} attrs={data.yiviAttrs} onSuccess={handleSuccess} />
 		</div>
 
 		<p class="login-footer">
