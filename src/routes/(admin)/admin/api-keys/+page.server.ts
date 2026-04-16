@@ -11,27 +11,22 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	revoke: async ({ request, parent, getClientAddress }) => {
-		const { admin } = await parent();
+	revoke: async ({ request, locals }) => {
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const keyId = data.get('keyId')?.toString();
 
 		if (!keyId) return fail(400);
 
 		await adminRevokeApiKey(keyId);
-		await logAdminAction(
-			admin.id,
-			'revoke_key',
-			'api_key',
-			keyId,
-			{},
-			getClientAddress()
-		);
+		await logAdminAction(adminId, 'revoke_key', 'api_key', keyId, {}, null);
 		return { revoked: true };
 	},
 
-	create: async ({ request, parent, getClientAddress }) => {
-		const { admin } = await parent();
+	create: async ({ request, locals }) => {
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const orgId = data.get('orgId')?.toString();
 		const name = data.get('name')?.toString().trim();
@@ -46,14 +41,7 @@ export const actions: Actions = {
 			expiresAt
 		);
 
-		await logAdminAction(
-			admin.id,
-			'create_key',
-			'api_key',
-			null,
-			{ orgId, name },
-			getClientAddress()
-		);
+		await logAdminAction(adminId, 'create_key', 'api_key', null, { orgId, name }, null);
 
 		return { created: true, rawKey };
 	}

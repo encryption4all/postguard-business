@@ -20,22 +20,24 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	activate: async ({ request, parent, locals, getClientAddress }) => {
-		const { admin } = await parent();
+	activate: async ({ request, locals }) => {
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const orgId = data.get('orgId')?.toString();
 		if (!orgId) return;
 
 		await activateOrganization(orgId);
-		await logAdminAction(admin.id, 'activate_org', 'organization', orgId, {}, getClientAddress());
+		await logAdminAction(adminId, 'activate_org', 'organization', orgId, {}, null);
 	},
-	suspend: async ({ request, parent, locals, getClientAddress }) => {
-		const { admin } = await parent();
+	suspend: async ({ request, locals }) => {
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const orgId = data.get('orgId')?.toString();
 		if (!orgId) return;
 
 		await suspendOrganization(orgId);
-		await logAdminAction(admin.id, 'suspend_org', 'organization', orgId, {}, getClientAddress());
+		await logAdminAction(adminId, 'suspend_org', 'organization', orgId, {}, null);
 	}
 };
