@@ -9,6 +9,17 @@ export default defineConfig({
 			'@privacybydesign/yivi-css': '@privacybydesign/yivi-css/dist/yivi.css'
 		}
 	},
+	server: {
+		// HMR through nginx proxy on port 8080
+		hmr: {
+			clientPort: 8080
+		},
+		// File watching with polling for Docker on macOS
+		watch: {
+			usePolling: true,
+			interval: 1000
+		}
+	},
 	test: {
 		projects: [
 			{
