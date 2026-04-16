@@ -9,7 +9,8 @@
 	const navItems = [
 		{ href: '/admin/organizations', label: 'Organizations', icon: 'mdi:domain' },
 		{ href: '/admin/api-keys', label: 'API Keys', icon: 'mdi:key-variant' },
-		{ href: '/admin/audit-log', label: 'Audit Log', icon: 'mdi:clipboard-text-clock' }
+		{ href: '/admin/audit-log', label: 'Audit Log', icon: 'mdi:clipboard-text-clock' },
+		{ href: '/admin/settings', label: 'Settings', icon: 'mdi:cog' }
 	];
 </script>
 
