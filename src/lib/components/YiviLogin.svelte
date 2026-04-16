@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '@privacybydesign/yivi-css';
 	import Icon from '@iconify/svelte';
 
 	const ATTR_EMAIL = 'pbdf.sidn-pbdf.email.email';
@@ -24,6 +23,8 @@
 		irmaToken = '';
 
 		try {
+			// Dynamic imports — these packages are browser-only
+			await import('@privacybydesign/yivi-css');
 			const YiviCore = (await import('@privacybydesign/yivi-core')).default;
 			const YiviWeb = (await import('@privacybydesign/yivi-web')).default;
 			const YiviClient = (await import('@privacybydesign/yivi-client')).default;
