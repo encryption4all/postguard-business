@@ -7,7 +7,7 @@ COPY static/ static/
 COPY svelte.config.js vite.config.ts tsconfig.json drizzle.config.ts ./
 COPY drizzle/ drizzle/
 COPY scripts/ scripts/
-RUN npm run build
+RUN DATABASE_URL=postgres://build:build@localhost:5432/build npm run build
 
 FROM node:24-slim
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
