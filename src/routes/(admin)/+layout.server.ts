@@ -29,6 +29,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 			email: admin.email
 		},
 		impersonatingOrgId: isEnabled('adminImpersonation') ? locals.session.impersonatingOrgId : null,
-		adminPanelEnabled: isEnabled('adminPanel')
+		adminPanelEnabled: isEnabled('adminPanel'),
+		adminAuditLogEnabled: isEnabled('adminAuditLog')
 	};
 };

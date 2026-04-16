@@ -9,6 +9,7 @@ export type FeatureFlag =
 	| 'portalEmailLog'
 	| 'portalDns'
 	| 'adminPanel'
+	| 'adminAuditLog'
 	| 'adminImpersonation';
 
 export const FLAG_LABELS: Record<FeatureFlag, string> = {
@@ -19,6 +20,7 @@ export const FLAG_LABELS: Record<FeatureFlag, string> = {
 	portalEmailLog: 'Portal: Email audit log',
 	portalDns: 'Portal: DNS verification',
 	adminPanel: 'Admin panel',
+	adminAuditLog: 'Admin: Audit log',
 	adminImpersonation: 'Admin: Impersonation'
 };
 
@@ -31,6 +33,7 @@ const envFlags: Record<FeatureFlag, boolean> = {
 	portalEmailLog: env.FF_PORTAL_EMAIL_LOG === 'true',
 	portalDns: env.FF_PORTAL_DNS === 'true',
 	adminPanel: env.FF_ADMIN_PANEL === 'true',
+	adminAuditLog: env.FF_ADMIN_AUDIT_LOG === 'true',
 	adminImpersonation: env.FF_ADMIN_IMPERSONATION === 'true'
 };
 
