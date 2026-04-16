@@ -35,7 +35,10 @@ async function main() {
 				phone: adminPhone,
 				isActive: true
 			})
-			.onConflictDoNothing({ target: adminAccounts.email });
+			.onConflictDoUpdate({
+				target: adminAccounts.email,
+				set: { fullName: adminName, phone: adminPhone, isActive: true }
+			});
 
 		console.log('Admin account:');
 		console.log(`  Email:     ${adminEmail}`);
