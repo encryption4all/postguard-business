@@ -6,7 +6,7 @@ import {
 	apiKeys,
 	adminAccounts
 } from '$lib/server/db/schema';
-import { eq, desc, and, isNull, or, count } from 'drizzle-orm';
+import { eq, desc, and, isNull, or, count, sql } from 'drizzle-orm';
 
 export async function logAdminAction(
 	adminId: string,
@@ -90,10 +90,7 @@ export async function approveChangeRequest(
 
 	if (fieldMap[req.fieldName]) {
 		// Use raw SQL for dynamic column update
-		await db.execute(
-			`UPDATE organizations SET ${fieldMap[req.fieldName]} = $1, updated_at = NOW() WHERE id = $2`,
-			[req.newValue, req.orgId]
-		);
+		await db.execute(sql`UPDATE organizations SET ${sql.raw(fieldMap[req.fieldName])} = ${req.newValue}, updated_at = NOW() WHERE id = ${req.orgId}`);
 	}
 
 	await db

@@ -8,8 +8,9 @@ export function load() {
 }
 
 export const actions: Actions = {
-	default: async ({ request, parent }) => {
-		const { organization } = await parent();
+	default: async ({ request, locals }) => {
+		const orgId = locals.session?.orgId;
+		if (!orgId) error(401, 'Not authenticated');
 		const data = await request.formData();
 
 		const name = data.get('name')?.toString().trim();
@@ -33,7 +34,7 @@ export const actions: Actions = {
 		const expiresAt = new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000);
 
 		const rawKey = await createApiKey(
-			organization.id,
+			orgId,
 			name,
 			{
 				orgName: signOrgName,

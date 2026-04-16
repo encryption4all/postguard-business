@@ -42,7 +42,7 @@
 		{#each Object.entries(flags) as [flag, info]}
 			<div class="flag-row">
 				<div class="flag-info">
-					<span class="flag-label">{data.labels[flag]}</span>
+					<span class="flag-label">{data.labels[flag as keyof typeof data.labels]}</span>
 					<span class="flag-key">{flag}</span>
 				</div>
 				<div class="flag-controls">

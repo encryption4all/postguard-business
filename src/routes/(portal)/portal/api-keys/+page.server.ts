@@ -11,8 +11,9 @@ export const load: PageServerLoad = async ({ parent }) => {
 };
 
 export const actions: Actions = {
-	revoke: async ({ request, parent }) => {
-		const { organization } = await parent();
+	revoke: async ({ request, locals }) => {
+		const orgId = locals.session?.orgId;
+		if (!orgId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const keyId = data.get('keyId')?.toString();
 
@@ -20,7 +21,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'Missing key ID' });
 		}
 
-		await revokeApiKey(keyId, organization.id);
+		await revokeApiKey(keyId, orgId);
 		return { revoked: true };
 	}
 };

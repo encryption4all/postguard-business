@@ -14,9 +14,10 @@ export const load: PageServerLoad = async ({ parent }) => {
 };
 
 export const actions: Actions = {
-	verify: async ({ parent }) => {
-		const { organization } = await parent();
-		const result = await verifyDns(organization.id);
+	verify: async ({ locals }) => {
+		const orgId = locals.session?.orgId;
+		if (!orgId) error(401, 'Not authenticated');
+		const result = await verifyDns(orgId);
 		return result;
 	}
 };

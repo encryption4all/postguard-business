@@ -11,8 +11,9 @@ export const load: PageServerLoad = async ({ parent }) => {
 };
 
 export const actions: Actions = {
-	requestChange: async ({ request, parent }) => {
-		const { organization } = await parent();
+	requestChange: async ({ request, locals }) => {
+		const orgId = locals.session?.orgId;
+		if (!orgId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const fieldName = data.get('fieldName')?.toString();
 		const newValue = data.get('newValue')?.toString().trim();
@@ -22,7 +23,7 @@ export const actions: Actions = {
 			return fail(400, { error: 'Field name and new value are required' });
 		}
 
-		await createChangeRequest(organization.id, fieldName, oldValue, newValue);
+		await createChangeRequest(orgId, fieldName, oldValue, newValue);
 		return { submitted: true, fieldName };
 	}
 };

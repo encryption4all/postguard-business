@@ -14,7 +14,10 @@ export function load() {
 export const actions: Actions = {
 	default: async ({ request }) => {
 		if (!isEnabled('registration')) {
-			return fail(404, { error: 'Not found' });
+			return fail(404, {
+				errors: { form: 'Not found' } as Record<string, string>,
+				values: { name: '', domain: '', email: '', contactName: '', phone: null, kvkNumber: null }
+			});
 		}
 
 		const data = await request.formData();
@@ -63,12 +66,12 @@ export const actions: Actions = {
 		} catch (err: unknown) {
 			if (err instanceof Error && err.message.includes('unique')) {
 				return fail(409, {
-					errors: { domain: 'This domain is already registered' },
+					errors: { domain: 'This domain is already registered' } as Record<string, string>,
 					values: { name, domain, email, contactName, phone, kvkNumber }
 				});
 			}
 			return fail(500, {
-				errors: { form: 'An unexpected error occurred. Please try again.' },
+				errors: { form: 'An unexpected error occurred. Please try again.' } as Record<string, string>,
 				values: { name, domain, email, contactName, phone, kvkNumber }
 			});
 		}

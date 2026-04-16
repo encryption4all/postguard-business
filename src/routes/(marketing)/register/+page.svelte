@@ -2,9 +2,14 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import { enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
-	import type { ActionData } from './$types';
 
-	let { form }: { form: ActionData } = $props();
+	interface FormResult {
+		success?: boolean;
+		errors?: Record<string, string>;
+		values?: Record<string, string | null | undefined>;
+	}
+
+	let { form }: { form: FormResult | null } = $props();
 </script>
 
 <SEO

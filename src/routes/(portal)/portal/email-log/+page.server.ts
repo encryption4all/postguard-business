@@ -14,14 +14,15 @@ export const load: PageServerLoad = async ({ parent, url }) => {
 };
 
 export const actions: Actions = {
-	revoke: async ({ request, parent, locals }) => {
-		const { organization } = await parent();
+	revoke: async ({ request, locals }) => {
+		const orgId = locals.session?.orgId;
+		if (!orgId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const emailId = data.get('emailId')?.toString();
 
 		if (!emailId) return fail(400, { error: 'Missing email ID' });
 
-		await revokeEmail(emailId, organization.id, locals.session?.id ?? 'unknown');
+		await revokeEmail(emailId, orgId, locals.session?.id ?? 'unknown');
 		return { revoked: true };
 	}
 };

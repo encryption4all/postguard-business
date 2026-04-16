@@ -38,7 +38,7 @@
 				session: {
 					url: '/irma',
 					start: {
-						url: (o: { url: string }) => `${o.url}/session`,
+						url: (o: any) => `${o.url}/session`,
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
@@ -47,12 +47,12 @@
 						})
 					},
 					mapping: {
-						sessionPtr: (r: { sessionPtr: unknown }) => r.sessionPtr,
-						sessionToken: (r: { token: string }) => {
+						sessionPtr: (r: any) => r.sessionPtr,
+						sessionToken: (r: any) => {
 							irmaToken = r.token;
 							return r.token;
 						},
-						frontendRequest: (r: { frontendRequest?: unknown }) => r.frontendRequest
+						frontendRequest: (r: any) => r.frontendRequest
 					}
 				},
 				state: {
