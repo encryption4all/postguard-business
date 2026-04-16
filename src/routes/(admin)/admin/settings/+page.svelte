@@ -22,19 +22,6 @@
 		updating = null;
 	}
 
-	async function resetFlag(flag: string) {
-		updating = flag;
-		const response = await fetch('/api/admin/flags', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ flag, value: null })
-		});
-		if (response.ok) {
-			const result = await response.json();
-			flags = result.flags;
-		}
-		updating = null;
-	}
 </script>
 
 <SEO title="Settings - Admin" />
@@ -71,12 +58,7 @@
 					>
 						{info.value ? 'ON' : 'OFF'}
 					</button>
-					{#if data.canToggle && info.source === 'override'}
-						<button class="reset-btn" onclick={() => resetFlag(flag)} disabled={updating === flag}>
-							<Icon icon="mdi:undo" width="16" height="16" />
-						</button>
-					{/if}
-				</div>
+					</div>
 			</div>
 		{/each}
 	</div>
@@ -179,14 +161,4 @@
 		}
 	}
 
-	.reset-btn {
-		color: var(--pg-text-secondary);
-		padding: 4px;
-		border-radius: var(--pg-border-radius-sm);
-
-		&:hover {
-			background: var(--pg-soft-background);
-			color: var(--pg-text);
-		}
-	}
 </style>
