@@ -3,6 +3,7 @@ import type { LayoutServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { adminAccounts } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
 	if (!locals.session || locals.session.userType !== 'admin') {
@@ -27,6 +28,6 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 			fullName: admin.fullName,
 			email: admin.email
 		},
-		impersonatingOrgId: locals.session.impersonatingOrgId
+		impersonatingOrgId: isEnabled('adminImpersonation') ? locals.session.impersonatingOrgId : null
 	};
 };

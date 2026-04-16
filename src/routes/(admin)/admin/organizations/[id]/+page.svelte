@@ -30,14 +30,16 @@
 	<div class="detail"><span class="label">KVK</span><span>{data.organization.kvkNumber ?? '—'}</span></div>
 </div>
 
-<div class="admin-actions">
-	<form method="POST" action="?/impersonate" use:enhance>
-		<button type="submit" class="secondary-btn">
-			<Icon icon="mdi:eye" width="16" height="16" />
-			Impersonate
-		</button>
-	</form>
-</div>
+{#if data.impersonationEnabled}
+	<div class="admin-actions">
+		<form method="POST" action="?/impersonate" use:enhance>
+			<button type="submit" class="secondary-btn">
+				<Icon icon="mdi:eye" width="16" height="16" />
+				Impersonate
+			</button>
+		</form>
+	</div>
+{/if}
 
 {#if data.requests.length > 0}
 	<section class="requests">

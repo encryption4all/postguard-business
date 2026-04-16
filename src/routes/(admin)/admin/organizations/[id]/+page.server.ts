@@ -7,11 +7,12 @@ import {
 	logAdminAction
 } from '$lib/server/services/admin';
 import { setImpersonation } from '$lib/server/auth/session';
+import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const result = await getOrganizationWithRequests(params.id);
 	if (!result) error(404, 'Organization not found');
-	return result;
+	return { ...result, impersonationEnabled: isEnabled('adminImpersonation') };
 };
 
 export const actions: Actions = {
@@ -58,6 +59,7 @@ export const actions: Actions = {
 	},
 
 	impersonate: async ({ params, parent, locals }) => {
+		if (!isEnabled('adminImpersonation')) return fail(404);
 		if (!locals.session) return fail(401);
 		await setImpersonation(locals.session.id, params.id);
 		return { impersonating: true };

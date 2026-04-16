@@ -8,7 +8,8 @@ export const flags = {
 	portalOrgInfo: env.FF_PORTAL_ORG_INFO === 'true',
 	portalEmailLog: env.FF_PORTAL_EMAIL_LOG === 'true',
 	portalDns: env.FF_PORTAL_DNS === 'true',
-	adminPanel: env.FF_ADMIN_PANEL === 'true'
+	adminPanel: env.FF_ADMIN_PANEL === 'true',
+	adminImpersonation: env.FF_ADMIN_IMPERSONATION === 'true'
 } as const;
 
 export type FeatureFlag = keyof typeof flags;

@@ -21,6 +21,7 @@ services:
       - FF_PORTAL_EMAIL_LOG=true
       - FF_PORTAL_DNS=true
       - FF_ADMIN_PANEL=true
+      - FF_ADMIN_IMPERSONATION=true
     networks:
       - pgb-network
     depends_on:
