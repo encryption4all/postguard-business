@@ -39,7 +39,7 @@ services:
       - DATABASE_URL=postgres://devuser:devpassword@postgres:5432/postguard_business
     env_file:
       - .env
-    entrypoint: ["sh", "-c", "npx drizzle-kit push && npx tsx scripts/seed.ts"]
+    entrypoint: ["sh", "-c", "npx drizzle-kit push --force && npx tsx scripts/seed.ts"]
     networks:
       - pgb-network
     depends_on:
