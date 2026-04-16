@@ -25,9 +25,9 @@
 
 		try {
 			// Dynamic imports — these packages are browser-only
-			const YiviCore = (await import('@privacybydesign/yivi-core')).default;
-			const YiviWeb = (await import('@privacybydesign/yivi-web')).default;
-			const YiviClient = (await import('@privacybydesign/yivi-client')).default;
+			const { YiviCore } = await import('@privacybydesign/yivi-core');
+			const { YiviWeb } = await import('@privacybydesign/yivi-web');
+			const { YiviClient } = await import('@privacybydesign/yivi-client');
 
 			const disclose =
 				type === 'admin'
