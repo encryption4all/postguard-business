@@ -99,7 +99,7 @@
 
 			<label class="checkbox-label">
 				<input type="checkbox" name="signKvkNumber" />
-				<span>KVK number</span>
+				<span>KvK number</span>
 			</label>
 		</fieldset>
 

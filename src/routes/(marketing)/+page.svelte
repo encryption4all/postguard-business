@@ -39,34 +39,23 @@
 
 		<div class="feature-card">
 			<div class="feature-icon">
+				<Icon icon="mdi:shield-account" width="32" height="32" />
+			</div>
+			<h3>Identity-Based Signing</h3>
+			<p>
+				Sign emails with your organization name, KvK number, phone, and email — verified
+				through Yivi.
+			</p>
+		</div>
+
+		<div class="feature-card">
+			<div class="feature-icon">
 				<Icon icon="mdi:server-security" width="32" height="32" />
 			</div>
 			<h3>Hosted in the EU</h3>
 			<p>
 				All data is stored and processed within the European Union, ensuring full GDPR
 				compliance and data sovereignty.
-			</p>
-		</div>
-
-		<div class="feature-card">
-			<div class="feature-icon">
-				<Icon icon="mdi:email-remove" width="32" height="32" />
-			</div>
-			<h3>Email Revocation <span class="coming-soon">Coming soon</span></h3>
-			<p>
-				Revoke signed emails after sending. Recipients will be notified that the email is
-				no longer valid.
-			</p>
-		</div>
-
-		<div class="feature-card">
-			<div class="feature-icon">
-				<Icon icon="mdi:shield-account" width="32" height="32" />
-			</div>
-			<h3>Identity-Based Signing</h3>
-			<p>
-				Sign emails with your organization name, KVK number, phone, and email — verified
-				through Yivi.
 			</p>
 		</div>
 
@@ -89,6 +78,17 @@
 			<p>
 				Built on the open-source PostGuard protocol. Full transparency, no vendor lock-in,
 				community-driven.
+			</p>
+		</div>
+
+		<div class="feature-card">
+			<div class="feature-icon">
+				<Icon icon="mdi:email-remove" width="32" height="32" />
+			</div>
+			<h3>Email Revocation <span class="coming-soon">Coming soon</span></h3>
+			<p>
+				Revoke signed emails after sending. Recipients will be notified that the email is
+				no longer valid.
 			</p>
 		</div>
 	</div>

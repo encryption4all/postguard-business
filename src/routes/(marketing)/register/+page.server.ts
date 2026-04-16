@@ -41,7 +41,7 @@ export const actions: Actions = {
 		}
 
 		if (kvkNumber && !/^\d{8}$/.test(kvkNumber)) {
-			errors.kvkNumber = 'KVK number must be 8 digits';
+			errors.kvkNumber = 'KvK number must be 8 digits';
 		}
 
 		if (Object.keys(errors).length > 0) {

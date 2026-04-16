@@ -118,7 +118,7 @@
 					</div>
 
 					<div class="form-group">
-						<label for="kvkNumber">KVK number</label>
+						<label for="kvkNumber">KvK number</label>
 						<input
 							id="kvkNumber"
 							name="kvkNumber"

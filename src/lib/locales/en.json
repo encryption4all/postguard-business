@@ -34,7 +34,7 @@
 		},
 		"identity": {
 			"title": "Identity-Based Signing",
-			"description": "Sign emails with your organization name, KVK number, phone, and email — verified through Yivi."
+			"description": "Sign emails with your organization name, KvK number, phone, and email — verified through Yivi."
 		},
 		"encryption": {
 			"title": "End-to-End Encryption",

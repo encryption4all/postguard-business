@@ -16,7 +16,7 @@
 		{ key: 'email', label: 'Contact email', value: org.email },
 		{ key: 'contactName', label: 'Contact person', value: org.contactName },
 		{ key: 'phone', label: 'Phone number', value: org.phone ?? '—' },
-		{ key: 'kvkNumber', label: 'KVK number', value: org.kvkNumber ?? '—' }
+		{ key: 'kvkNumber', label: 'KvK number', value: org.kvkNumber ?? '—' }
 	]);
 
 	function startEdit(key: string, currentValue: string) {
