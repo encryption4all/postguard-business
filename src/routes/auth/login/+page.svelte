@@ -24,7 +24,7 @@
 	<div class="login-header">
 		<a href="/" class="logo">
 			<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
-			<span>PostGuard</span>
+			<span class="logo-badge">Business</span>
 		</a>
 		<ThemeSwitcher />
 	</div>
@@ -69,10 +69,18 @@
 		align-items: center;
 		gap: 0.5rem;
 		text-decoration: none;
-		color: var(--pg-text);
+	}
+
+	.logo-badge {
 		font-family: var(--pg-font-family);
-		font-weight: var(--pg-font-weight-extrabold);
-		font-size: var(--pg-font-size-lg);
+		font-size: var(--pg-font-size-xs);
+		font-weight: var(--pg-font-weight-bold);
+		background: var(--pg-primary);
+		color: #fff;
+		padding: 2px 6px;
+		border-radius: var(--pg-border-radius-sm);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
 	}
 
 	.login-card {

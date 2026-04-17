@@ -35,6 +35,7 @@
 				debugging: false,
 				element: '#yivi-login-container',
 				language: 'en',
+				minimal: true,
 				session: {
 					url: '/irma',
 					start: {
