@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { version } from '$app/environment';
+	import pkg from '../../../package.json';
 
 	const year = new Date().getFullYear();
 </script>
@@ -26,7 +26,7 @@
 
 		<div class="footer-bottom">
 			<p>&copy; {year} PostGuard. All rights reserved.</p>
-			<span class="version">v{version}</span>
+			<span class="version">v{pkg.version}</span>
 		</div>
 	</div>
 </footer>
