@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { version } from '$app/environment';
+
 	const year = new Date().getFullYear();
 </script>
 
@@ -24,6 +26,7 @@
 
 		<div class="footer-bottom">
 			<p>&copy; {year} PostGuard. All rights reserved.</p>
+			<span class="version">v{version}</span>
 		</div>
 	</div>
 </footer>
@@ -96,11 +99,20 @@
 	.footer-bottom {
 		border-top: 1px solid var(--pg-strong-background);
 		padding-top: 1rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 
 		p {
 			font-size: var(--pg-font-size-xs);
 			color: var(--pg-text-secondary);
 			margin: 0;
+		}
+
+		.version {
+			font-size: var(--pg-font-size-xs);
+			color: var(--pg-text-secondary);
+			opacity: 0.6;
 		}
 	}
 </style>
