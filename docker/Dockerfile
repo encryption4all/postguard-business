@@ -16,10 +16,12 @@ COPY --from=build /app/build ./build
 COPY --from=build /app/package.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/drizzle ./drizzle
+COPY --from=build /app/drizzle.config.ts ./
 COPY --from=build /app/scripts ./scripts
+COPY docker/entrypoint.sh ./entrypoint.sh
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:3000/health || exit 1
-CMD ["node", "build"]
+ENTRYPOINT ["./entrypoint.sh"]

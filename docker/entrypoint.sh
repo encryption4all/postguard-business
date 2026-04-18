@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+echo "Pushing database schema..."
+npx drizzle-kit push --force
+
+if [ -n "$ADMIN_EMAIL" ] && [ -n "$ADMIN_FULL_NAME" ] && [ -n "$ADMIN_PHONE" ]; then
+  echo "Seeding admin account..."
+  node --experimental-strip-types scripts/seed.ts
+fi
+
+echo "Starting application..."
+exec node build
