@@ -26,5 +26,4 @@ vite.config.ts.timestamp-*
 test-results
 /playwright-report
 
-# Drizzle
-drizzle/meta
+# Drizzle (meta/journal inside migrations/ must be committed for drizzle-orm migrator)

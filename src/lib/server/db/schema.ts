@@ -23,7 +23,7 @@ export const adminAccounts = pgTable('admin_accounts', {
 });
 
 export const apiKeys = pgTable(
-	'api_keys',
+	'business_api_keys',
 	{
 		id: uuid('id').primaryKey().defaultRandom(),
 		keyHash: varchar('key_hash', { length: 128 }).notNull().unique(),

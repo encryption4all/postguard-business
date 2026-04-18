@@ -1,0 +1,2 @@
+# Check migration files for dangerous patterns
+npx tsx scripts/check-migrations.ts

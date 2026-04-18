@@ -7,7 +7,7 @@
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"prepare": "playwright install && svelte-kit sync || echo ''",
+		"prepare": "svelte-kit sync && husky || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
@@ -19,7 +19,8 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx scripts/migrate.ts",
 		"db:seed": "tsx scripts/seed.ts",
-		"db:studio": "drizzle-kit studio"
+		"db:studio": "drizzle-kit studio",
+		"db:check": "tsx scripts/check-migrations.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.4",
@@ -34,6 +35,7 @@
 		"eslint": "^10.2.0",
 		"eslint-plugin-svelte": "^3.17.0",
 		"globals": "^17.4.0",
+		"husky": "^9.1.7",
 		"postgres": "^3.4.9",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
