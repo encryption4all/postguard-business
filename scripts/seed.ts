@@ -6,7 +6,7 @@ import {
 	organizations,
 	apiKeys,
 	dnsVerifications
-} from '../src/lib/server/db/schema';
+} from '../src/lib/server/db/schema.ts';
 import { eq } from 'drizzle-orm';
 
 const DATABASE_URL = process.env.DATABASE_URL;

@@ -16,6 +16,7 @@ COPY --from=build /app/build ./build
 COPY --from=build /app/package.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/drizzle/migrations ./drizzle/migrations
+COPY --from=build /app/src/lib/server/db/schema.ts ./src/lib/server/db/schema.ts
 COPY --from=build /app/scripts ./scripts
 COPY docker/entrypoint.sh ./entrypoint.sh
 ENV NODE_ENV=production
