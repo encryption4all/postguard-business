@@ -1,8 +1,20 @@
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { execSync } from 'child_process';
+
+const commitHash = (() => {
+	try {
+		return execSync('git rev-parse --short HEAD').toString().trim();
+	} catch {
+		return '';
+	}
+})();
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	define: {
+		__COMMIT_HASH__: JSON.stringify(commitHash)
+	},
 	resolve: {
 		alias: {
 			// yivi-css has "main": "dist/yivi.min.css" which Vite 8 can't resolve as a JS import

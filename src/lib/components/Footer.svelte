@@ -1,7 +1,11 @@
 <script lang="ts">
 	import pkg from '../../../package.json';
 
+	declare const __COMMIT_HASH__: string;
+
 	const year = new Date().getFullYear();
+	const hash = __COMMIT_HASH__;
+	const versionLabel = hash ? `${pkg.version}+${hash}` : pkg.version;
 </script>
 
 <footer>
@@ -26,7 +30,7 @@
 
 		<div class="footer-bottom">
 			<p>&copy; {year} PostGuard. All rights reserved.</p>
-			<span class="version">v{pkg.version}</span>
+			<span class="version">v{versionLabel}</span>
 		</div>
 	</div>
 </footer>
