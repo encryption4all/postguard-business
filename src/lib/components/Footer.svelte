@@ -1,7 +1,9 @@
+<script module lang="ts">
+	declare const __COMMIT_HASH__: string;
+</script>
+
 <script lang="ts">
 	import pkg from '../../../package.json';
-
-	declare const __COMMIT_HASH__: string;
 
 	const year = new Date().getFullYear();
 	const hash = __COMMIT_HASH__;

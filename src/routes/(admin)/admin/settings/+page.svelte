@@ -5,7 +5,7 @@
 
 	let { data }: { data: PageData } = $props();
 
-	let flags = $state(data.flags);
+	let flags = $derived(data.flags);
 	let updating = $state<string | null>(null);
 
 	async function toggleFlag(flag: string, currentValue: boolean) {

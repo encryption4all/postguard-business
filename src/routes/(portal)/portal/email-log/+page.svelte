@@ -6,7 +6,7 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-	let searchInput = $state(data.search);
+	let searchInput = $derived(data.search);
 	let confirmRevoke = $state<string | null>(null);
 
 	function search() {

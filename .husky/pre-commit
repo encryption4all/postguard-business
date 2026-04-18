@@ -1,2 +1,5 @@
+# Type check Svelte/TypeScript
+npx svelte-kit sync && npx svelte-check --threshold warning
+
 # Check migration files for dangerous patterns
 npx tsx scripts/check-migrations.ts
