@@ -33,8 +33,12 @@ export async function verifyYiviSession(irmaSessionToken: string): Promise<{
 	valid: boolean;
 	attributes: Record<string, string>;
 }> {
+	const headers: Record<string, string> = {};
+	if (YIVI_SERVER_TOKEN) headers['Authorization'] = YIVI_SERVER_TOKEN;
+
 	const response = await fetch(`${YIVI_SERVER_URL}/session/${irmaSessionToken}/result`, {
-		method: 'GET'
+		method: 'GET',
+		headers
 	});
 
 	if (!response.ok) {
