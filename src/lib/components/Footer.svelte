@@ -19,12 +19,12 @@
 
 		<div class="footer-links">
 			<div class="link-group">
-				<h4>Product</h4>
+				<h2>Product</h2>
 				<a href="/pricing">Pricing</a>
 				<a href="/register">Register</a>
 			</div>
 			<div class="link-group">
-				<h4>Resources</h4>
+				<h2>Resources</h2>
 				<a href="https://postguard.eu" target="_blank" rel="noopener">PostGuard Personal</a>
 				<a href="https://docs.postguard.eu" target="_blank" rel="noopener">Documentation</a>
 			</div>
@@ -82,12 +82,13 @@
 		flex-direction: column;
 		gap: 0.5rem;
 
-		h4 {
+		h2 {
 			font-size: var(--pg-font-size-sm);
 			font-weight: var(--pg-font-weight-bold);
 			color: var(--pg-text-secondary);
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
+			line-height: normal;
 			margin: 0 0 0.25rem;
 		}
 
