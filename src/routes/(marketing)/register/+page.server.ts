@@ -17,7 +17,7 @@ export const actions: Actions = {
 		if (!isEnabled('registration')) {
 			return fail(404, {
 				errors: { form: 'Not found' } as Record<string, string>,
-				values: { name: '', domain: '', email: '', contactName: '', phone: null, kvkNumber: null }
+				values: { name: '' }
 			});
 		}
 
@@ -27,43 +27,32 @@ export const actions: Actions = {
 		const email = data.get('email')?.toString().trim().toLowerCase();
 		const contactName = data.get('contactName')?.toString().trim();
 		const phone = data.get('phone')?.toString().trim() || null;
-		const kvkNumber = data.get('kvkNumber')?.toString().trim() || null;
 
 		// Validation
 		const errors: Record<string, string> = {};
 		if (!name) errors.name = 'Organization name is required';
-		if (!domain) errors.domain = 'Domain is required';
-		if (!email) errors.email = 'Email is required';
-		if (!contactName) errors.contactName = 'Contact name is required';
-
-		if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-			errors.email = 'Invalid email address';
-		}
+		if (!domain) errors.domain = 'Could not derive domain from email';
+		if (!email) errors.form = 'Email attribute missing — please verify with Yivi first';
+		if (!contactName) errors.form = 'Name attribute missing — please verify with Yivi first';
 
 		if (domain && !/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.[a-z]{2,}$/.test(domain)) {
-			errors.domain = 'Invalid domain name';
-		}
-
-		if (kvkNumber && !/^\d{8}$/.test(kvkNumber)) {
-			errors.kvkNumber = 'KvK number must be 8 digits';
+			errors.domain = 'Invalid domain derived from email';
 		}
 
 		if (Object.keys(errors).length > 0) {
 			return fail(400, {
 				errors,
-				values: { name, domain, email, contactName, phone, kvkNumber }
+				values: { name }
 			});
 		}
 
 		try {
-			// Create org, then user, then link contact person
 			const [org] = await db
 				.insert(organizations)
 				.values({
 					name: name!,
 					domain: domain!,
-					signingEmail: email!,
-					kvkNumber
+					signingEmail: email!
 				})
 				.returning({ id: organizations.id });
 
@@ -82,15 +71,18 @@ export const actions: Actions = {
 				.set({ contactUserId: user.id })
 				.where(eq(organizations.id, org.id));
 		} catch (err: unknown) {
-			if (err instanceof Error && err.message.includes('unique')) {
+			const errStr = String(err instanceof Error ? err.stack ?? err.message : err);
+			const cause = (err as any)?.cause;
+			const causeStr = cause ? String(cause.message ?? cause) : '';
+			if (errStr.includes('unique') || errStr.includes('duplicate key') || causeStr.includes('duplicate key')) {
 				return fail(409, {
 					errors: { domain: 'This domain is already registered' } as Record<string, string>,
-					values: { name, domain, email, contactName, phone, kvkNumber }
+					values: { name }
 				});
 			}
 			return fail(500, {
 				errors: { form: 'An unexpected error occurred. Please try again.' } as Record<string, string>,
-				values: { name, domain, email, contactName, phone, kvkNumber }
+				values: { name }
 			});
 		}
 

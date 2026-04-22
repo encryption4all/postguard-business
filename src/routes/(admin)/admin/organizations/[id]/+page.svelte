@@ -131,16 +131,17 @@
 	}
 
 	.detail {
-		display: flex;
+		display: grid;
+		grid-template-columns: 120px 1fr;
 		gap: 1rem;
 		padding: 0.5rem 0;
 		border-bottom: 1px solid var(--pg-strong-background);
 		font-size: var(--pg-font-size-md);
+		align-items: baseline;
 		&:last-child { border-bottom: none; }
 	}
 
 	.label {
-		min-width: 80px;
 		font-size: var(--pg-font-size-xs);
 		color: var(--pg-text-secondary);
 		font-weight: var(--pg-font-weight-medium);
