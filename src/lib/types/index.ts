@@ -2,13 +2,21 @@ export interface Organization {
 	id: string;
 	name: string;
 	domain: string;
-	email: string;
-	contactName: string;
-	phone: string | null;
+	signingEmail: string;
 	kvkNumber: string | null;
+	contactUserId: string | null;
 	status: 'pending' | 'active' | 'suspended';
 	createdAt: Date;
 	updatedAt: Date;
+}
+
+export interface User {
+	id: string;
+	email: string;
+	fullName: string;
+	phone: string | null;
+	orgId: string;
+	createdAt: Date;
 }
 
 export interface ApiKey {

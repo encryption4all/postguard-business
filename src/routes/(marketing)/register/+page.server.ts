@@ -1,7 +1,8 @@
 import type { Actions } from './$types';
 import { fail } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { organizations } from '$lib/server/db/schema';
+import { organizations, users } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 import { isEnabled } from '$lib/feature-flags';
 import { error } from '@sveltejs/kit';
 
@@ -55,14 +56,31 @@ export const actions: Actions = {
 		}
 
 		try {
-			await db.insert(organizations).values({
-				name: name!,
-				domain: domain!,
-				email: email!,
-				contactName: contactName!,
-				phone,
-				kvkNumber
-			});
+			// Create org, then user, then link contact person
+			const [org] = await db
+				.insert(organizations)
+				.values({
+					name: name!,
+					domain: domain!,
+					signingEmail: email!,
+					kvkNumber
+				})
+				.returning({ id: organizations.id });
+
+			const [user] = await db
+				.insert(users)
+				.values({
+					email: email!,
+					fullName: contactName!,
+					phone,
+					orgId: org.id
+				})
+				.returning({ id: users.id });
+
+			await db
+				.update(organizations)
+				.set({ contactUserId: user.id })
+				.where(eq(organizations.id, org.id));
 		} catch (err: unknown) {
 			if (err instanceof Error && err.message.includes('unique')) {
 				return fail(409, {

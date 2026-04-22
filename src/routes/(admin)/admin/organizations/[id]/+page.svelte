@@ -24,10 +24,9 @@
 
 <div class="org-details">
 	<div class="detail"><span class="label">Domain</span><span>{data.organization.domain}</span></div>
-	<div class="detail"><span class="label">Email</span><span>{data.organization.email}</span></div>
-	<div class="detail"><span class="label">Contact</span><span>{data.organization.contactName}</span></div>
-	<div class="detail"><span class="label">Phone</span><span>{data.organization.phone ?? '—'}</span></div>
+	<div class="detail"><span class="label">Signing email</span><span>{data.organization.signingEmail}</span></div>
 	<div class="detail"><span class="label">KVK</span><span>{data.organization.kvkNumber ?? '—'}</span></div>
+	<div class="detail"><span class="label">Contact</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
 </div>
 
 {#if data.impersonationEnabled}

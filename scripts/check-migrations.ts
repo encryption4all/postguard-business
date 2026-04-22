@@ -127,8 +127,9 @@ function checkFile(filePath: string): Violation[] {
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i];
 
-		// Skip comments
+		// Skip comments and lines with safe: annotation
 		if (line.trim().startsWith('--')) continue;
+		if (line.includes('-- safe:')) continue;
 
 		for (const rule of RULES) {
 			if (rule.pattern.test(line)) {

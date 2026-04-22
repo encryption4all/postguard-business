@@ -4,14 +4,28 @@ export const organizations = pgTable('organizations', {
 	id: uuid('id').primaryKey().defaultRandom(),
 	name: varchar('name', { length: 256 }).notNull(),
 	domain: varchar('domain', { length: 256 }).notNull().unique(),
-	email: varchar('email', { length: 256 }).notNull(),
-	contactName: varchar('contact_name', { length: 256 }).notNull(),
-	phone: varchar('phone', { length: 32 }),
+	signingEmail: varchar('signing_email', { length: 256 }).notNull(),
 	kvkNumber: varchar('kvk_number', { length: 32 }),
+	contactUserId: uuid('contact_user_id'),
 	status: varchar('status', { length: 32 }).notNull().default('pending'),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
 });
+
+export const users = pgTable(
+	'users',
+	{
+		id: uuid('id').primaryKey().defaultRandom(),
+		email: varchar('email', { length: 256 }).notNull().unique(),
+		fullName: varchar('full_name', { length: 256 }).notNull(),
+		phone: varchar('phone', { length: 32 }),
+		orgId: uuid('org_id')
+			.notNull()
+			.references(() => organizations.id, { onDelete: 'cascade' }),
+		createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+	},
+	(table) => [index('idx_users_org').on(table.orgId)]
+);
 
 export const adminAccounts = pgTable('admin_accounts', {
 	id: uuid('id').primaryKey().defaultRandom(),
@@ -48,6 +62,7 @@ export const sessions = pgTable(
 		id: uuid('id').primaryKey().defaultRandom(),
 		tokenHash: varchar('token_hash', { length: 128 }).notNull().unique(),
 		userType: varchar('user_type', { length: 16 }).notNull(),
+		userId: uuid('user_id').references(() => users.id),
 		orgId: uuid('org_id').references(() => organizations.id),
 		adminId: uuid('admin_id').references(() => adminAccounts.id),
 		impersonatingOrgId: uuid('impersonating_org_id').references(() => organizations.id),

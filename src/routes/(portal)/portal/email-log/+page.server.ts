@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ parent, url }) => {
 
 export const actions: Actions = {
 	revoke: async ({ request, locals }) => {
-		const orgId = locals.session?.orgId;
+		const orgId = locals.session?.impersonatingOrgId ?? locals.session?.orgId;
 		if (!orgId) error(401, 'Not authenticated');
 		const data = await request.formData();
 		const emailId = data.get('emailId')?.toString();

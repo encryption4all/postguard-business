@@ -39,7 +39,7 @@
 				<tr>
 					<th>Name</th>
 					<th>Domain</th>
-					<th>Email</th>
+					<th>Signing email</th>
 					{#if data.orgStatusEnabled}<th>Status</th>{/if}
 					<th>Created</th>
 					{#if data.orgStatusEnabled}<th></th>{/if}
@@ -50,7 +50,7 @@
 					<tr>
 						<td><a href="/admin/organizations/{org.id}" class="org-link">{org.name}</a></td>
 						<td>{org.domain}</td>
-						<td>{org.email}</td>
+						<td>{org.signingEmail}</td>
 						{#if data.orgStatusEnabled}
 							<td>
 								<span class="status" class:active={org.status === 'active'} class:pending={org.status === 'pending'} class:suspended={org.status === 'suspended'}>

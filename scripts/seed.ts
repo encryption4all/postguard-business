@@ -4,6 +4,7 @@ import { createHash, randomBytes } from 'crypto';
 import {
 	adminAccounts,
 	organizations,
+	users,
 	apiKeys,
 	dnsVerifications
 } from '../src/lib/server/db/schema.ts';
@@ -62,9 +63,7 @@ async function main() {
 		.values({
 			name: 'Acme B.V.',
 			domain: 'acme.example.nl',
-			email: orgEmail,
-			contactName: 'Jan de Vries',
-			phone: '+31612345678',
+			signingEmail: orgEmail,
 			kvkNumber: '12345678',
 			status: 'active'
 		})
@@ -72,12 +71,32 @@ async function main() {
 		.returning();
 
 	if (org) {
+		// 2b. Create a user for this org and set as contact person
+		const [user] = await db
+			.insert(users)
+			.values({
+				email: orgEmail,
+				fullName: 'Jan de Vries',
+				phone: '+31612345678',
+				orgId: org.id
+			})
+			.onConflictDoNothing({ target: users.email })
+			.returning();
+
+		if (user) {
+			await db
+				.update(organizations)
+				.set({ contactUserId: user.id })
+				.where(eq(organizations.id, org.id));
+		}
+
 		console.log('Example organization:');
 		console.log('  Name:    Acme B.V.');
 		console.log('  Domain:  acme.example.nl');
-		console.log(`  Email:   ${orgEmail}`);
+		console.log(`  Signing email: ${orgEmail}`);
 		console.log('  Status:  active');
 		console.log('  KVK:     12345678');
+		console.log(`  Contact: Jan de Vries (${orgEmail})`);
 		console.log(`  Log in as org by disclosing email: ${orgEmail}\n`);
 
 		// 3. Example API key

@@ -1,6 +1,7 @@
 import { db } from '$lib/server/db';
 import {
 	organizations,
+	users,
 	changeRequests,
 	adminAuditLog,
 	apiKeys,
@@ -60,7 +61,18 @@ export async function getOrganizationWithRequests(orgId: string) {
 		.where(eq(changeRequests.orgId, orgId))
 		.orderBy(desc(changeRequests.requestedAt));
 
-	return { organization: orgs[0], requests };
+	// Load contact person if set
+	let contactPerson = null;
+	if (orgs[0].contactUserId) {
+		const result = await db
+			.select()
+			.from(users)
+			.where(eq(users.id, orgs[0].contactUserId))
+			.limit(1);
+		contactPerson = result[0] ?? null;
+	}
+
+	return { organization: orgs[0], requests, contactPerson };
 }
 
 export async function approveChangeRequest(
@@ -82,9 +94,7 @@ export async function approveChangeRequest(
 	const fieldMap: Record<string, string> = {
 		name: 'name',
 		domain: 'domain',
-		email: 'email',
-		contactName: 'contact_name',
-		phone: 'phone',
+		signingEmail: 'signing_email',
 		kvkNumber: 'kvk_number'
 	};
 

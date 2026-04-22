@@ -16,10 +16,9 @@ describe('type definitions', () => {
 			id: 'test-uuid',
 			name: 'Test Org',
 			domain: 'test.com',
-			email: 'admin@test.com',
-			contactName: 'John Doe',
-			phone: '+31612345678',
+			signingEmail: 'admin@test.com',
 			kvkNumber: '12345678',
+			contactUserId: null,
 			status: 'active',
 			createdAt: new Date(),
 			updatedAt: new Date()
