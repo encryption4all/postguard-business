@@ -292,7 +292,8 @@
 	}
 
 	.inline-form {
-		display: inline;
+		display: flex;
+		align-items: center;
 	}
 
 	.confirm-row {
