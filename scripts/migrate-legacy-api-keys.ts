@@ -122,7 +122,7 @@ async function main() {
 							contactName: g.contactName,
 							phone: g.phone ?? null,
 							kvkNumber: g.kvkNumber ?? null,
-							status: 'pending'
+							status: 'active'
 						})
 						.returning({ id: organizations.id });
 					orgId = inserted.id;

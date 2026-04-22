@@ -69,8 +69,8 @@ If two groups happen to collide on a synthesised domain, an 8-hex-char
 disambiguating suffix is appended (derived from the grouping key's hash,
 so the result is still deterministic across runs).
 
-New orgs are created with `status = 'pending'` — a human should review
-them in the admin panel before marking them active.
+Migrated orgs are created with `status = 'active'` — these are existing
+users and do not need to re-verify.
 
 ### Signing attributes
 
@@ -110,31 +110,19 @@ are upserted by `domain`.
 
 ## Open product questions
 
-These are not decided by this PR. The migration plan above is the
-conservative choice for each; @rubenhensen should confirm or override.
+All resolved — confirmed by @rubenhensen.
 
-1. **Re-keying.** The legacy keys do not have the `PG-` prefix. This PR
-   preserves them by hashing the raw string, which means pkg#140's
-   validator must accept non-`PG-` keys during the transition. If we
-   prefer a hard cutover, this script should be extended to (a) generate
-   a fresh `PG-…` key per row, (b) notify each user, and (c) keep the
-   legacy row read-only until confirmation. That is a significantly
-   bigger change and has not been implemented here.
+1. **Re-keying.** **Resolved:** preserve existing keys. All legacy keys
+   have the `PG-API-` prefix, which passes the new `PG-` prefix check
+   in postguard#142. No re-keying needed.
 
-2. **Grouping heuristic.** The `kvk → orgname → email-domain → email`
-   grouping is a guess. If the real population of legacy rows has a
-   known structure (for example, "every key belongs to exactly one kvk
-   number") the script should be tightened to fail loudly on violations
-   rather than silently falling back.
+2. **Grouping heuristic.** **Resolved:** the `kvk → orgname →
+   email-domain → email` fallback chain is fine.
 
-3. **Synthetic org status.** New orgs land with `status = 'pending'`
-   intentionally — they have not completed DNS verification. If the
-   product wants them grandfathered to `active`, flip the default in
-   `migrate-legacy-api-keys.ts`.
+3. **Synthetic org status.** **Resolved:** migrated orgs are set to
+   `active` — these are existing users and should be grandfathered in.
 
-4. **`created_by`.** `business_api_keys.created_by` is left NULL.
-   Alternative: create a single `admin_accounts` row representing "legacy
-   migration" and point all migrated keys at it.
+4. **`created_by`.** **Resolved:** left NULL is fine for now.
 
 ## What this PR does NOT do
 
