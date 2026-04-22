@@ -44,9 +44,10 @@ export type PlannedKey = {
 export type OrgGroup = {
 	name: string;
 	domain: string;
-	email: string;
+	signingEmail: string;
+	contactEmail: string;
 	contactName: string;
-	phone: string | null;
+	contactPhone: string | null;
 	kvkNumber: string | null;
 	memberKeyHashes: string[];
 };
@@ -102,15 +103,15 @@ export function groupingKey(row: LegacyApiKeyRow): string {
  * back to `<slug>.legacy.postguard.local`.
  */
 export function synthesiseDomain(group: OrgGroup): string {
-	if (group.email) {
-		const at = group.email.indexOf('@');
-		if (at > 0 && at < group.email.length - 1) {
-			const dom = group.email.substring(at + 1).toLowerCase();
+	if (group.signingEmail) {
+		const at = group.signingEmail.indexOf('@');
+		if (at > 0 && at < group.signingEmail.length - 1) {
+			const dom = group.signingEmail.substring(at + 1).toLowerCase();
 			if (isPlausibleDomain(dom)) return dom;
 		}
 	}
 
-	const slug = slugify(group.kvkNumber ?? group.name ?? group.email);
+	const slug = slugify(group.kvkNumber ?? group.name ?? group.signingEmail);
 	return `${slug}.legacy.postguard.local`;
 }
 
@@ -182,9 +183,10 @@ export function planMigration(rows: LegacyApiKeyRow[]): MigrationPlan {
 				name:
 					row.organisation_name?.trim() || (row.kvk_number ? `KVK ${row.kvk_number}` : row.email),
 				domain: '', // filled below
-				email: row.email,
+				signingEmail: row.email,
+				contactEmail: row.email,
 				contactName: row.email,
-				phone: row.phone_number,
+				contactPhone: row.phone_number,
 				kvkNumber: row.kvk_number,
 				memberKeyHashes: []
 			};

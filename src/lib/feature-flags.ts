@@ -8,6 +8,7 @@ export type FeatureFlag =
 	| 'portalOrgInfo'
 	| 'portalEmailLog'
 	| 'portalDns'
+	| 'portalMembers'
 	| 'adminPanel'
 	| 'adminOrgStatus'
 	| 'adminAuditLog'
@@ -20,6 +21,7 @@ export const FLAG_LABELS: Record<FeatureFlag, string> = {
 	portalOrgInfo: 'Portal: Organization info',
 	portalEmailLog: 'Portal: Email audit log',
 	portalDns: 'Portal: DNS verification',
+	portalMembers: 'Portal: Members',
 	adminPanel: 'Admin panel',
 	adminOrgStatus: 'Admin: Org status (activate/suspend)',
 	adminAuditLog: 'Admin: Audit log',
@@ -34,6 +36,7 @@ const envFlags: Record<FeatureFlag, boolean> = {
 	portalOrgInfo: env.FF_PORTAL_ORG_INFO === 'true',
 	portalEmailLog: env.FF_PORTAL_EMAIL_LOG === 'true',
 	portalDns: env.FF_PORTAL_DNS === 'true',
+	portalMembers: env.FF_PORTAL_MEMBERS === 'true',
 	adminPanel: env.FF_ADMIN_PANEL === 'true',
 	adminOrgStatus: env.FF_ADMIN_ORG_STATUS === 'true',
 	adminAuditLog: env.FF_ADMIN_AUDIT_LOG === 'true',

@@ -17,7 +17,7 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { eq } from 'drizzle-orm';
-import { organizations, apiKeys } from '../src/lib/server/db/schema.ts';
+import { organizations, users, apiKeys } from '../src/lib/server/db/schema.ts';
 import {
 	planMigration,
 	type LegacyApiKeyRow
@@ -118,15 +118,30 @@ async function main() {
 						.values({
 							name: g.name,
 							domain: g.domain,
-							email: g.email,
-							contactName: g.contactName,
-							phone: g.phone ?? null,
+							signingEmail: g.signingEmail,
 							kvkNumber: g.kvkNumber ?? null,
 							status: 'active'
 						})
 						.returning({ id: organizations.id });
 					orgId = inserted.id;
-					console.log(`org: created "${g.domain}" id=${orgId}`);
+
+					// Create a user for the contact person and link them
+					const [user] = await tx
+						.insert(users)
+						.values({
+							email: g.contactEmail,
+							fullName: g.contactName,
+							phone: g.contactPhone ?? null,
+							orgId
+						})
+						.returning({ id: users.id });
+
+					await tx
+						.update(organizations)
+						.set({ contactUserId: user.id })
+						.where(eq(organizations.id, orgId));
+
+					console.log(`org: created "${g.domain}" id=${orgId} contact=${user.id}`);
 				}
 
 				for (const h of g.memberKeyHashes) {

@@ -1,11 +1,12 @@
 import { db } from '$lib/server/db';
-import { sessions, organizations, adminAccounts } from '$lib/server/db/schema';
+import { sessions, organizations, adminAccounts, users } from '$lib/server/db/schema';
 import { eq, and, gt } from 'drizzle-orm';
 import { randomBytes, createHash } from 'crypto';
 
 export interface SessionData {
 	id: string;
 	userType: 'org' | 'admin';
+	userId: string | null;
 	orgId: string | null;
 	adminId: string | null;
 	impersonatingOrgId: string | null;
@@ -24,6 +25,7 @@ export function generateToken(): string {
 
 export async function createSession(
 	userType: 'org' | 'admin',
+	userId: string | null,
 	orgId: string | null,
 	adminId: string | null,
 	yiviAttributes: Record<string, string>
@@ -35,6 +37,7 @@ export async function createSession(
 	await db.insert(sessions).values({
 		tokenHash,
 		userType,
+		userId,
 		orgId,
 		adminId,
 		yiviAttributes,
@@ -66,6 +69,7 @@ export async function resolveSession(token: string): Promise<SessionData | null>
 	return {
 		id: session.id,
 		userType: session.userType as 'org' | 'admin',
+		userId: session.userId,
 		orgId: session.orgId,
 		adminId: session.adminId,
 		impersonatingOrgId: session.impersonatingOrgId,
@@ -76,15 +80,6 @@ export async function resolveSession(token: string): Promise<SessionData | null>
 export async function destroySession(token: string): Promise<void> {
 	const tokenHash = hashToken(token);
 	await db.delete(sessions).where(eq(sessions.tokenHash, tokenHash));
-}
-
-export async function findOrgByEmail(email: string) {
-	const result = await db
-		.select()
-		.from(organizations)
-		.where(eq(organizations.email, email))
-		.limit(1);
-	return result[0] ?? null;
 }
 
 export async function findAdminByAttributes(

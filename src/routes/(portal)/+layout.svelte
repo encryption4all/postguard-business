@@ -19,6 +19,9 @@
 		...(data.featureFlags.emailLog
 			? [{ href: '/portal/email-log', label: 'Email Log', icon: 'mdi:email-search' }]
 			: []),
+		...(data.featureFlags.members
+			? [{ href: '/portal/members', label: 'Members', icon: 'mdi:account-group' }]
+			: []),
 		...(data.featureFlags.dns
 			? [{ href: '/portal/dns', label: 'DNS Verification', icon: 'mdi:dns' }]
 			: [])

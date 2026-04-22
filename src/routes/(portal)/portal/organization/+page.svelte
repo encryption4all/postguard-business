@@ -10,13 +10,14 @@
 
 	const org = $derived(data.organization);
 
+	const contactPerson = $derived(data.contactPerson);
+
 	const fields = $derived([
-		{ key: 'name', label: 'Organization name', value: org.name },
-		{ key: 'domain', label: 'Domain', value: org.domain },
-		{ key: 'email', label: 'Contact email', value: org.email },
-		{ key: 'contactName', label: 'Contact person', value: org.contactName },
-		{ key: 'phone', label: 'Phone number', value: org.phone ?? '—' },
-		{ key: 'kvkNumber', label: 'KvK number', value: org.kvkNumber ?? '—' }
+		{ key: 'name', label: 'Organization name', value: org.name, editable: true },
+		{ key: 'domain', label: 'Domain', value: org.domain, editable: true },
+		{ key: 'signingEmail', label: 'Signing email', value: org.signingEmail, editable: true },
+		{ key: 'kvkNumber', label: 'KvK number', value: org.kvkNumber ?? '—', editable: true },
+		{ key: 'contactPerson', label: 'Contact person', value: contactPerson ? `${contactPerson.fullName} (${contactPerson.email})` : '—', editable: false }
 	]);
 
 	function startEdit(key: string, currentValue: string) {
@@ -54,37 +55,39 @@
 				<span class="field-label">{field.label}</span>
 				<span class="field-value">{field.value}</span>
 			</div>
-			{#if editingField === field.key}
-				<form method="POST" action="?/requestChange" use:enhance={() => {
-					return async ({ update }) => {
-						cancelEdit();
-						await update();
-					};
-				}}>
-					<input type="hidden" name="fieldName" value={field.key} />
-					<input type="hidden" name="oldValue" value={field.value} />
-					<div class="edit-row">
-						<input
-							name="newValue"
-							type="text"
-							class="pg-input edit-input"
-							bind:value={editValue}
-							placeholder="New value"
-							required
-						/>
-						<button type="submit" class="ghost-btn submit-edit">
-							<Icon icon="mdi:send" width="18" height="18" />
-						</button>
-						<button type="button" class="ghost-btn" onclick={cancelEdit}>
-							<Icon icon="mdi:close" width="18" height="18" />
-						</button>
-					</div>
-				</form>
-			{:else}
-				<button class="ghost-btn edit-btn" onclick={() => startEdit(field.key, field.value)}>
-					<Icon icon="mdi:pencil" width="16" height="16" />
-					Request change
-				</button>
+			{#if field.editable}
+				{#if editingField === field.key}
+					<form method="POST" action="?/requestChange" use:enhance={() => {
+						return async ({ update }) => {
+							cancelEdit();
+							await update();
+						};
+					}}>
+						<input type="hidden" name="fieldName" value={field.key} />
+						<input type="hidden" name="oldValue" value={field.value} />
+						<div class="edit-row">
+							<input
+								name="newValue"
+								type="text"
+								class="pg-input edit-input"
+								bind:value={editValue}
+								placeholder="New value"
+								required
+							/>
+							<button type="submit" class="ghost-btn submit-edit">
+								<Icon icon="mdi:send" width="18" height="18" />
+							</button>
+							<button type="button" class="ghost-btn" onclick={cancelEdit}>
+								<Icon icon="mdi:close" width="18" height="18" />
+							</button>
+						</div>
+					</form>
+				{:else}
+					<button class="ghost-btn edit-btn" onclick={() => startEdit(field.key, field.value)}>
+						<Icon icon="mdi:pencil" width="16" height="16" />
+						Request change
+					</button>
+				{/if}
 			{/if}
 		</div>
 	{/each}

@@ -142,8 +142,11 @@
 	}
 
 	.yivi-container {
-		min-width: 260px;
-		min-height: 260px;
+		background: #fff;
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 4px;
+		overflow: hidden;
 	}
 
 	.waiting-text {

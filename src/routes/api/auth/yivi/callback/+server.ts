@@ -1,11 +1,8 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { verifyYiviSession } from '$lib/server/auth/yivi';
-import {
-	createSession,
-	findOrgByEmail,
-	findAdminByAttributes
-} from '$lib/server/auth/session';
+import { createSession, findAdminByAttributes } from '$lib/server/auth/session';
+import { findUserByEmail } from '$lib/server/services/users';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
@@ -24,6 +21,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		error(401, 'Yivi verification failed');
 	}
 
+	let userId: string | null = null;
 	let orgId: string | null = null;
 	let adminId: string | null = null;
 
@@ -31,14 +29,15 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		if (!result.attributes.email) {
 			error(401, 'Email attribute not disclosed');
 		}
-		const org = await findOrgByEmail(result.attributes.email);
-		if (!org) {
-			error(403, 'No organization found for this email. Please register first.');
+		const found = await findUserByEmail(result.attributes.email);
+		if (!found) {
+			error(403, 'No account found for this email. Please register first.');
 		}
-		if (org.status !== 'active') {
+		if (found.org.status !== 'active') {
 			error(403, 'Your organization is not yet approved.');
 		}
-		orgId = org.id;
+		userId = found.user.id;
+		orgId = found.org.id;
 	} else {
 		if (!result.attributes.email || !result.attributes.fullName || !result.attributes.phone) {
 			error(401, 'Required attributes not disclosed');
@@ -54,7 +53,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		adminId = admin.id;
 	}
 
-	const sessionToken = await createSession(type, orgId, adminId, result.attributes);
+	const sessionToken = await createSession(type, userId, orgId, adminId, result.attributes);
 
 	cookies.set('pg_session', sessionToken, {
 		path: '/',

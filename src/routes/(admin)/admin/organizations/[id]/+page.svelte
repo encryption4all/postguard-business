@@ -24,10 +24,9 @@
 
 <div class="org-details">
 	<div class="detail"><span class="label">Domain</span><span>{data.organization.domain}</span></div>
-	<div class="detail"><span class="label">Email</span><span>{data.organization.email}</span></div>
-	<div class="detail"><span class="label">Contact</span><span>{data.organization.contactName}</span></div>
-	<div class="detail"><span class="label">Phone</span><span>{data.organization.phone ?? '—'}</span></div>
+	<div class="detail"><span class="label">Signing email</span><span>{data.organization.signingEmail}</span></div>
 	<div class="detail"><span class="label">KVK</span><span>{data.organization.kvkNumber ?? '—'}</span></div>
+	<div class="detail"><span class="label">Contact</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
 </div>
 
 {#if data.impersonationEnabled}
@@ -132,16 +131,17 @@
 	}
 
 	.detail {
-		display: flex;
+		display: grid;
+		grid-template-columns: 120px 1fr;
 		gap: 1rem;
 		padding: 0.5rem 0;
 		border-bottom: 1px solid var(--pg-strong-background);
 		font-size: var(--pg-font-size-md);
+		align-items: baseline;
 		&:last-child { border-bottom: none; }
 	}
 
 	.label {
-		min-width: 80px;
 		font-size: var(--pg-font-size-xs);
 		color: var(--pg-text-secondary);
 		font-weight: var(--pg-font-weight-medium);

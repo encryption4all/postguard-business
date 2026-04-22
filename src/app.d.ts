@@ -7,6 +7,7 @@ declare global {
 			session: {
 				id: string;
 				userType: 'org' | 'admin';
+				userId: string | null;
 				orgId: string | null;
 				adminId: string | null;
 				impersonatingOrgId: string | null;

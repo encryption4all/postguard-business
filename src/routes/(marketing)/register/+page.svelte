@@ -2,6 +2,10 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import { enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
+	import '@privacybydesign/yivi-css';
+	import type { PageData } from './$types';
+
+	let { data, form }: { data: PageData; form: FormResult | null } = $props();
 
 	interface FormResult {
 		success?: boolean;
@@ -9,7 +13,104 @@
 		values?: Record<string, string | null | undefined>;
 	}
 
-	let { form }: { form: FormResult | null } = $props();
+	let yiviStatus = $state<'idle' | 'running' | 'done' | 'error'>('idle');
+	let yiviError = $state('');
+	let disclosed = $state<{ email: string; fullName: string; phone: string | null } | null>(null);
+	let derivedDomain = $state('');
+
+	async function startYiviFlow() {
+		yiviStatus = 'running';
+		yiviError = '';
+
+		try {
+			const { YiviCore } = await import('@privacybydesign/yivi-core');
+			const { YiviWeb } = await import('@privacybydesign/yivi-web');
+			const { YiviClient } = await import('@privacybydesign/yivi-client');
+
+			const attrs = data.yiviAttrs;
+			let irmaToken = '';
+
+			const yivi = new YiviCore({
+				debugging: false,
+				element: '#yivi-register-container',
+				language: 'en',
+				minimal: true,
+				session: {
+					url: '/irma',
+					start: {
+						url: (o: any) => `${o.url}/session`,
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							'@context': 'https://irma.app/ld/request/disclosure/v2',
+							disclose: [[[attrs.email]], [[attrs.fullName]], [[attrs.phone]]]
+						})
+					},
+					mapping: {
+						sessionPtr: (r: any) => r.sessionPtr,
+						sessionToken: (r: any) => {
+							irmaToken = r.token;
+							return r.token;
+						},
+						frontendRequest: (r: any) => r.frontendRequest
+					}
+				},
+				state: {
+					serverSentEvents: false,
+					polling: {
+						endpoint: 'status',
+						interval: 1000,
+						startState: 'INITIALIZED'
+					}
+				}
+			});
+
+			yivi.use(YiviWeb);
+			yivi.use(YiviClient);
+
+			await yivi.start();
+
+			// Verify the disclosure and get attributes
+			const response = await fetch('/api/auth/yivi/verify', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ irmaSessionToken: irmaToken })
+			});
+
+			if (!response.ok) {
+				const err = await response.json();
+				yiviStatus = 'error';
+				yiviError = err.message ?? 'Verification failed';
+				return;
+			}
+
+			const { attributes } = await response.json();
+			disclosed = {
+				email: attributes.email,
+				fullName: attributes.fullName,
+				phone: attributes.phone ?? null
+			};
+
+			// Derive domain from email
+			const at = attributes.email.indexOf('@');
+			if (at > 0) {
+				derivedDomain = attributes.email.substring(at + 1).toLowerCase();
+			}
+
+			yiviStatus = 'done';
+		} catch (e: unknown) {
+			if (yiviStatus === 'running') {
+				yiviStatus = 'error';
+				yiviError = e instanceof Error ? e.message : 'Yivi session failed. Please try again.';
+			}
+		}
+	}
+
+	function retryYivi() {
+		yiviStatus = 'idle';
+		yiviError = '';
+		disclosed = null;
+	}
 </script>
 
 <SEO
@@ -30,11 +131,35 @@
 				</p>
 				<a href="/" class="secondary-btn">Back to home</a>
 			</div>
-		{:else}
+		{:else if yiviStatus === 'idle' || yiviStatus === 'running' || yiviStatus === 'error'}
 			<h1>Register your organization</h1>
 			<p class="register-subtitle">
-				Fill in your organization details to apply for PostGuard for Business. We'll review
-				your application and get back to you shortly.
+				Verify your identity with the Yivi app to register your organization for PostGuard for Business.
+			</p>
+
+			{#if yiviStatus === 'idle'}
+				<div class="yivi-section">
+					<button class="primary-btn yivi-btn" onclick={startYiviFlow}>
+						<Icon icon="mdi:qrcode-scan" width="20" height="20" />
+						Verify with Yivi
+					</button>
+				</div>
+			{:else if yiviStatus === 'running'}
+				<div class="yivi-section">
+					<div id="yivi-register-container" class="yivi-container"></div>
+					<p class="yivi-hint">Please disclose your email, full name, and phone number.</p>
+				</div>
+			{:else if yiviStatus === 'error'}
+				<div class="yivi-section error-state">
+					<Icon icon="mdi:alert-circle" width="32" height="32" />
+					<p>{yiviError}</p>
+					<button class="secondary-btn" onclick={retryYivi}>Try again</button>
+				</div>
+			{/if}
+		{:else if disclosed}
+			<h1>Complete registration</h1>
+			<p class="register-subtitle">
+				Your identity has been verified. Fill in the remaining details below.
 			</p>
 
 			{#if form?.errors?.form}
@@ -44,7 +169,33 @@
 				</div>
 			{/if}
 
+			<div class="disclosed-info">
+				<div class="disclosed-field">
+					<span class="disclosed-label">Full name</span>
+					<span class="disclosed-value">{disclosed.fullName}</span>
+				</div>
+				<div class="disclosed-field">
+					<span class="disclosed-label">Email</span>
+					<span class="disclosed-value">{disclosed.email}</span>
+				</div>
+				{#if disclosed.phone}
+					<div class="disclosed-field">
+						<span class="disclosed-label">Phone</span>
+						<span class="disclosed-value">{disclosed.phone}</span>
+					</div>
+				{/if}
+				<div class="disclosed-badge">
+					<Icon icon="mdi:check-decagram" width="16" height="16" />
+					Verified with Yivi
+				</div>
+			</div>
+
 			<form method="POST" use:enhance>
+				<input type="hidden" name="email" value={disclosed.email} />
+				<input type="hidden" name="contactName" value={disclosed.fullName} />
+				<input type="hidden" name="phone" value={disclosed.phone ?? ''} />
+				<input type="hidden" name="domain" value={derivedDomain} />
+
 				<div class="form-group">
 					<label for="name">Organization name *</label>
 					<input
@@ -61,83 +212,12 @@
 					{/if}
 				</div>
 
-				<div class="form-group">
-					<label for="domain">Domain name *</label>
-					<input
-						id="domain"
-						name="domain"
-						type="text"
-						class="pg-input"
-						placeholder="acme.nl"
-						value={form?.values?.domain ?? ''}
-						required
-					/>
-					{#if form?.errors?.domain}
-						<span class="field-error">{form.errors.domain}</span>
-					{/if}
-				</div>
-
-				<div class="form-group">
-					<label for="email">Contact email *</label>
-					<input
-						id="email"
-						name="email"
-						type="email"
-						class="pg-input"
-						placeholder="admin@acme.nl"
-						value={form?.values?.email ?? ''}
-						required
-					/>
-					{#if form?.errors?.email}
-						<span class="field-error">{form.errors.email}</span>
-					{/if}
-				</div>
-
-				<div class="form-group">
-					<label for="contactName">Contact person full name *</label>
-					<input
-						id="contactName"
-						name="contactName"
-						type="text"
-						class="pg-input"
-						placeholder="Jan de Vries"
-						value={form?.values?.contactName ?? ''}
-						required
-					/>
-					{#if form?.errors?.contactName}
-						<span class="field-error">{form.errors.contactName}</span>
-					{/if}
-				</div>
-
-				<div class="form-row">
-					<div class="form-group">
-						<label for="phone">Phone number</label>
-						<input
-							id="phone"
-							name="phone"
-							type="tel"
-							class="pg-input"
-							placeholder="+31 6 12345678"
-							value={form?.values?.phone ?? ''}
-						/>
+				{#if form?.errors?.domain}
+					<div class="form-error" role="alert">
+						<Icon icon="mdi:alert-circle" width="20" height="20" />
+						<span>{form.errors.domain}</span>
 					</div>
-
-					<div class="form-group">
-						<label for="kvkNumber">KvK number</label>
-						<input
-							id="kvkNumber"
-							name="kvkNumber"
-							type="text"
-							class="pg-input"
-							placeholder="12345678"
-							maxlength="8"
-							value={form?.values?.kvkNumber ?? ''}
-						/>
-						{#if form?.errors?.kvkNumber}
-							<span class="field-error">{form.errors.kvkNumber}</span>
-						{/if}
-					</div>
-				</div>
+				{/if}
 
 				<button type="submit" class="primary-btn submit-btn">Submit application</button>
 			</form>
@@ -174,6 +254,92 @@
 		line-height: 1.5;
 	}
 
+	.yivi-section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 1rem 0;
+	}
+
+	.yivi-btn {
+		gap: 0.5rem;
+	}
+
+	.yivi-container {
+		background: #fff;
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 4px;
+		overflow: hidden;
+	}
+
+	.yivi-hint {
+		max-width: 300px;
+		text-align: center;
+		line-height: 1.5;
+		color: var(--pg-text-secondary);
+		margin-top: 1rem;
+	}
+
+	.error-state {
+		gap: 1rem;
+		text-align: center;
+
+		:global(svg) {
+			color: var(--pg-input-error);
+		}
+
+		p {
+			color: var(--pg-input-error);
+		}
+	}
+
+	.disclosed-info {
+		background: var(--pg-soft-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.25rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.disclosed-field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+		padding: 0.5rem 0;
+		border-bottom: 1px solid var(--pg-strong-background);
+
+		&:last-of-type {
+			border-bottom: none;
+		}
+	}
+
+	.disclosed-label {
+		font-size: var(--pg-font-size-xs);
+		color: var(--pg-text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		font-weight: var(--pg-font-weight-medium);
+	}
+
+	.disclosed-value {
+		font-size: var(--pg-font-size-md);
+		font-weight: var(--pg-font-weight-medium);
+	}
+
+	.disclosed-badge {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: 0.75rem;
+		font-size: var(--pg-font-size-xs);
+		font-weight: var(--pg-font-weight-bold);
+		color: #16a34a;
+
+		:global(svg) {
+			color: #16a34a;
+		}
+	}
+
 	.form-error {
 		display: flex;
 		align-items: center;
@@ -202,16 +368,6 @@
 			font-size: var(--pg-font-size-sm);
 			font-weight: var(--pg-font-weight-medium);
 			color: var(--pg-text);
-		}
-	}
-
-	.form-row {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-
-		@media only screen and (max-width: 500px) {
-			grid-template-columns: 1fr;
 		}
 	}
 
