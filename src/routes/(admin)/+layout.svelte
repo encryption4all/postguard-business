@@ -22,6 +22,7 @@
 	]);
 </script>
 
+<div class="layout-shell">
 {#if data.impersonatingOrgId}
 	<div class="impersonation-bar">
 		<Icon icon="mdi:eye" width="16" height="16" />
@@ -83,6 +84,7 @@
 		</div>
 	</div>
 </div>
+</div>
 
 {#if sidebarOpen}
 	<div class="sidebar-overlay desktop-hide" role="presentation" onclick={() => (sidebarOpen = false)}></div>
@@ -115,9 +117,16 @@
 		&:hover { background: rgba(255, 255, 255, 0.3); }
 	}
 
+	.layout-shell {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
+
 	.admin-layout {
 		display: flex;
-		min-height: 100vh;
+		flex: 1;
+		min-height: 0;
 	}
 
 	.sidebar {
