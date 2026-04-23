@@ -40,6 +40,42 @@
 	</div>
 {/if}
 
+<section class="users">
+	<h2>Users <span class="count">({data.users.length})</span></h2>
+	{#if data.users.length === 0}
+		<p class="empty">No users belong to this organisation yet.</p>
+	{:else}
+		<div class="table-wrap">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Phone</th>
+						<th>Contact</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each data.users as u (u.id)}
+						<tr>
+							<td>{u.fullName}</td>
+							<td>{u.email}</td>
+							<td>{u.phone ?? '—'}</td>
+							<td>
+								{#if data.organization.contactUserId === u.id}
+									<span class="badge">Contact person</span>
+								{:else}
+									—
+								{/if}
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{/if}
+</section>
+
 {#if data.requests.length > 0}
 	<section class="requests">
 		<h2>Change Requests</h2>
@@ -150,6 +186,18 @@
 	}
 
 	.admin-actions { margin-bottom: 2rem; }
+
+	.users {
+		margin-bottom: 2rem;
+		h2 { margin-bottom: 1rem; }
+		.count { font-size: var(--pg-font-size-sm); color: var(--pg-text-secondary); font-weight: var(--pg-font-weight-regular); }
+		.empty { color: var(--pg-text-secondary); font-size: var(--pg-font-size-sm); }
+		.table-wrap { overflow-x: auto; }
+		table { width: 100%; border-collapse: collapse; font-size: var(--pg-font-size-sm); }
+		th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--pg-strong-background); }
+		th { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); text-transform: uppercase; font-weight: var(--pg-font-weight-medium); font-family: var(--pg-font-family); }
+		.badge { background: rgba(22, 163, 74, 0.12); color: #16a34a; font-size: var(--pg-font-size-xs); font-weight: var(--pg-font-weight-bold); padding: 3px 10px; border-radius: 100px; text-transform: uppercase; font-family: var(--pg-font-family); }
+	}
 
 	.requests h2 { margin-bottom: 1rem; }
 

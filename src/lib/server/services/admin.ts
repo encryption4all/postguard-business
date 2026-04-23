@@ -61,18 +61,19 @@ export async function getOrganizationWithRequests(orgId: string) {
 		.where(eq(changeRequests.orgId, orgId))
 		.orderBy(desc(changeRequests.requestedAt));
 
+	const orgUsers = await db
+		.select()
+		.from(users)
+		.where(eq(users.orgId, orgId))
+		.orderBy(users.fullName);
+
 	// Load contact person if set
 	let contactPerson = null;
 	if (orgs[0].contactUserId) {
-		const result = await db
-			.select()
-			.from(users)
-			.where(eq(users.id, orgs[0].contactUserId))
-			.limit(1);
-		contactPerson = result[0] ?? null;
+		contactPerson = orgUsers.find((u) => u.id === orgs[0].contactUserId) ?? null;
 	}
 
-	return { organization: orgs[0], requests, contactPerson };
+	return { organization: orgs[0], requests, contactPerson, users: orgUsers };
 }
 
 export async function approveChangeRequest(
