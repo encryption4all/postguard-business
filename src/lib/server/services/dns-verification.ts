@@ -40,7 +40,7 @@ export async function verifyDns(orgId: string): Promise<{
 	try {
 		const txtRecords = await resolve(record.domain, 'TXT');
 		const flat = txtRecords.flat();
-		const found = flat.some((txt) => txt.includes(record.txtRecord));
+		const found = flat.some((txt) => txt === record.txtRecord);
 
 		if (found) {
 			await db
