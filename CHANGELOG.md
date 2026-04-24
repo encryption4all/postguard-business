@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.1.0](https://github.com/encryption4all/postguard-business/compare/v1.0.0...v1.1.0) (2026-04-24)
+
+
+### Features
+
+* add legacy pkg api_keys migration script and plan ([8dee289](https://github.com/encryption4all/postguard-business/commit/8dee28955be34d318068ac2a40ae0c9c54f27012))
+* add purple PostGuard shield favicon as 144x144 PNG ([d7c07e5](https://github.com/encryption4all/postguard-business/commit/d7c07e53e5a3074ed7cf5dc1d1374d7012c03e35))
+* add users table and Yivi-based registration ([9c1097f](https://github.com/encryption4all/postguard-business/commit/9c1097f843592944ee0037be592788dea4787bb4))
+* add users table to separate org signing attrs from user identity ([2e2e926](https://github.com/encryption4all/postguard-business/commit/2e2e9263f21b483b8bda4c58d9fc847503a1d090))
+* **admin:** show users per organisation on org detail page ([9f12bd8](https://github.com/encryption4all/postguard-business/commit/9f12bd87df0269c5f02d535c79bfb514d4ef75f7))
+* **admin:** show users per organisation on org detail page ([d202745](https://github.com/encryption4all/postguard-business/commit/d202745c7ee38038a18ec388becbf69feb70fbdb))
+* auto-push schema and seed admin on container startup ([bf6dfed](https://github.com/encryption4all/postguard-business/commit/bf6dfeda7171bdb2159016aad2c609de4f88d2ad))
+* **i18n:** add Dutch and English translations ([d4a2ac2](https://github.com/encryption4all/postguard-business/commit/d4a2ac2f982c347893bf5c27243ec4515dd96087))
+* **i18n:** add Dutch and English translations across entire app ([60f6d05](https://github.com/encryption4all/postguard-business/commit/60f6d055eff01692ef2b105af0a30709424dbcd6))
+* migration script for legacy pkg api_keys → business PG- format ([8e40573](https://github.com/encryption4all/postguard-business/commit/8e40573bd220536a21cc5640f92fbc81a6a48339))
+* **nav:** show logged-in state in marketing header ([300bf70](https://github.com/encryption4all/postguard-business/commit/300bf707a4852c6f604766f43e7af515ab2c0958))
+* **nav:** show logged-in state in marketing header ([5eace1b](https://github.com/encryption4all/postguard-business/commit/5eace1b7f7efd97f62f2a31b23b8b59850c0de6e)), closes [#16](https://github.com/encryption4all/postguard-business/issues/16)
+* proxy IRMA requests through SvelteKit backend ([e2367f1](https://github.com/encryption4all/postguard-business/commit/e2367f18bb35a05cba01eaf78a5e516e2029d13f))
+* replace registration form with Yivi disclosure flow ([2b982aa](https://github.com/encryption4all/postguard-business/commit/2b982aa9d336fd820732eaf83188b35b8dcf41a6))
+* show commit hash in footer version (e.g. v1.0.0+abc1234) ([7e0dcbb](https://github.com/encryption4all/postguard-business/commit/7e0dcbb330e45e93a45a9442e155847a1b3d0e2f))
+* show version indicator in footer from package.json ([18d4407](https://github.com/encryption4all/postguard-business/commit/18d4407651be26f7ca158dc798c561cbe3e3502c))
+* switch to file-based migrations with safety checks ([7087869](https://github.com/encryption4all/postguard-business/commit/7087869ddf34e04eddaed550ea5a71b905c80777))
+
+
+### Bug Fixes
+
+* **a11y:** improve color contrast to pass WCAG AA in both themes ([196d8b9](https://github.com/encryption4all/postguard-business/commit/196d8b9f96ffef075869378b2fba211fea296d69))
+* add accessible labels to theme toggle buttons ([452d911](https://github.com/encryption4all/postguard-business/commit/452d91190b9f69a30f9b1aacc9623dc01a8db1e6))
+* add accessible labels to theme toggle buttons ([4278cf5](https://github.com/encryption4all/postguard-business/commit/4278cf50a5f23027fa5636a117ee404aa71c0c94)), closes [#5](https://github.com/encryption4all/postguard-business/issues/5)
+* center contact person icon in members table ([ba75628](https://github.com/encryption4all/postguard-business/commit/ba756289bfbbf9a369e5707405db4c4cbfcb149f))
+* change footer headings from h4 to h2 ([4e07c0e](https://github.com/encryption4all/postguard-business/commit/4e07c0e1a53b9a9df2912a2d36ecaf3ba404a166))
+* change footer headings from h4 to h2 ([782135e](https://github.com/encryption4all/postguard-business/commit/782135e246f26ea20fcf18752aae8f2c0e073efe)), closes [#6](https://github.com/encryption4all/postguard-business/issues/6)
+* **design:** inline feature icons next to headings ([6c8e60f](https://github.com/encryption4all/postguard-business/commit/6c8e60f6e353d963e8a362e97ee8556ee998d568))
+* **design:** large background icons as decorative card accents ([e498c56](https://github.com/encryption4all/postguard-business/commit/e498c56eee80e7cbfb9b22134365b4d6cbffd198))
+* **design:** mixed feature layout with rows and pairs ([d1bc96b](https://github.com/encryption4all/postguard-business/commit/d1bc96bb47ca65253ee7ec490d8e1f4075eef5d8))
+* **design:** replace AI template patterns with more distinctive layouts ([bb4ee52](https://github.com/encryption4all/postguard-business/commit/bb4ee520ff7c78df6ab36ec124c80e9d7f53f0b7))
+* improve white-on-purple contrast in dark mode ([58959bf](https://github.com/encryption4all/postguard-business/commit/58959bf44b0fe5ce25b9d0f78a651fb947979a42))
+* improve white-on-purple contrast in dark mode ([8224ca8](https://github.com/encryption4all/postguard-business/commit/8224ca87158f554a18c035da88327781cda0733b)), closes [#4](https://github.com/encryption4all/postguard-business/issues/4)
+* include schema.ts in production image for seed script ([7a30b44](https://github.com/encryption4all/postguard-business/commit/7a30b446773efd15d4f5ef4259becae42cc07c38))
+* include YIVI_SERVER_TOKEN when verifying session result from IRMA server ([a4cca2e](https://github.com/encryption4all/postguard-business/commit/a4cca2eb9f7abe43b9d754b139546d6d5e4189eb))
+* keep impersonation banner inside viewport layout ([0a94f99](https://github.com/encryption4all/postguard-business/commit/0a94f992d82f6bbb6765501562723ee4f4c4f6ad))
+* keep impersonation banner inside viewport layout ([e08cd8e](https://github.com/encryption4all/postguard-business/commit/e08cd8e96756bc6f813a0895f410ca8257112ed0)), closes [#18](https://github.com/encryption4all/postguard-business/issues/18)
+* read version from package.json instead of SvelteKit build timestamp ([e96c64e](https://github.com/encryption4all/postguard-business/commit/e96c64e54bfc3bb44d1001ba6939987774af1f85))
+* redirect already-authenticated users away from login pages ([fa5c56e](https://github.com/encryption4all/postguard-business/commit/fa5c56e544512840bb4c1af9c7c51ee8c0dbd019))
+* resolve svelte-check errors and add pre-commit type checking ([84c349c](https://github.com/encryption4all/postguard-business/commit/84c349ce4e166ee8d8147c169687d92fc6ab6ee0))
+* **security:** allowlist change-request field names ([843e361](https://github.com/encryption4all/postguard-business/commit/843e361dfc1aea4960bcf79fc43f995178e3a469))
+* **security:** allowlist irma proxy path prefixes ([e3fb6ba](https://github.com/encryption4all/postguard-business/commit/e3fb6ba9fa4f39d3535fa0f19f719bd2cdd106c0))
+* **security:** allowlist irma proxy path prefixes ([75021e7](https://github.com/encryption4all/postguard-business/commit/75021e7d93f51887b94b9772e4c58cfaff8da442)), closes [#10](https://github.com/encryption4all/postguard-business/issues/10)
+* **security:** allowlist org change-request field names ([55ac721](https://github.com/encryption4all/postguard-business/commit/55ac7215cc26dfe50d14441a505c321e10830363)), closes [#10](https://github.com/encryption4all/postguard-business/issues/10)
+* set migrated orgs to active and resolve open product questions ([2ebe532](https://github.com/encryption4all/postguard-business/commit/2ebe5328f21967de5c9a3cb4c356f30dda75b13f))
+* use PostGuard logo + Business badge consistently, enable Yivi minimal mode ([0b42a5f](https://github.com/encryption4all/postguard-business/commit/0b42a5ffb295b289377d4f445e509323a346ad18))
+* wait for locale before rendering, update e2e tests ([06d5350](https://github.com/encryption4all/postguard-business/commit/06d53501ae7bf0af63e4f297268e3b6fa3a57035))
+
 ## 1.0.0 (2026-04-16)
 
 
