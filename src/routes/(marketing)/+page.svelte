@@ -5,11 +5,63 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+
+	const jsonLd = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'Organization',
+			name: 'PostGuard for Business',
+			url: 'https://business.postguard.eu',
+			logo: {
+				'@type': 'ImageObject',
+				url: 'https://business.postguard.eu/pg_logo.png'
+			},
+			description:
+				'PostGuard for Business offers enterprise-grade identity-based email signing and encryption for organizations.',
+			sameAs: ['https://postguard.eu', 'https://docs.postguard.eu']
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'WebSite',
+			name: 'PostGuard for Business',
+			url: 'https://business.postguard.eu'
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'SoftwareApplication',
+			name: 'PostGuard for Business',
+			url: 'https://business.postguard.eu',
+			applicationCategory: 'BusinessApplication',
+			operatingSystem: 'Web',
+			description:
+				'Identity-based email signing and end-to-end encryption for organizations. Manage API keys, audit email activity, and verify domain ownership.',
+			featureList: [
+				'API Key Management',
+				'Identity-Based Email Signing',
+				'End-to-End Encryption',
+				'Email Audit Log',
+				'GDPR-compliant EU hosting'
+			],
+			offers: {
+				'@type': 'AggregateOffer',
+				priceCurrency: 'EUR',
+				lowPrice: '4',
+				highPrice: '6',
+				priceSpecification: {
+					'@type': 'UnitPriceSpecification',
+					price: '4',
+					priceCurrency: 'EUR',
+					unitText: 'per user per month'
+				}
+			}
+		}
+	];
 </script>
 
 <SEO
 	title={$_('seo.homeTitle')}
 	description={$_('seo.homeDescription')}
+	{jsonLd}
 />
 
 <section class="hero">
