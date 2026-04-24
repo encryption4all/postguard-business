@@ -9,8 +9,7 @@ test.describe('Landing page', () => {
 	test('should display features section', async ({ page }) => {
 		await page.goto('/');
 		await expect(page.locator('.features')).toBeVisible();
-		await expect(page.locator('.feature-row')).toHaveCount(2);
-		await expect(page.locator('.bento-item')).toHaveCount(4);
+		await expect(page.locator('.feature-block')).toHaveCount(6);
 	});
 
 	test('should have working navigation links', async ({ page }) => {

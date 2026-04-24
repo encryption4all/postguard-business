@@ -48,43 +48,41 @@
 <section class="features">
 	<h2 class="section-title">{$_('features.title')}</h2>
 
-	<div class="feature-rows">
-		<div class="feature-row highlight-row">
-			<div class="row-icon"><Icon icon="mdi:key-variant" width="36" height="36" /></div>
-			<div class="row-body">
-				<h3>{$_('features.apiKeys.title')}</h3>
-				<p>{$_('features.apiKeys.description')}</p>
-			</div>
+	<div class="feature-list">
+		<div class="feature-block">
+			<div class="bg-icon"><Icon icon="mdi:key-variant" width="120" height="120" /></div>
+			<h3>{$_('features.apiKeys.title')}</h3>
+			<p>{$_('features.apiKeys.description')}</p>
 		</div>
 
-		<div class="feature-pair">
-			<div class="bento-item">
-				<h3><Icon icon="mdi:shield-account" width="20" height="20" />{$_('features.identity.title')}</h3>
-				<p>{$_('features.identity.description')}</p>
-			</div>
-			<div class="bento-item">
-				<h3><Icon icon="mdi:lock-check" width="20" height="20" />{$_('features.encryption.title')}</h3>
-				<p>{$_('features.encryption.description')}</p>
-			</div>
+		<div class="feature-block">
+			<div class="bg-icon"><Icon icon="mdi:shield-account" width="120" height="120" /></div>
+			<h3>{$_('features.identity.title')}</h3>
+			<p>{$_('features.identity.description')}</p>
 		</div>
 
-		<div class="feature-row">
-			<div class="row-icon"><Icon icon="mdi:server-security" width="36" height="36" /></div>
-			<div class="row-body">
-				<h3>{$_('features.hostedEU.title')}</h3>
-				<p>{$_('features.hostedEU.description')}</p>
-			</div>
+		<div class="feature-block">
+			<div class="bg-icon"><Icon icon="mdi:lock-check" width="120" height="120" /></div>
+			<h3>{$_('features.encryption.title')}</h3>
+			<p>{$_('features.encryption.description')}</p>
 		</div>
 
-		<div class="feature-pair">
-			<div class="bento-item">
-				<h3><Icon icon="mdi:source-branch" width="20" height="20" />{$_('features.openSource.title')}</h3>
-				<p>{$_('features.openSource.description')}</p>
-			</div>
-			<div class="bento-item muted">
-				<h3><Icon icon="mdi:email-remove" width="20" height="20" />{$_('features.revocation.title')} <span class="coming-soon">{$_('features.revocation.comingSoon')}</span></h3>
-				<p>{$_('features.revocation.description')}</p>
-			</div>
+		<div class="feature-block">
+			<div class="bg-icon"><Icon icon="mdi:server-security" width="120" height="120" /></div>
+			<h3>{$_('features.hostedEU.title')}</h3>
+			<p>{$_('features.hostedEU.description')}</p>
+		</div>
+
+		<div class="feature-block">
+			<div class="bg-icon"><Icon icon="mdi:source-branch" width="120" height="120" /></div>
+			<h3>{$_('features.openSource.title')}</h3>
+			<p>{$_('features.openSource.description')}</p>
+		</div>
+
+		<div class="feature-block muted">
+			<div class="bg-icon"><Icon icon="mdi:email-remove" width="120" height="120" /></div>
+			<h3>{$_('features.revocation.title')} <span class="coming-soon">{$_('features.revocation.comingSoon')}</span></h3>
+			<p>{$_('features.revocation.description')}</p>
 		</div>
 	</div>
 </section>
@@ -203,87 +201,53 @@
 		margin-bottom: 2rem;
 	}
 
-	.feature-rows {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-	}
-
-	/* Full-width horizontal feature row */
-	.feature-row {
-		display: flex;
-		align-items: flex-start;
-		gap: 1.5rem;
-		padding: 1.75rem;
-		border: 1px solid var(--pg-strong-background);
-		border-radius: var(--pg-border-radius-lg);
-
-		&.highlight-row {
-			background: var(--pg-soft-background);
-			border: none;
-		}
-
-		@media only screen and (max-width: 600px) {
-			flex-direction: column;
-			gap: 0.75rem;
-		}
-	}
-
-	.row-icon {
-		color: var(--pg-primary);
-		flex-shrink: 0;
-		padding-top: 0.15rem;
-	}
-
-	.row-body {
-		h3 {
-			margin: 0 0 0.35rem;
-		}
-
-		p {
-			color: var(--pg-text-secondary);
-			font-size: var(--pg-font-size-md);
-			line-height: 1.5;
-			max-width: 600px;
-		}
-	}
-
-	/* Side-by-side compact pair */
-	.feature-pair {
+	.feature-list {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
 
-		@media only screen and (max-width: 600px) {
+		@media only screen and (max-width: 700px) {
 			grid-template-columns: 1fr;
 		}
 	}
 
-	.bento-item {
-		background: var(--pg-soft-background);
+	.feature-block {
+		position: relative;
+		overflow: hidden;
 		border-radius: var(--pg-border-radius-lg);
-		padding: 1.25rem;
+		padding: 2rem 1.75rem;
+		min-height: 160px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		background: var(--pg-soft-background);
 
 		&.muted {
-			opacity: 0.65;
+			opacity: 0.6;
 		}
 
 		h3 {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
+			position: relative;
 			margin: 0 0 0.35rem;
-
-			:global(svg) {
-				color: var(--pg-primary);
-				flex-shrink: 0;
-			}
 		}
 
 		p {
+			position: relative;
 			color: var(--pg-text-secondary);
 			font-size: var(--pg-font-size-md);
 			line-height: 1.5;
+		}
+	}
+
+	.bg-icon {
+		position: absolute;
+		top: -10px;
+		right: -10px;
+		opacity: 0.08;
+		pointer-events: none;
+
+		:global(svg) {
+			color: var(--pg-primary);
 		}
 	}
 
