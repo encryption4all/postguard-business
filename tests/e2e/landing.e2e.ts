@@ -6,9 +6,11 @@ test.describe('Landing page', () => {
 		await expect(page.locator('.hero h1')).toBeVisible();
 	});
 
-	test('should display feature cards', async ({ page }) => {
+	test('should display features section', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.locator('.bento-item')).toHaveCount(6);
+		await expect(page.locator('.features')).toBeVisible();
+		await expect(page.locator('.feature-row')).toHaveCount(2);
+		await expect(page.locator('.bento-item')).toHaveCount(4);
 	});
 
 	test('should have working navigation links', async ({ page }) => {
