@@ -69,9 +69,9 @@
 
 <style lang="scss">
 	.pricing-hero {
-		text-align: center;
+		max-width: 1100px;
+		margin: 0 auto;
 		padding: 4rem 1.5rem 2rem;
-		background: linear-gradient(180deg, var(--pg-soft-background) 0%, var(--pg-general-background) 100%);
 
 		h1 {
 			font-size: 2.2rem;
@@ -81,8 +81,7 @@
 		p {
 			color: var(--pg-text-secondary);
 			font-size: var(--pg-font-size-lg);
-			max-width: 600px;
-			margin: 0 auto;
+			max-width: 500px;
 		}
 	}
 
@@ -116,7 +115,6 @@
 
 		&.highlighted {
 			border-color: var(--pg-primary);
-			box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
 		}
 
 		h2 {
@@ -156,13 +154,12 @@
 	}
 
 	.advantages {
-		max-width: 600px;
+		max-width: 1100px;
 		margin: 0 auto;
-		padding: 1rem 1.5rem 4rem;
-		text-align: center;
+		padding: 1.5rem 1.5rem 4rem;
 
 		h2 {
-			margin-bottom: 1.25rem;
+			margin-bottom: 1rem;
 		}
 	}
 
@@ -170,13 +167,12 @@
 		list-style: none;
 		padding: 0;
 		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
+		flex-wrap: wrap;
+		gap: 0.5rem 2rem;
 
 		li {
 			display: flex;
 			align-items: center;
-			justify-content: center;
 			gap: 0.5rem;
 			font-size: var(--pg-font-size-md);
 			color: var(--pg-text);
