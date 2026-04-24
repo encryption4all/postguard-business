@@ -17,6 +17,12 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
+#app {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
 @media (resolution: 1dppx) {
 	body {
 		-webkit-font-smoothing: subpixel-antialiased;

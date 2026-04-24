@@ -1,29 +1,31 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import Icon from '@iconify/svelte';
 	import logoLight from '$lib/assets/images/logo.svg';
 	import logoDark from '$lib/assets/images/logo-dark.svg';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
+	import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte';
 	import type { LayoutData } from './$types';
 
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
 	let sidebarOpen = $state(false);
 
 	const navItems = $derived([
-		{ href: '/portal/dashboard', label: 'Dashboard', icon: 'mdi:view-dashboard' },
+		{ href: '/portal/dashboard', label: $_('nav.dashboard'), icon: 'mdi:view-dashboard' },
 		...(data.featureFlags.apiKeys
-			? [{ href: '/portal/api-keys', label: 'API Keys', icon: 'mdi:key-variant' }]
+			? [{ href: '/portal/api-keys', label: $_('nav.apiKeys'), icon: 'mdi:key-variant' }]
 			: []),
 		...(data.featureFlags.orgInfo
-			? [{ href: '/portal/organization', label: 'Organization', icon: 'mdi:office-building' }]
+			? [{ href: '/portal/organization', label: $_('nav.organization'), icon: 'mdi:office-building' }]
 			: []),
 		...(data.featureFlags.emailLog
-			? [{ href: '/portal/email-log', label: 'Email Log', icon: 'mdi:email-search' }]
+			? [{ href: '/portal/email-log', label: $_('nav.emailLog'), icon: 'mdi:email-search' }]
 			: []),
 		...(data.featureFlags.members
-			? [{ href: '/portal/members', label: 'Members', icon: 'mdi:account-group' }]
+			? [{ href: '/portal/members', label: $_('nav.members'), icon: 'mdi:account-group' }]
 			: []),
 		...(data.featureFlags.dns
-			? [{ href: '/portal/dns', label: 'DNS Verification', icon: 'mdi:dns' }]
+			? [{ href: '/portal/dns', label: $_('nav.dns'), icon: 'mdi:dns' }]
 			: [])
 	]);
 </script>
@@ -31,9 +33,9 @@
 {#if data.isImpersonating}
 	<div class="impersonation-bar">
 		<Icon icon="mdi:eye" width="16" height="16" />
-		<span>Viewing as <strong>{data.organization.name}</strong></span>
+		<span>{$_('admin.viewingAs', { values: { orgName: data.organization.name } })}</span>
 		<form method="POST" action="/api/admin/impersonate/stop">
-			<button type="submit" class="stop-btn">Stop impersonating</button>
+			<button type="submit" class="stop-btn">{$_('admin.stopImpersonating')}</button>
 		</form>
 	</div>
 {/if}
@@ -68,7 +70,7 @@
 			<form method="POST" action="/auth/logout">
 				<button type="submit" class="nav-item logout-btn">
 					<Icon icon="mdi:logout" width="20" height="20" />
-					<span>Log out</span>
+					<span>{$_('nav.logout')}</span>
 				</button>
 			</form>
 		</div>
@@ -81,6 +83,7 @@
 			</button>
 			<h2 class="portal-title">{data.organization.name}</h2>
 			<div class="header-actions">
+				<LocaleSwitcher />
 				<ThemeSwitcher />
 			</div>
 		</header>

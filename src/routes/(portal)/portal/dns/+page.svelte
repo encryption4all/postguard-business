@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -14,9 +15,9 @@
 	}
 </script>
 
-<SEO title="DNS Verification" />
+<SEO title={$_('dns.title')} />
 
-<h1>DNS Verification</h1>
+<h1>{$_('dns.title')}</h1>
 
 <div class="status-card" class:verified={data.dns.verified}>
 	<div class="status-header">
@@ -26,12 +27,12 @@
 			height="28"
 		/>
 		<div>
-			<h2>{data.dns.verified ? 'Domain verified' : 'Verification pending'}</h2>
+			<h2>{data.dns.verified ? $_('dns.domainVerified') : $_('dns.verificationPending')}</h2>
 			<p class="domain">{data.dns.domain}</p>
 		</div>
 	</div>
 	{#if data.dns.verifiedAt}
-		<p class="verified-date">Verified on {new Date(data.dns.verifiedAt).toLocaleDateString()}</p>
+		<p class="verified-date">{$_('dns.verifiedOn', { values: { date: new Date(data.dns.verifiedAt).toLocaleDateString() } })}</p>
 	{/if}
 </div>
 
@@ -45,29 +46,29 @@
 {#if form?.verified}
 	<div class="verify-success" role="status">
 		<Icon icon="mdi:check-circle" width="18" height="18" />
-		<span>DNS verified successfully!</span>
+		<span>{$_('dns.verifiedSuccess')}</span>
 	</div>
 {/if}
 
 <section class="instructions">
-	<h2>Setup Instructions</h2>
+	<h2>{$_('dns.instructions')}</h2>
 
 	<div class="step">
 		<div class="step-number">1</div>
 		<div class="step-content">
-			<h3>Add TXT record</h3>
-			<p>Add the following TXT record to your domain's DNS configuration:</p>
+			<h3>{$_('dns.step1Title')}</h3>
+			<p>{$_('dns.step1Desc')}</p>
 			<div class="record-box">
 				<div class="record-field">
-					<span class="record-label">Type</span>
+					<span class="record-label">{$_('dns.type')}</span>
 					<code>TXT</code>
 				</div>
 				<div class="record-field">
-					<span class="record-label">Name/Host</span>
+					<span class="record-label">{$_('dns.nameHost')}</span>
 					<code>@</code>
 				</div>
 				<div class="record-field">
-					<span class="record-label">Value</span>
+					<span class="record-label">{$_('dns.value')}</span>
 					<div class="record-value-row">
 						<code>{data.dns.txtRecord}</code>
 						<button class="ghost-btn copy-btn" onclick={copyRecord}>
@@ -82,24 +83,24 @@
 	<div class="step">
 		<div class="step-number">2</div>
 		<div class="step-content">
-			<h3>Wait for propagation</h3>
-			<p>DNS changes can take up to 48 hours to propagate, though most changes are visible within minutes.</p>
+			<h3>{$_('dns.step2Title')}</h3>
+			<p>{$_('dns.step2Desc')}</p>
 		</div>
 	</div>
 
 	<div class="step">
 		<div class="step-number">3</div>
 		<div class="step-content">
-			<h3>Verify</h3>
-			<p>Click the button below to check if your DNS records are configured correctly.</p>
+			<h3>{$_('dns.step3Title')}</h3>
+			<p>{$_('dns.step3Desc')}</p>
 			<form method="POST" action="?/verify" use:enhance>
 				<button type="submit" class="primary-btn">
 					<Icon icon="mdi:check-network" width="18" height="18" />
-					Verify DNS
+					{$_('dns.verifyBtn')}
 				</button>
 			</form>
 			{#if data.dns.lastCheckedAt}
-				<p class="last-check">Last checked: {new Date(data.dns.lastCheckedAt).toLocaleString()}</p>
+				<p class="last-check">{$_('dns.lastChecked', { values: { date: new Date(data.dns.lastCheckedAt).toLocaleString() } })}</p>
 			{/if}
 		</div>
 	</div>

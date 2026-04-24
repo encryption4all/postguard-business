@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types';
@@ -7,38 +8,35 @@
 </script>
 
 <SEO
-	title="Enterprise Email Signing & Encryption"
-	description="PostGuard for Business offers enterprise-grade identity-based email signing and encryption. Manage API keys, verify domains, and audit email activity."
+	title={$_('seo.homeTitle')}
+	description={$_('seo.homeDescription')}
 />
 
 <section class="hero">
 	<div class="hero-content">
-		<h1>Secure email signing for your organization</h1>
+		<h1>{$_('hero.title')}</h1>
 		<p class="hero-subtitle">
-			PostGuard for Business lets your organization sign and encrypt emails with
-			identity-verified attributes. Manage API keys, verify your domain, and maintain full
-			audit trails.
+			{$_('hero.subtitle')}
 		</p>
 		<div class="hero-actions">
-			<a href="/register" class="primary-btn">Get started</a>
+			<a href="/register" class="primary-btn">{$_('hero.cta')}</a>
 			{#if data.marketingFlags.pricing}
-				<a href="/pricing" class="secondary-btn">View pricing</a>
+				<a href="/pricing" class="secondary-btn">{$_('hero.pricing')}</a>
 			{/if}
 		</div>
 	</div>
 </section>
 
 <section class="features">
-	<h2 class="section-title">Why PostGuard for Business?</h2>
+	<h2 class="section-title">{$_('features.title')}</h2>
 	<div class="features-grid">
 		<div class="feature-card">
 			<div class="feature-icon">
 				<Icon icon="mdi:key-variant" width="32" height="32" />
 			</div>
-			<h3>API Key Management</h3>
+			<h3>{$_('features.apiKeys.title')}</h3>
 			<p>
-				Create and manage API keys with granular control over which organizational attributes
-				each key signs with.
+				{$_('features.apiKeys.description')}
 			</p>
 		</div>
 
@@ -46,10 +44,9 @@
 			<div class="feature-icon">
 				<Icon icon="mdi:shield-account" width="32" height="32" />
 			</div>
-			<h3>Identity-Based Signing</h3>
+			<h3>{$_('features.identity.title')}</h3>
 			<p>
-				Sign emails with your organization name, KvK number, phone, and email — verified
-				through Yivi.
+				{$_('features.identity.description')}
 			</p>
 		</div>
 
@@ -57,10 +54,9 @@
 			<div class="feature-icon">
 				<Icon icon="mdi:server-security" width="32" height="32" />
 			</div>
-			<h3>Hosted in the EU</h3>
+			<h3>{$_('features.hostedEU.title')}</h3>
 			<p>
-				All data is stored and processed within the European Union, ensuring full GDPR
-				compliance and data sovereignty.
+				{$_('features.hostedEU.description')}
 			</p>
 		</div>
 
@@ -68,10 +64,9 @@
 			<div class="feature-icon">
 				<Icon icon="mdi:lock-check" width="32" height="32" />
 			</div>
-			<h3>End-to-End Encryption</h3>
+			<h3>{$_('features.encryption.title')}</h3>
 			<p>
-				Emails are encrypted end-to-end. Only the intended recipient with the right identity
-				attributes can decrypt.
+				{$_('features.encryption.description')}
 			</p>
 		</div>
 
@@ -79,10 +74,9 @@
 			<div class="feature-icon">
 				<Icon icon="mdi:source-branch" width="32" height="32" />
 			</div>
-			<h3>Open Source</h3>
+			<h3>{$_('features.openSource.title')}</h3>
 			<p>
-				Built on the open-source PostGuard protocol. Full transparency, no vendor lock-in,
-				community-driven.
+				{$_('features.openSource.description')}
 			</p>
 		</div>
 
@@ -90,10 +84,9 @@
 			<div class="feature-icon">
 				<Icon icon="mdi:email-remove" width="32" height="32" />
 			</div>
-			<h3>Email Revocation <span class="coming-soon">Coming soon</span></h3>
+			<h3>{$_('features.revocation.title')} <span class="coming-soon">{$_('features.revocation.comingSoon')}</span></h3>
 			<p>
-				Revoke signed emails after sending. Recipients will be notified that the email is
-				no longer valid.
+				{$_('features.revocation.description')}
 			</p>
 		</div>
 	</div>
@@ -101,9 +94,9 @@
 
 <section class="cta">
 	<div class="cta-content">
-		<h2>Ready to secure your organization's email?</h2>
-		<p>Register for PostGuard for Business and start signing emails in minutes.</p>
-		<a href="/register" class="primary-btn">Register your organization</a>
+		<h2>{$_('cta.title')}</h2>
+		<p>{$_('cta.subtitle')}</p>
+		<a href="/register" class="primary-btn">{$_('cta.button')}</a>
 	</div>
 </section>
 

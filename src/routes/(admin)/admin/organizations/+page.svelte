@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -7,15 +8,15 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<SEO title="Organizations - Admin" />
+<SEO title="{$_('admin.organizations.title')} - Admin" />
 
-<h1>Organizations</h1>
+<h1>{$_('admin.organizations.title')}</h1>
 
 {#if data.pendingRequests.length > 0}
 	<section class="pending-section">
 		<h2>
 			<Icon icon="mdi:bell-ring" width="20" height="20" />
-			Pending change requests ({data.pendingRequests.length})
+			{$_('admin.organizations.pendingRequests', { values: { count: data.pendingRequests.length } })}
 		</h2>
 		<div class="pending-list">
 			{#each data.pendingRequests as item}
@@ -32,16 +33,16 @@
 {/if}
 
 <section>
-	<h2>All organizations</h2>
+	<h2>{$_('admin.organizations.allOrgs')}</h2>
 	<div class="table-wrapper">
 		<table>
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Domain</th>
-					<th>Signing email</th>
-					{#if data.orgStatusEnabled}<th>Status</th>{/if}
-					<th>Created</th>
+					<th>{$_('admin.organizations.name')}</th>
+					<th>{$_('admin.organizations.domain')}</th>
+					<th>{$_('admin.organizations.signingEmail')}</th>
+					{#if data.orgStatusEnabled}<th>{$_('admin.organizations.status')}</th>{/if}
+					<th>{$_('admin.organizations.created')}</th>
 					{#if data.orgStatusEnabled}<th></th>{/if}
 				</tr>
 			</thead>
@@ -54,7 +55,7 @@
 						{#if data.orgStatusEnabled}
 							<td>
 								<span class="status" class:active={org.status === 'active'} class:pending={org.status === 'pending'} class:suspended={org.status === 'suspended'}>
-									{org.status}
+									{$_(`admin.organizations.${org.status}`)}
 								</span>
 							</td>
 						{/if}
@@ -64,17 +65,17 @@
 								{#if org.status === 'pending'}
 									<form method="POST" action="?/activate" use:enhance>
 										<input type="hidden" name="orgId" value={org.id} />
-										<button type="submit" class="action-btn approve">Activate</button>
+										<button type="submit" class="action-btn approve">{$_('admin.organizations.activate')}</button>
 									</form>
 								{:else if org.status === 'active'}
 									<form method="POST" action="?/suspend" use:enhance>
 										<input type="hidden" name="orgId" value={org.id} />
-										<button type="submit" class="action-btn suspend">Suspend</button>
+										<button type="submit" class="action-btn suspend">{$_('admin.organizations.suspend')}</button>
 									</form>
 								{:else}
 									<form method="POST" action="?/activate" use:enhance>
 										<input type="hidden" name="orgId" value={org.id} />
-										<button type="submit" class="action-btn approve">Reactivate</button>
+										<button type="submit" class="action-btn approve">{$_('admin.organizations.reactivate')}</button>
 									</form>
 								{/if}
 							</td>

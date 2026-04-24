@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -9,13 +10,13 @@
 	let confirmRemove = $state<string | null>(null);
 </script>
 
-<SEO title="Members" />
+<SEO title={$_('members.title')} />
 
 <div class="page-header">
-	<h1>Members</h1>
+	<h1>{$_('members.title')}</h1>
 	<button class="primary-btn" onclick={() => (showAddForm = !showAddForm)}>
 		<Icon icon="mdi:plus" width="18" height="18" />
-		Add member
+		{$_('members.addMember')}
 	</button>
 </div>
 
@@ -29,20 +30,20 @@
 {#if form?.added}
 	<div class="success-banner" role="status">
 		<Icon icon="mdi:check-circle" width="20" height="20" />
-		<span>Member added successfully.</span>
+		<span>{$_('members.memberAdded')}</span>
 	</div>
 {/if}
 
 {#if form?.contactChanged}
 	<div class="success-banner" role="status">
 		<Icon icon="mdi:check-circle" width="20" height="20" />
-		<span>Contact person updated.</span>
+		<span>{$_('members.contactUpdated')}</span>
 	</div>
 {/if}
 
 {#if showAddForm}
 	<div class="add-form-card">
-		<h3>Add a new member</h3>
+		<h3>{$_('members.addTitle')}</h3>
 		<form method="POST" action="?/add" use:enhance={() => {
 			return async ({ update, result }) => {
 				if (result.type === 'success') showAddForm = false;
@@ -50,20 +51,20 @@
 			};
 		}}>
 			<div class="form-row">
-				<label for="fullName">Full name</label>
+				<label for="fullName">{$_('members.fullName')}</label>
 				<input id="fullName" name="fullName" type="text" class="pg-input" required />
 			</div>
 			<div class="form-row">
-				<label for="email">Email</label>
+				<label for="email">{$_('members.email')}</label>
 				<input id="email" name="email" type="email" class="pg-input" required />
 			</div>
 			<div class="form-row">
-				<label for="phone">Phone <span class="optional">(optional)</span></label>
+				<label for="phone">{$_('members.phone')} <span class="optional">{$_('members.optional')}</span></label>
 				<input id="phone" name="phone" type="tel" class="pg-input" />
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="primary-btn">Add member</button>
-				<button type="button" class="ghost-btn" onclick={() => (showAddForm = false)}>Cancel</button>
+				<button type="submit" class="primary-btn">{$_('members.addMember')}</button>
+				<button type="button" class="ghost-btn" onclick={() => (showAddForm = false)}>{$_('members.cancel')}</button>
 			</div>
 		</form>
 	</div>
@@ -72,18 +73,18 @@
 {#if data.members.length === 0}
 	<div class="empty-state">
 		<Icon icon="mdi:account-group" width="48" height="48" />
-		<h3>No members yet</h3>
-		<p>Add the first member to your organization.</p>
+		<h3>{$_('members.emptyTitle')}</h3>
+		<p>{$_('members.emptyDescription')}</p>
 	</div>
 {:else}
 	<div class="table-wrapper">
 		<table>
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Email</th>
-					<th>Phone</th>
-					<th>Role</th>
+					<th>{$_('members.name')}</th>
+					<th>{$_('members.email')}</th>
+					<th>{$_('members.phone')}</th>
+					<th>{$_('members.role')}</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -95,16 +96,16 @@
 						<td>{member.phone ?? '—'}</td>
 						<td>
 							{#if member.id === data.organization.contactUserId}
-								<span class="contact-badge">Contact person</span>
+								<span class="contact-badge">{$_('members.contactPerson')}</span>
 							{:else}
-								<span class="muted">Member</span>
+								<span class="muted">{$_('members.member')}</span>
 							{/if}
 						</td>
 						<td class="actions-cell">
 							{#if member.id !== data.organization.contactUserId}
 								<form method="POST" action="?/setContact" use:enhance class="inline-form">
 									<input type="hidden" name="userId" value={member.id} />
-									<button type="submit" class="ghost-btn" title="Make contact person">
+									<button type="submit" class="ghost-btn" title={$_('members.makeContact')}>
 										<Icon icon="mdi:account-star" width="18" height="18" />
 									</button>
 								</form>
@@ -113,12 +114,12 @@
 								<form method="POST" action="?/remove" use:enhance>
 									<input type="hidden" name="userId" value={member.id} />
 									<div class="confirm-row">
-										<button type="submit" class="danger-btn">Remove</button>
-										<button type="button" class="ghost-btn" onclick={() => (confirmRemove = null)}>Cancel</button>
+										<button type="submit" class="danger-btn">{$_('members.remove')}</button>
+										<button type="button" class="ghost-btn" onclick={() => (confirmRemove = null)}>{$_('members.cancel')}</button>
 									</div>
 								</form>
 							{:else if member.id !== data.organization.contactUserId && member.id !== data.user?.id}
-								<button class="ghost-btn danger" onclick={() => (confirmRemove = member.id)} title="Remove member">
+								<button class="ghost-btn danger" onclick={() => (confirmRemove = member.id)} title={$_('members.removeMember')}>
 									<Icon icon="mdi:delete" width="18" height="18" />
 								</button>
 							{/if}

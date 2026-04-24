@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -8,29 +9,29 @@
 	let confirmRevoke = $state<string | null>(null);
 </script>
 
-<SEO title="API Keys - Admin" />
+<SEO title="{$_('admin.apiKeys.title')} - Admin" />
 
-<h1>All API Keys</h1>
+<h1>{$_('admin.apiKeys.title')}</h1>
 
 {#if form?.created && form?.rawKey}
 	<div class="key-banner">
 		<Icon icon="mdi:key-chain" width="20" height="20" />
-		<span>Key created: <code>{form.rawKey}</code></span>
+		<span>{$_('admin.apiKeys.keyCreated', { values: { rawKey: form.rawKey } })}</span>
 	</div>
 {/if}
 
 {#if data.keys.length === 0}
-	<p class="empty">No active API keys across all organizations.</p>
+	<p class="empty">{$_('admin.apiKeys.noKeys')}</p>
 {:else}
 	<div class="table-wrapper">
 		<table>
 			<thead>
 				<tr>
-					<th>Organization</th>
-					<th>Key name</th>
-					<th>Prefix</th>
-					<th>Created</th>
-					<th>Last used</th>
+					<th>{$_('admin.apiKeys.organization')}</th>
+					<th>{$_('admin.apiKeys.keyName')}</th>
+					<th>{$_('admin.apiKeys.prefix')}</th>
+					<th>{$_('admin.apiKeys.created')}</th>
+					<th>{$_('admin.apiKeys.lastUsed')}</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -45,7 +46,7 @@
 							{#if item.key.lastUsedAt}
 								{new Date(item.key.lastUsedAt).toLocaleDateString()}
 							{:else}
-								<span class="muted">Never</span>
+								<span class="muted">{$_('admin.apiKeys.never')}</span>
 							{/if}
 						</td>
 						<td>
@@ -53,14 +54,14 @@
 								<form method="POST" action="?/revoke" use:enhance>
 									<input type="hidden" name="keyId" value={item.key.id} />
 									<div class="confirm-row">
-										<button type="submit" class="danger-btn">Confirm</button>
-										<button type="button" class="ghost-btn" onclick={() => (confirmRevoke = null)}>Cancel</button>
+										<button type="submit" class="danger-btn">{$_('admin.apiKeys.confirm')}</button>
+										<button type="button" class="ghost-btn" onclick={() => (confirmRevoke = null)}>{$_('admin.apiKeys.cancel')}</button>
 									</div>
 								</form>
 							{:else}
 								<button class="ghost-btn danger" onclick={() => (confirmRevoke = item.key.id)}>
 									<Icon icon="mdi:delete" width="16" height="16" />
-									Revoke
+									{$_('admin.apiKeys.revoke')}
 								</button>
 							{/if}
 						</td>

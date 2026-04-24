@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
+	import LocaleSwitcher from './LocaleSwitcher.svelte';
 	import Icon from '@iconify/svelte';
 	import logoLight from '$lib/assets/images/logo.svg';
 	import logoDark from '$lib/assets/images/logo-dark.svg';
@@ -19,9 +21,9 @@
 	}
 
 	const navLinks = $derived([
-		{ href: '/', label: 'Home' },
-		...(showPricing ? [{ href: '/pricing', label: 'Pricing' }] : []),
-		...(showRegister ? [{ href: '/register', label: 'Register' }] : [])
+		{ href: '/', label: $_('nav.home') },
+		...(showPricing ? [{ href: '/pricing', label: $_('nav.pricing') }] : []),
+		...(showRegister ? [{ href: '/register', label: $_('nav.register') }] : [])
 	]);
 </script>
 
@@ -33,18 +35,19 @@
 			<span class="logo-badge">Business</span>
 		</a>
 
-		<nav class="desktop-nav" aria-label="Main navigation">
+		<nav class="desktop-nav" aria-label={$_('nav.mainNav')}>
 			{#each navLinks as link}
 				<a href={link.href}>{link.label}</a>
 			{/each}
-			<a href="/auth/login" class="nav-login">Log in</a>
+			<a href="/auth/login" class="nav-login">{$_('nav.login')}</a>
 		</nav>
 
 		<div class="header-actions">
+			<LocaleSwitcher />
 			<ThemeSwitcher />
 			<button
 				class="hamburger desktop-hide"
-				aria-label="Toggle menu"
+				aria-label={$_('nav.toggleMenu')}
 				aria-expanded={menuOpen}
 				onclick={toggleMenu}
 			>
@@ -54,11 +57,12 @@
 	</div>
 
 	{#if menuOpen}
-		<nav class="mobile-nav" aria-label="Mobile navigation">
+		<nav class="mobile-nav" aria-label={$_('nav.mobileNav')}>
 			{#each navLinks as link}
 				<a href={link.href} onclick={() => (menuOpen = false)}>{link.label}</a>
 			{/each}
-			<a href="/auth/login" onclick={() => (menuOpen = false)}>Log in</a>
+			<a href="/auth/login" onclick={() => (menuOpen = false)}>{$_('nav.login')}</a>
+			<LocaleSwitcher />
 		</nav>
 	{/if}
 </header>

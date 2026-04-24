@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import { page } from '$app/state';
 	import Icon from '@iconify/svelte';
 </script>
@@ -11,8 +12,8 @@
 			height="56"
 		/>
 		<h1>{page.status}</h1>
-		<p>{page.error?.message || 'Something went wrong'}</p>
-		<button class="secondary-btn" onclick={() => history.back()}>Go back</button>
+		<p>{page.error?.message || $_('common.somethingWrong')}</p>
+		<button class="secondary-btn" onclick={() => history.back()}>{$_('common.goBack')}</button>
 	</div>
 </div>
 

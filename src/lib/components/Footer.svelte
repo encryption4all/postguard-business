@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import pkg from '../../../package.json';
 
 	const year = new Date().getFullYear();
@@ -13,25 +14,25 @@
 <footer>
 	<div class="footer-inner">
 		<div class="footer-brand">
-			<p class="brand-name">PostGuard for Business</p>
-			<p class="brand-tagline">Enterprise-grade identity-based email signing</p>
+			<p class="brand-name">{$_('footer.brandName')}</p>
+			<p class="brand-tagline">{$_('footer.tagline')}</p>
 		</div>
 
 		<div class="footer-links">
 			<div class="link-group">
-				<h4>Product</h4>
-				<a href="/pricing">Pricing</a>
-				<a href="/register">Register</a>
+				<h4>{$_('footer.product')}</h4>
+				<a href="/pricing">{$_('nav.pricing')}</a>
+				<a href="/register">{$_('nav.register')}</a>
 			</div>
 			<div class="link-group">
-				<h4>Resources</h4>
-				<a href="https://postguard.eu" target="_blank" rel="noopener">PostGuard Personal</a>
-				<a href="https://docs.postguard.eu" target="_blank" rel="noopener">Documentation</a>
+				<h4>{$_('footer.resources')}</h4>
+				<a href="https://postguard.eu" target="_blank" rel="noopener">{$_('footer.personal')}</a>
+				<a href="https://docs.postguard.eu" target="_blank" rel="noopener">{$_('footer.docs')}</a>
 			</div>
 		</div>
 
 		<div class="footer-bottom">
-			<p>&copy; {year} PostGuard. All rights reserved.</p>
+			<p>{$_('footer.copyright', { values: { year } })}</p>
 			<span class="version">v{versionLabel}</span>
 		</div>
 	</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -8,33 +9,33 @@
 	let confirmDelete = $state<string | null>(null);
 </script>
 
-<SEO title="API Keys" />
+<SEO title={$_('apiKeys.title')} />
 
 <div class="page-header">
-	<h1>API Keys</h1>
+	<h1>{$_('apiKeys.title')}</h1>
 	<a href="/portal/api-keys/create" class="primary-btn">
 		<Icon icon="mdi:plus" width="18" height="18" />
-		Create key
+		{$_('apiKeys.createKey')}
 	</a>
 </div>
 
 {#if data.keys.length === 0}
 	<div class="empty-state">
 		<Icon icon="mdi:key-variant" width="48" height="48" />
-		<h3>No API keys yet</h3>
-		<p>Create your first API key to start signing emails.</p>
-		<a href="/portal/api-keys/create" class="secondary-btn">Create API key</a>
+		<h3>{$_('apiKeys.emptyTitle')}</h3>
+		<p>{$_('apiKeys.emptyDescription')}</p>
+		<a href="/portal/api-keys/create" class="secondary-btn">{$_('apiKeys.createApiKey')}</a>
 	</div>
 {:else}
 	<div class="table-wrapper">
 		<table>
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Key prefix</th>
-					<th>Created</th>
-					<th>Last used</th>
-					<th>Expires</th>
+					<th>{$_('apiKeys.name')}</th>
+					<th>{$_('apiKeys.keyPrefix')}</th>
+					<th>{$_('apiKeys.created')}</th>
+					<th>{$_('apiKeys.lastUsed')}</th>
+					<th>{$_('apiKeys.expires')}</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -48,7 +49,7 @@
 							{#if key.lastUsedAt}
 								{new Date(key.lastUsedAt).toLocaleDateString()}
 							{:else}
-								<span class="muted">Never</span>
+								<span class="muted">{$_('apiKeys.never')}</span>
 							{/if}
 						</td>
 						<td>{new Date(key.expiresAt).toLocaleDateString()}</td>
@@ -57,9 +58,9 @@
 								<form method="POST" action="?/revoke" use:enhance>
 									<input type="hidden" name="keyId" value={key.id} />
 									<div class="confirm-row">
-										<button type="submit" class="danger-btn">Confirm</button>
+										<button type="submit" class="danger-btn">{$_('apiKeys.confirm')}</button>
 										<button type="button" class="ghost-btn" onclick={() => (confirmDelete = null)}>
-											Cancel
+											{$_('apiKeys.cancel')}
 										</button>
 									</div>
 								</form>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
@@ -18,7 +19,7 @@
 	}
 </script>
 
-<SEO title="Login" description="Log in to your PostGuard for Business account." />
+<SEO title={$_('auth.login')} description={$_('auth.loginSubtitle')} />
 
 <section class="login-page">
 	<div class="login-header">
@@ -29,18 +30,18 @@
 		<ThemeSwitcher />
 	</div>
 	<div class="login-card">
-		<h1>Log in</h1>
+		<h1>{$_('auth.login')}</h1>
 		<p class="login-subtitle">
-			Authenticate with your Yivi app to access your organization portal.
+			{$_('auth.loginSubtitle')}
 		</p>
 
 		<div class="login-content">
-			<p class="login-hint">Disclose your organization email address to log in.</p>
+			<p class="login-hint">{$_('auth.loginHint')}</p>
 			<YiviLogin type="org" attrs={data.yiviAttrs} onSuccess={handleSuccess} />
 		</div>
 
 		<p class="login-footer">
-			Don't have an account? <a href="/register">Register your organization</a>
+			{$_('auth.noAccount')} <a href="/register">{$_('auth.registerOrg')}</a>
 		</p>
 	</div>
 </section>

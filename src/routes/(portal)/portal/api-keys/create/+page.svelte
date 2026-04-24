@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -16,34 +17,34 @@
 	}
 </script>
 
-<SEO title="Create API Key" />
+<SEO title={$_('apiKeys.create.title')} />
 
 {#if form?.success && form?.rawKey}
 	<div class="key-created">
 		<div class="key-created-icon">
 			<Icon icon="mdi:key-chain" width="48" height="48" />
 		</div>
-		<h1>API key created</h1>
+		<h1>{$_('apiKeys.create.created')}</h1>
 		<p class="warning">
 			<Icon icon="mdi:alert" width="18" height="18" />
-			Copy this key now. You won't be able to see it again.
+			{$_('apiKeys.create.copyWarning')}
 		</p>
 		<div class="key-display">
 			<code>{form.rawKey}</code>
 			<button class="ghost-btn copy-btn" onclick={copyKey}>
 				<Icon icon={copied ? 'mdi:check' : 'mdi:content-copy'} width="18" height="18" />
-				{copied ? 'Copied!' : 'Copy'}
+				{copied ? $_('apiKeys.create.copied') : $_('apiKeys.create.copy')}
 			</button>
 		</div>
-		<a href="/portal/api-keys" class="secondary-btn back-btn">Back to API keys</a>
+		<a href="/portal/api-keys" class="secondary-btn back-btn">{$_('apiKeys.create.backToKeys')}</a>
 	</div>
 {:else}
 	<div class="page-header">
 		<a href="/portal/api-keys" class="back-link">
 			<Icon icon="mdi:arrow-left" width="18" height="18" />
-			Back
+			{$_('apiKeys.create.back')}
 		</a>
-		<h1>Create API key</h1>
+		<h1>{$_('apiKeys.create.title')}</h1>
 	</div>
 
 	{#if form?.error}
@@ -55,55 +56,55 @@
 
 	<form method="POST" use:enhance class="create-form">
 		<div class="form-group">
-			<label for="name">Key name</label>
+			<label for="name">{$_('apiKeys.create.keyName')}</label>
 			<input
 				id="name"
 				name="name"
 				type="text"
 				class="pg-input"
-				placeholder="e.g. Production Mailer"
+				placeholder={$_('apiKeys.create.keyNamePlaceholder')}
 				value={form?.values?.name ?? ''}
 				required
 			/>
-			<span class="field-hint">A descriptive name to identify this key</span>
+			<span class="field-hint">{$_('apiKeys.create.keyNameHint')}</span>
 		</div>
 
 		<div class="form-group">
-			<label for="expiryDays">Expires in</label>
+			<label for="expiryDays">{$_('apiKeys.create.expiresIn')}</label>
 			<select id="expiryDays" name="expiryDays" class="pg-input">
-				<option value="30">30 days</option>
-				<option value="90">90 days</option>
-				<option value="180">180 days</option>
-				<option value="365" selected>1 year</option>
+				<option value="30">{$_('apiKeys.create.days30')}</option>
+				<option value="90">{$_('apiKeys.create.days90')}</option>
+				<option value="180">{$_('apiKeys.create.days180')}</option>
+				<option value="365" selected>{$_('apiKeys.create.year1')}</option>
 			</select>
 		</div>
 
 		<fieldset class="signing-attrs">
-			<legend>Signing attributes</legend>
-			<p class="field-hint">Choose which organizational attributes this API key will include when signing emails.</p>
+			<legend>{$_('apiKeys.create.signingAttrs')}</legend>
+			<p class="field-hint">{$_('apiKeys.create.signingHint')}</p>
 
 			<label class="checkbox-label">
 				<input type="checkbox" name="signEmail" checked />
-				<span>Email address</span>
+				<span>{$_('apiKeys.create.attrEmail')}</span>
 			</label>
 
 			<label class="checkbox-label">
 				<input type="checkbox" name="signOrgName" checked />
-				<span>Organization name</span>
+				<span>{$_('apiKeys.create.attrOrgName')}</span>
 			</label>
 
 			<label class="checkbox-label">
 				<input type="checkbox" name="signPhone" />
-				<span>Phone number</span>
+				<span>{$_('apiKeys.create.attrPhone')}</span>
 			</label>
 
 			<label class="checkbox-label">
 				<input type="checkbox" name="signKvkNumber" />
-				<span>KvK number</span>
+				<span>{$_('apiKeys.create.attrKvk')}</span>
 			</label>
 		</fieldset>
 
-		<button type="submit" class="primary-btn">Generate API key</button>
+		<button type="submit" class="primary-btn">{$_('apiKeys.create.generate')}</button>
 	</form>
 {/if}
 

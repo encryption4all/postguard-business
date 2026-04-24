@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import Icon from '@iconify/svelte';
 	import logoLight from '$lib/assets/images/logo.svg';
 	import logoDark from '$lib/assets/images/logo-dark.svg';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
+	import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte';
 	import type { LayoutData } from './$types';
 
 	let { data, children }: { data: LayoutData; children: import('svelte').Snippet } = $props();
@@ -11,23 +13,23 @@
 	const navItems = $derived([
 		...(data.adminPanelEnabled
 			? [
-					{ href: '/admin/organizations', label: 'Organizations', icon: 'mdi:domain' },
-					{ href: '/admin/api-keys', label: 'API Keys', icon: 'mdi:key-variant' }
+					{ href: '/admin/organizations', label: $_('nav.organizations'), icon: 'mdi:domain' },
+					{ href: '/admin/api-keys', label: $_('nav.apiKeys'), icon: 'mdi:key-variant' }
 				]
 			: []),
 		...(data.adminPanelEnabled && data.adminAuditLogEnabled
-			? [{ href: '/admin/audit-log', label: 'Audit Log', icon: 'mdi:clipboard-text-clock' }]
+			? [{ href: '/admin/audit-log', label: $_('nav.auditLog'), icon: 'mdi:clipboard-text-clock' }]
 			: []),
-		{ href: '/admin/settings', label: 'Settings', icon: 'mdi:cog' }
+		{ href: '/admin/settings', label: $_('nav.settings'), icon: 'mdi:cog' }
 	]);
 </script>
 
 {#if data.impersonatingOrgId}
 	<div class="impersonation-bar">
 		<Icon icon="mdi:eye" width="16" height="16" />
-		<span>Impersonating organization</span>
+		<span>{$_('admin.impersonating')}</span>
 		<form method="POST" action="/api/admin/impersonate/stop">
-			<button type="submit" class="stop-btn">Stop impersonating</button>
+			<button type="submit" class="stop-btn">{$_('admin.stopImpersonating')}</button>
 		</form>
 	</div>
 {/if}
@@ -62,7 +64,7 @@
 			<form method="POST" action="/auth/logout">
 				<button type="submit" class="nav-item logout-btn">
 					<Icon icon="mdi:logout" width="20" height="20" />
-					<span>Log out</span>
+					<span>{$_('nav.logout')}</span>
 				</button>
 			</form>
 		</div>
@@ -73,8 +75,9 @@
 			<button class="hamburger desktop-hide" onclick={() => (sidebarOpen = true)}>
 				<Icon icon="mdi:menu" width="24" height="24" />
 			</button>
-			<h2 class="header-title">Admin Panel</h2>
+			<h2 class="header-title">{$_('nav.adminPanel')}</h2>
 			<div class="header-actions">
+				<LocaleSwitcher />
 				<ThemeSwitcher />
 			</div>
 		</header>

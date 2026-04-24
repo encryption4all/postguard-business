@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -13,11 +14,11 @@
 	const contactPerson = $derived(data.contactPerson);
 
 	const fields = $derived([
-		{ key: 'name', label: 'Organization name', value: org.name, editable: true },
-		{ key: 'domain', label: 'Domain', value: org.domain, editable: true },
-		{ key: 'signingEmail', label: 'Signing email', value: org.signingEmail, editable: true },
-		{ key: 'kvkNumber', label: 'KvK number', value: org.kvkNumber ?? '—', editable: true },
-		{ key: 'contactPerson', label: 'Contact person', value: contactPerson ? `${contactPerson.fullName} (${contactPerson.email})` : '—', editable: false }
+		{ key: 'name', label: $_('organization.orgName'), value: org.name, editable: true },
+		{ key: 'domain', label: $_('organization.domain'), value: org.domain, editable: true },
+		{ key: 'signingEmail', label: $_('organization.signingEmail'), value: org.signingEmail, editable: true },
+		{ key: 'kvkNumber', label: $_('organization.kvkNumber'), value: org.kvkNumber ?? '—', editable: true },
+		{ key: 'contactPerson', label: $_('organization.contactPerson'), value: contactPerson ? `${contactPerson.fullName} (${contactPerson.email})` : '—', editable: false }
 	]);
 
 	function startEdit(key: string, currentValue: string) {
@@ -31,14 +32,14 @@
 	}
 </script>
 
-<SEO title="Organization" />
+<SEO title={$_('organization.title')} />
 
-<h1>Organization Details</h1>
+<h1>{$_('organization.details')}</h1>
 
 {#if form?.submitted}
 	<div class="success-banner" role="status">
 		<Icon icon="mdi:check-circle" width="20" height="20" />
-		<span>Change request for <strong>{form.fieldName}</strong> submitted. An admin will review it.</span>
+		<span>{$_('organization.changeSubmitted', { values: { fieldName: form.fieldName } })}</span>
 	</div>
 {/if}
 
@@ -85,7 +86,7 @@
 				{:else}
 					<button class="ghost-btn edit-btn" onclick={() => startEdit(field.key, field.value)}>
 						<Icon icon="mdi:pencil" width="16" height="16" />
-						Request change
+						{$_('organization.requestChange')}
 					</button>
 				{/if}
 			{/if}
@@ -95,15 +96,15 @@
 
 {#if data.requests.length > 0}
 	<section class="requests-section">
-		<h2>Change Requests</h2>
+		<h2>{$_('organization.changeRequests')}</h2>
 		<div class="table-wrapper">
 			<table>
 				<thead>
 					<tr>
-						<th>Field</th>
-						<th>New value</th>
-						<th>Status</th>
-						<th>Requested</th>
+						<th>{$_('organization.field')}</th>
+						<th>{$_('organization.newValue')}</th>
+						<th>{$_('organization.status')}</th>
+						<th>{$_('organization.requested')}</th>
 					</tr>
 				</thead>
 				<tbody>
