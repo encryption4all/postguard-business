@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _, locale } from 'svelte-i18n';
 	import '@privacybydesign/yivi-css';
 	import Icon from '@iconify/svelte';
 
@@ -34,7 +35,7 @@
 			const yivi = new YiviCore({
 				debugging: false,
 				element: '#yivi-login-container',
-				language: 'en',
+				language: $locale?.startsWith('nl') ? 'nl' : 'en',
 				minimal: true,
 				session: {
 					url: '/irma',
@@ -105,27 +106,27 @@
 	{#if status === 'idle'}
 		<button class="primary-btn yivi-btn" onclick={startYiviFlow}>
 			<Icon icon="mdi:qrcode-scan" width="20" height="20" />
-			{type === 'admin' ? 'Login as admin with Yivi' : 'Login with Yivi'}
+			{type === 'admin' ? $_('auth.yiviLoginAdmin') : $_('auth.yiviLoginOrg')}
 		</button>
 	{:else if status === 'running'}
 		<div id="yivi-login-container" class="yivi-container"></div>
 		<p class="waiting-text">
 			{#if type === 'admin'}
-				Please disclose your name, email, and phone number.
+				{$_('auth.yiviDiscloseAdmin')}
 			{:else}
-				Please disclose your organization email address.
+				{$_('auth.yiviDiscloseOrg')}
 			{/if}
 		</p>
 	{:else if status === 'success'}
 		<div class="yivi-status success">
 			<Icon icon="mdi:check-circle" width="48" height="48" />
-			<p>Authentication successful! Redirecting...</p>
+			<p>{$_('auth.yiviSuccess')}</p>
 		</div>
 	{:else if status === 'error'}
 		<div class="yivi-status error">
 			<Icon icon="mdi:alert-circle" width="32" height="32" />
 			<p>{errorMessage}</p>
-			<button class="secondary-btn" onclick={retry}>Try again</button>
+			<button class="secondary-btn" onclick={retry}>{$_('auth.tryAgain')}</button>
 		</div>
 	{/if}
 </div>

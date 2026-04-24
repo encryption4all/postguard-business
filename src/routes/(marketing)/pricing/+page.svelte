@@ -1,102 +1,77 @@
 <script lang="ts">
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
-
-	const plans = [
-		{
-			name: 'Starter',
-			price: 'Free',
-			period: '',
-			description: 'For small teams getting started with email signing.',
-			features: [
-				'Up to 3 API keys',
-				'100 signed emails/month',
-				'Basic audit log',
-				'Email support',
-				'1 domain'
-			],
-			cta: 'Get started',
-			href: '/register',
-			highlighted: false
-		},
-		{
-			name: 'Professional',
-			price: '\u20AC49',
-			period: '/month',
-			description: 'For growing organizations with advanced needs.',
-			features: [
-				'Unlimited API keys',
-				'10,000 signed emails/month',
-				'Full audit log with export',
-				'Priority support',
-				'5 domains',
-				'Read receipts',
-				'Email revocation'
-			],
-			cta: 'Start free trial',
-			href: '/register?plan=professional',
-			highlighted: true
-		},
-		{
-			name: 'Enterprise',
-			price: 'Custom',
-			period: '',
-			description: 'For large organizations with custom requirements.',
-			features: [
-				'Everything in Professional',
-				'Unlimited emails',
-				'Unlimited domains',
-				'Dedicated support',
-				'SLA guarantees',
-				'Custom integrations',
-				'On-premise option'
-			],
-			cta: 'Contact sales',
-			href: '/register?plan=enterprise',
-			highlighted: false
-		}
-	];
+	import { _ } from 'svelte-i18n';
 </script>
 
-<SEO title="Pricing" description="Choose the right PostGuard for Business plan for your organization." />
+<SEO title={$_('pricing.title')} description={$_('pricing.seoDescription')} />
 
 <section class="pricing-hero">
-	<h1>Simple, transparent pricing</h1>
-	<p>Choose the plan that fits your organization. All plans include DNS verification and Yivi-based authentication.</p>
+	<h1>{$_('pricing.heading')}</h1>
+	<p>{$_('pricing.subtitle')}</p>
 </section>
 
 <section class="pricing-grid">
-	{#each plans as plan}
-		<div class="plan-card" class:highlighted={plan.highlighted}>
-			{#if plan.highlighted}
-				<div class="plan-badge">Most popular</div>
-			{/if}
-			<h2>{plan.name}</h2>
-			<div class="plan-price">
-				<span class="price">{plan.price}</span>
-				{#if plan.period}<span class="period">{plan.period}</span>{/if}
-			</div>
-			<p class="plan-description">{plan.description}</p>
-			<a href={plan.href} class={plan.highlighted ? 'primary-btn' : 'secondary-btn'}>
-				{plan.cta}
-			</a>
-			<ul class="plan-features">
-				{#each plan.features as feature}
-					<li>
-						<Icon icon="mdi:check-circle" width="18" height="18" />
-						<span>{feature}</span>
-					</li>
-				{/each}
-			</ul>
+	<div class="plan-card">
+		<h2>{$_('pricing.small.name')}</h2>
+		<div class="plan-users">{$_('pricing.small.users')}</div>
+		<div class="plan-price">
+			<span class="price">{$_('pricing.small.price')}</span>
+			<span class="period">{$_('pricing.small.period')}</span>
 		</div>
-	{/each}
+		<p class="plan-description">{$_('pricing.small.description')}</p>
+		<a href="/register?plan=small" class="secondary-btn">{$_('pricing.small.cta')}</a>
+	</div>
+
+	<div class="plan-card highlighted">
+		<h2>{$_('pricing.medium.name')}</h2>
+		<div class="plan-users">{$_('pricing.medium.users')}</div>
+		<div class="plan-price">
+			<span class="price">{$_('pricing.medium.price')}</span>
+			<span class="period">{$_('pricing.medium.period')}</span>
+		</div>
+		<p class="plan-description">{$_('pricing.medium.description')}</p>
+		<a href="/register?plan=medium" class="primary-btn">{$_('pricing.medium.cta')}</a>
+	</div>
+
+	<div class="plan-card">
+		<h2>{$_('pricing.enterprise.name')}</h2>
+		<div class="plan-users">{$_('pricing.enterprise.users')}</div>
+		<div class="plan-price">
+			<span class="price">{$_('pricing.enterprise.price')}</span>
+		</div>
+		<p class="plan-description">{$_('pricing.enterprise.description')}</p>
+		<a href="/register?plan=enterprise" class="secondary-btn">{$_('pricing.enterprise.cta')}</a>
+	</div>
+</section>
+
+<section class="advantages">
+	<h2>{$_('pricing.advantages.title')}</h2>
+	<ul class="advantages-list">
+		<li>
+			<Icon icon="mdi:check-circle" width="20" height="20" />
+			<span>{$_('pricing.advantages.allIn')}</span>
+		</li>
+		<li>
+			<Icon icon="mdi:check-circle" width="20" height="20" />
+			<span>{$_('pricing.advantages.noFees')}</span>
+		</li>
+		<li>
+			<Icon icon="mdi:check-circle" width="20" height="20" />
+			<span>{$_('pricing.advantages.onboarding')}</span>
+		</li>
+		<li>
+			<Icon icon="mdi:check-circle" width="20" height="20" />
+			<span>{$_('pricing.advantages.contracts')}</span>
+		</li>
+	</ul>
 </section>
 
 <style lang="scss">
 	.pricing-hero {
-		text-align: center;
+		max-width: 1100px;
+		margin: 0 auto;
 		padding: 4rem 1.5rem 2rem;
-		background: linear-gradient(180deg, var(--pg-soft-background) 0%, var(--pg-general-background) 100%);
 
 		h1 {
 			font-size: 2.2rem;
@@ -106,8 +81,7 @@
 		p {
 			color: var(--pg-text-secondary);
 			font-size: var(--pg-font-size-lg);
-			max-width: 600px;
-			margin: 0 auto;
+			max-width: 500px;
 		}
 	}
 
@@ -117,7 +91,7 @@
 		gap: 1.5rem;
 		max-width: 1100px;
 		margin: 0 auto;
-		padding: 2rem 1.5rem 4rem;
+		padding: 2rem 1.5rem 2rem;
 
 		@media only screen and (max-width: 900px) {
 			grid-template-columns: 1fr;
@@ -141,7 +115,6 @@
 
 		&.highlighted {
 			border-color: var(--pg-primary);
-			box-shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
 		}
 
 		h2 {
@@ -150,19 +123,10 @@
 		}
 	}
 
-	.plan-badge {
-		position: absolute;
-		top: -12px;
-		left: 50%;
-		transform: translateX(-50%);
-		background: var(--pg-primary-bg);
-		color: #fff;
-		font-family: var(--pg-font-family);
-		font-size: var(--pg-font-size-xs);
-		font-weight: var(--pg-font-weight-bold);
-		padding: 4px 12px;
-		border-radius: 100px;
-		white-space: nowrap;
+	.plan-users {
+		font-size: var(--pg-font-size-sm);
+		color: var(--pg-text-secondary);
+		margin-bottom: 0.5rem;
 	}
 
 	.plan-price {
@@ -186,19 +150,30 @@
 		font-size: var(--pg-font-size-md);
 		margin-bottom: 1.5rem;
 		line-height: 1.5;
+		flex: 1;
 	}
 
-	.plan-features {
+	.advantages {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 1.5rem 1.5rem 4rem;
+
+		h2 {
+			margin-bottom: 1rem;
+		}
+	}
+
+	.advantages-list {
 		list-style: none;
 		padding: 0;
-		margin: 1.5rem 0 0;
-		flex: 1;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 2rem;
 
 		li {
 			display: flex;
 			align-items: center;
 			gap: 0.5rem;
-			padding: 0.4rem 0;
 			font-size: var(--pg-font-size-md);
 			color: var(--pg-text);
 

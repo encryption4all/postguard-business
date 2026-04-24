@@ -1,28 +1,29 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<SEO title="Audit Log - Admin" />
+<SEO title="{$_('admin.auditLog.title')} - Admin" />
 
-<h1>Admin Audit Log</h1>
-<p class="subtitle">{data.auditLog.total} actions logged</p>
+<h1>{$_('admin.auditLog.title')}</h1>
+<p class="subtitle">{$_('admin.auditLog.actionsLogged', { values: { count: data.auditLog.total } })}</p>
 
 {#if data.auditLog.logs.length === 0}
-	<p class="empty">No admin actions logged yet.</p>
+	<p class="empty">{$_('admin.auditLog.noActions')}</p>
 {:else}
 	<div class="table-wrapper">
 		<table>
 			<thead>
 				<tr>
-					<th>Admin</th>
-					<th>Action</th>
-					<th>Target</th>
-					<th>Details</th>
-					<th>IP</th>
-					<th>Time</th>
+					<th>{$_('admin.auditLog.admin')}</th>
+					<th>{$_('admin.auditLog.action')}</th>
+					<th>{$_('admin.auditLog.target')}</th>
+					<th>{$_('admin.auditLog.details')}</th>
+					<th>{$_('admin.auditLog.ip')}</th>
+					<th>{$_('admin.auditLog.time')}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -55,11 +56,11 @@
 	{#if data.auditLog.totalPages > 1}
 		<div class="pagination">
 			{#if data.auditLog.page > 1}
-				<a href="/admin/audit-log?page={data.auditLog.page - 1}" class="secondary-btn">Previous</a>
+				<a href="/admin/audit-log?page={data.auditLog.page - 1}" class="secondary-btn">{$_('admin.auditLog.previous')}</a>
 			{/if}
-			<span class="page-info">Page {data.auditLog.page} of {data.auditLog.totalPages}</span>
+			<span class="page-info">{$_('admin.auditLog.pageOf', { values: { page: data.auditLog.page, totalPages: data.auditLog.totalPages } })}</span>
 			{#if data.auditLog.page < data.auditLog.totalPages}
-				<a href="/admin/audit-log?page={data.auditLog.page + 1}" class="secondary-btn">Next</a>
+				<a href="/admin/audit-log?page={data.auditLog.page + 1}" class="secondary-btn">{$_('admin.auditLog.next')}</a>
 			{/if}
 		</div>
 	{/if}

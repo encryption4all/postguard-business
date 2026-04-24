@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -12,7 +13,7 @@
 
 <a href="/admin/organizations" class="back-link">
 	<Icon icon="mdi:arrow-left" width="16" height="16" />
-	Back to organizations
+	{$_('admin.organizations.backToOrgs')}
 </a>
 
 <div class="org-header">
@@ -23,10 +24,10 @@
 </div>
 
 <div class="org-details">
-	<div class="detail"><span class="label">Domain</span><span>{data.organization.domain}</span></div>
-	<div class="detail"><span class="label">Signing email</span><span>{data.organization.signingEmail}</span></div>
-	<div class="detail"><span class="label">KVK</span><span>{data.organization.kvkNumber ?? '—'}</span></div>
-	<div class="detail"><span class="label">Contact</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
+	<div class="detail"><span class="label">{$_('admin.organizations.domain')}</span><span>{data.organization.domain}</span></div>
+	<div class="detail"><span class="label">{$_('admin.organizations.signingEmail')}</span><span>{data.organization.signingEmail}</span></div>
+	<div class="detail"><span class="label">{$_('admin.organizations.kvk')}</span><span>{data.organization.kvkNumber ?? '—'}</span></div>
+	<div class="detail"><span class="label">{$_('admin.organizations.contact')}</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
 </div>
 
 {#if data.impersonationEnabled}
@@ -34,7 +35,7 @@
 		<form method="POST" action="?/impersonate" use:enhance>
 			<button type="submit" class="secondary-btn">
 				<Icon icon="mdi:eye" width="16" height="16" />
-				Impersonate
+				{$_('admin.organizations.impersonate')}
 			</button>
 		</form>
 	</div>
@@ -78,7 +79,7 @@
 
 {#if data.requests.length > 0}
 	<section class="requests">
-		<h2>Change Requests</h2>
+		<h2>{$_('admin.organizations.changeRequests')}</h2>
 		{#each data.requests as req}
 			<div class="request-card" class:pending={req.status === 'pending'}>
 				<div class="request-header">
@@ -88,7 +89,7 @@
 					</span>
 				</div>
 				<div class="req-values">
-					<span class="old">{req.oldValue ?? '(empty)'}</span>
+					<span class="old">{req.oldValue ?? $_('admin.organizations.empty')}</span>
 					<Icon icon="mdi:arrow-right" width="14" height="14" />
 					<span class="new">{req.newValue}</span>
 				</div>
@@ -99,19 +100,19 @@
 						<input
 							type="text"
 							class="pg-input"
-							placeholder="Validation notes (what did you check?)"
+							placeholder={$_('admin.organizations.validationNotes')}
 							bind:value={reviewNotes}
 						/>
 						<div class="review-actions">
 							<form method="POST" action="?/approve" use:enhance>
 								<input type="hidden" name="requestId" value={req.id} />
 								<input type="hidden" name="reviewNotes" value={reviewNotes} />
-								<button type="submit" class="action-btn approve">Approve</button>
+								<button type="submit" class="action-btn approve">{$_('admin.organizations.approve')}</button>
 							</form>
 							<form method="POST" action="?/reject" use:enhance>
 								<input type="hidden" name="requestId" value={req.id} />
 								<input type="hidden" name="reviewNotes" value={reviewNotes} />
-								<button type="submit" class="action-btn reject">Reject</button>
+								<button type="submit" class="action-btn reject">{$_('admin.organizations.reject')}</button>
 							</form>
 						</div>
 					</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types';
@@ -6,9 +7,9 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
-<SEO title="Dashboard" />
+<SEO title={$_('dashboard.title')} />
 
-<h1>Dashboard</h1>
+<h1>{$_('dashboard.title')}</h1>
 
 <div class="stats-grid">
 	{#if data.featureFlags.apiKeys}
@@ -18,9 +19,9 @@
 			</div>
 			<div class="stat-info">
 				<p class="stat-value">{data.stats.activeKeys}</p>
-				<p class="stat-label">Active API keys</p>
+				<p class="stat-label">{$_('dashboard.activeKeys')}</p>
 			</div>
-			<a href="/portal/api-keys" class="stat-link">Manage</a>
+			<a href="/portal/api-keys" class="stat-link">{$_('dashboard.manage')}</a>
 		</div>
 	{/if}
 
@@ -31,9 +32,9 @@
 			</div>
 			<div class="stat-info">
 				<p class="stat-value">{data.stats.emailsThisMonth}</p>
-				<p class="stat-label">Emails this month</p>
+				<p class="stat-label">{$_('dashboard.emailsMonth')}</p>
 			</div>
-			<a href="/portal/email-log" class="stat-link">View log</a>
+			<a href="/portal/email-log" class="stat-link">{$_('dashboard.viewLog')}</a>
 		</div>
 	{/if}
 
@@ -47,33 +48,33 @@
 				/>
 			</div>
 			<div class="stat-info">
-				<p class="stat-value">{data.stats.dnsVerified ? 'Verified' : 'Pending'}</p>
-				<p class="stat-label">DNS status</p>
+				<p class="stat-value">{data.stats.dnsVerified ? $_('dashboard.verified') : $_('dashboard.pending')}</p>
+				<p class="stat-label">{$_('dashboard.dnsStatus')}</p>
 			</div>
-			<a href="/portal/dns" class="stat-link">Configure</a>
+			<a href="/portal/dns" class="stat-link">{$_('dashboard.configure')}</a>
 		</div>
 	{/if}
 </div>
 
 <section class="quick-actions">
-	<h2>Quick actions</h2>
+	<h2>{$_('dashboard.quickActions')}</h2>
 	<div class="actions-row">
 		{#if data.featureFlags.apiKeys}
 			<a href="/portal/api-keys/create" class="action-card">
 				<Icon icon="mdi:key-plus" width="24" height="24" />
-				<span>Create API key</span>
+				<span>{$_('dashboard.createKey')}</span>
 			</a>
 		{/if}
 		{#if data.featureFlags.orgInfo}
 			<a href="/portal/organization" class="action-card">
 				<Icon icon="mdi:office-building-cog" width="24" height="24" />
-				<span>Edit organization</span>
+				<span>{$_('dashboard.editOrg')}</span>
 			</a>
 		{/if}
 		{#if data.featureFlags.emailLog}
 			<a href="/portal/email-log" class="action-card">
 				<Icon icon="mdi:file-document-outline" width="24" height="24" />
-				<span>Export audit log</span>
+				<span>{$_('dashboard.exportLog')}</span>
 			</a>
 		{/if}
 	</div>

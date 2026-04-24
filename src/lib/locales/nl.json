@@ -4,17 +4,26 @@
 		"pricing": "Prijzen",
 		"register": "Registreren",
 		"login": "Inloggen",
+		"myPortal": "Mijn portaal",
 		"logout": "Uitloggen",
 		"dashboard": "Dashboard",
 		"apiKeys": "API-sleutels",
 		"organization": "Organisatie",
 		"emailLog": "E-maillog",
+		"members": "Leden",
 		"dns": "DNS-verificatie",
-		"admin": "Beheer"
+		"admin": "Beheer",
+		"adminPanel": "Beheerpaneel",
+		"organizations": "Organisaties",
+		"auditLog": "Auditlog",
+		"settings": "Instellingen",
+		"toggleMenu": "Menu openen",
+		"mainNav": "Hoofdnavigatie",
+		"mobileNav": "Mobiele navigatie"
 	},
 	"hero": {
 		"title": "Veilige e-mailondertekening voor uw organisatie",
-		"subtitle": "PostGuard for Business laat uw organisatie e-mails ondertekenen en versleutelen met identiteitsgecontroleerde attributen. Beheer API-sleutels, verifieer uw domein en houd volledige audittrails bij.",
+		"subtitle": "PostGuard for Business laat uw organisatie e-mails ondertekenen en versleutelen met identiteitsgecontroleerde attributen. Beheer API-sleutels en houd volledige audittrails bij.",
 		"cta": "Aan de slag",
 		"pricing": "Bekijk prijzen"
 	},
@@ -24,17 +33,13 @@
 			"title": "API-sleutelbeheer",
 			"description": "Maak en beheer API-sleutels met gedetailleerde controle over welke organisatiekenmerken elke sleutel ondertekent."
 		},
-		"dns": {
-			"title": "DNS-verificatie",
-			"description": "Verifieer uw domeineigendom en configureer DNS-records zodat PostGuard e-mails namens u kan ondertekenen."
-		},
-		"auditLog": {
-			"title": "E-mail auditlog",
-			"description": "Volledige audittrail van elke ondertekende e-mail. Trek e-mails in, volg leesbevestigingen en exporteer compliancerapporten."
-		},
 		"identity": {
 			"title": "Identiteitsgebaseerde ondertekening",
-			"description": "Onderteken e-mails met uw organisatienaam, KVK-nummer, telefoonnummer en e-mailadres — geverifieerd via Yivi."
+			"description": "Onderteken e-mails met uw organisatienaam, KVK-nummer, telefoonnummer en e-mailadres \u2014 geverifieerd via Yivi."
+		},
+		"hostedEU": {
+			"title": "Gehost in de EU",
+			"description": "Alle gegevens worden opgeslagen en verwerkt binnen de Europese Unie, voor volledige AVG-naleving en datasoevereiniteit."
 		},
 		"encryption": {
 			"title": "End-to-end versleuteling",
@@ -43,6 +48,19 @@
 		"openSource": {
 			"title": "Open source",
 			"description": "Gebouwd op het open-source PostGuard-protocol. Volledige transparantie, geen vendor lock-in, community-gedreven."
+		},
+		"revocation": {
+			"title": "E-mailintrekking",
+			"comingSoon": "Binnenkort",
+			"description": "Trek ondertekende e-mails in na verzending. Ontvangers worden ge\u00efnformeerd dat de e-mail niet langer geldig is."
+		},
+		"dns": {
+			"title": "DNS-verificatie",
+			"description": "Verifieer uw domeineigendom en configureer DNS-records zodat PostGuard e-mails namens u kan ondertekenen."
+		},
+		"auditLog": {
+			"title": "E-mail auditlog",
+			"description": "Volledige audittrail van elke ondertekende e-mail. Trek e-mails in, volg leesbevestigingen en exporteer compliancerapporten."
 		}
 	},
 	"cta": {
@@ -51,11 +69,294 @@
 		"button": "Registreer uw organisatie"
 	},
 	"footer": {
+		"brandName": "PostGuard for Business",
 		"tagline": "Enterprise-grade identiteitsgebaseerde e-mailondertekening",
 		"product": "Product",
 		"resources": "Bronnen",
 		"personal": "PostGuard Persoonlijk",
 		"docs": "Documentatie",
-		"copyright": "© {year} PostGuard. Alle rechten voorbehouden."
+		"copyright": "\u00a9 {year} PostGuard. Alle rechten voorbehouden."
+	},
+	"seo": {
+		"siteName": "PostGuard for Business",
+		"defaultDescription": "PostGuard for Business biedt enterprise-grade identiteitsgebaseerde e-mailondertekening en versleuteling voor organisaties.",
+		"homeTitle": "Enterprise e-mailondertekening en versleuteling",
+		"homeDescription": "PostGuard for Business biedt enterprise-grade identiteitsgebaseerde e-mailondertekening en versleuteling. Beheer API-sleutels en controleer e-mailactiviteit."
+	},
+	"pricing": {
+		"title": "Prijzen",
+		"seoDescription": "Transparante per-gebruiker pricing voor PostGuard for Business. Kies het plan dat bij uw organisatie past.",
+		"heading": "Transparante, all-in pricing",
+		"subtitle": "Kies het plan dat bij uw organisatie past.",
+		"small": {
+			"name": "Small",
+			"price": "\u20ac5\u2013\u20ac6",
+			"period": "/gebruiker/maand",
+			"users": "Tot 100 gebruikers",
+			"description": "Voor organisaties met maximaal 100 gebruikers.",
+			"cta": "Aan de slag"
+		},
+		"medium": {
+			"name": "Medium",
+			"price": "\u20ac4\u2013\u20ac5",
+			"period": "/gebruiker/maand",
+			"users": "Tot 300 gebruikers",
+			"description": "Voor groeiende organisaties met maximaal 300 gebruikers.",
+			"cta": "Aan de slag"
+		},
+		"enterprise": {
+			"name": "Enterprise",
+			"price": "Op maat",
+			"users": "300+ gebruikers",
+			"description": "Voor grote organisaties met specifieke wensen.",
+			"cta": "Neem contact op"
+		},
+		"advantages": {
+			"title": "Waarom PostGuard for Business?",
+			"allIn": "Transparante all-in pricing",
+			"noFees": "Geen verborgen add-on fees",
+			"onboarding": "Eenvoudige onboarding",
+			"contracts": "Flexibele contracten"
+		}
+	},
+	"auth": {
+		"login": "Inloggen",
+		"loginSubtitle": "Authenticeer met uw Yivi-app om toegang te krijgen tot uw organisatieportaal.",
+		"loginHint": "Toon uw organisatie e-mailadres om in te loggen.",
+		"noAccount": "Nog geen account?",
+		"registerOrg": "Registreer uw organisatie",
+		"adminLogin": "Admin Login",
+		"adminLoginSubtitle": "Toon uw volledige naam, e-mailadres en telefoonnummer om in te loggen als beheerder.",
+		"yiviLoginAdmin": "Inloggen als admin met Yivi",
+		"yiviLoginOrg": "Inloggen met Yivi",
+		"yiviDiscloseAdmin": "Toon uw naam, e-mailadres en telefoonnummer.",
+		"yiviDiscloseOrg": "Toon uw organisatie e-mailadres.",
+		"yiviSuccess": "Authenticatie geslaagd! U wordt doorgestuurd...",
+		"yiviFailed": "Yivi-sessie mislukt. Probeer het opnieuw.",
+		"tryAgain": "Opnieuw proberen"
+	},
+	"register": {
+		"title": "Registreren",
+		"seoDescription": "Registreer uw organisatie voor PostGuard for Business.",
+		"heading": "Registreer uw organisatie",
+		"subtitle": "Verifieer uw identiteit met de Yivi-app om uw organisatie te registreren voor PostGuard for Business.",
+		"verifyBtn": "Verifi\u00ebren met Yivi",
+		"yiviHint": "Toon uw e-mailadres, volledige naam en telefoonnummer.",
+		"submitted": "Aanvraag ingediend",
+		"submittedMessage": "Bedankt voor uw registratie. We beoordelen uw aanvraag en nemen binnen 2 werkdagen contact met u op. U ontvangt een bevestigings-e-mail zodra uw organisatie is goedgekeurd.",
+		"backHome": "Terug naar home",
+		"completeTitle": "Registratie afronden",
+		"completeSubtitle": "Uw identiteit is geverifieerd. Vul de overige gegevens hieronder in.",
+		"fullName": "Volledige naam",
+		"email": "E-mailadres",
+		"phone": "Telefoonnummer",
+		"verifiedYivi": "Geverifieerd met Yivi",
+		"orgName": "Organisatienaam",
+		"orgNamePlaceholder": "Acme B.V.",
+		"submit": "Aanvraag indienen"
+	},
+	"dashboard": {
+		"title": "Dashboard",
+		"activeKeys": "Actieve API-sleutels",
+		"emailsMonth": "E-mails deze maand",
+		"dnsStatus": "DNS-status",
+		"verified": "Geverifieerd",
+		"pending": "In behandeling",
+		"manage": "Beheren",
+		"viewLog": "Log bekijken",
+		"configure": "Configureren",
+		"quickActions": "Snelle acties",
+		"createKey": "API-sleutel aanmaken",
+		"editOrg": "Organisatie bewerken",
+		"exportLog": "Auditlog exporteren"
+	},
+	"apiKeys": {
+		"title": "API-sleutels",
+		"createKey": "Sleutel aanmaken",
+		"emptyTitle": "Nog geen API-sleutels",
+		"emptyDescription": "Maak uw eerste API-sleutel aan om e-mails te ondertekenen.",
+		"createApiKey": "API-sleutel aanmaken",
+		"name": "Naam",
+		"keyPrefix": "Sleutelprefix",
+		"created": "Aangemaakt",
+		"lastUsed": "Laatst gebruikt",
+		"expires": "Verloopt",
+		"never": "Nooit",
+		"confirm": "Bevestigen",
+		"cancel": "Annuleren",
+		"revoke": "Intrekken",
+		"create": {
+			"title": "API-sleutel aanmaken",
+			"created": "API-sleutel aangemaakt",
+			"copyWarning": "Kopieer deze sleutel nu. U kunt hem daarna niet meer zien.",
+			"backToKeys": "Terug naar API-sleutels",
+			"back": "Terug",
+			"keyName": "Sleutelnaam",
+			"keyNamePlaceholder": "bijv. Productie Mailer",
+			"keyNameHint": "Een beschrijvende naam om deze sleutel te herkennen",
+			"expiresIn": "Verloopt over",
+			"days30": "30 dagen",
+			"days90": "90 dagen",
+			"days180": "180 dagen",
+			"year1": "1 jaar",
+			"signingAttrs": "Ondertekeningskenmerken",
+			"signingHint": "Kies welke organisatiekenmerken deze API-sleutel meeneemt bij het ondertekenen van e-mails.",
+			"attrEmail": "E-mailadres",
+			"attrOrgName": "Organisatienaam",
+			"attrPhone": "Telefoonnummer",
+			"attrKvk": "KVK-nummer",
+			"generate": "API-sleutel genereren",
+			"copied": "Gekopieerd!",
+			"copy": "Kopi\u00ebren"
+		}
+	},
+	"organization": {
+		"title": "Organisatie",
+		"details": "Organisatiegegevens",
+		"changeSubmitted": "Wijzigingsverzoek voor {fieldName} ingediend. Een beheerder zal het beoordelen.",
+		"orgName": "Organisatienaam",
+		"domain": "Domein",
+		"signingEmail": "Ondertekenings-e-mail",
+		"kvkNumber": "KVK-nummer",
+		"contactPerson": "Contactpersoon",
+		"requestChange": "Wijziging aanvragen",
+		"changeRequests": "Wijzigingsverzoeken",
+		"field": "Veld",
+		"newValue": "Nieuwe waarde",
+		"status": "Status",
+		"requested": "Aangevraagd"
+	},
+	"emailLog": {
+		"title": "E-maillog",
+		"heading": "E-mail auditlog",
+		"searchPlaceholder": "Zoek op ontvanger of onderwerp...",
+		"search": "Zoeken",
+		"emailsFound": "{count} e-mail(s) gevonden",
+		"noEmails": "Geen e-mails gevonden",
+		"noSearchMatch": "Geen e-mails komen overeen met uw zoekopdracht.",
+		"noEmailsYet": "Nog geen ondertekende e-mails. E-mails verschijnen hier zodra uw API-sleutels worden gebruikt.",
+		"recipient": "Ontvanger",
+		"subject": "Onderwerp",
+		"signed": "Ondertekend",
+		"read": "Gelezen",
+		"statusCol": "Status",
+		"notRead": "Niet gelezen",
+		"revoked": "Ingetrokken",
+		"active": "Actief",
+		"revoke": "Intrekken",
+		"cancel": "Annuleren",
+		"previous": "Vorige",
+		"pageOf": "Pagina {page} van {totalPages}",
+		"next": "Volgende"
+	},
+	"dns": {
+		"title": "DNS-verificatie",
+		"domainVerified": "Domein geverifieerd",
+		"verificationPending": "Verificatie in behandeling",
+		"verifiedOn": "Geverifieerd op {date}",
+		"verifiedSuccess": "DNS succesvol geverifieerd!",
+		"instructions": "Installatie-instructies",
+		"step1Title": "TXT-record toevoegen",
+		"step1Desc": "Voeg het volgende TXT-record toe aan de DNS-configuratie van uw domein:",
+		"type": "Type",
+		"nameHost": "Naam/Host",
+		"value": "Waarde",
+		"step2Title": "Wacht op propagatie",
+		"step2Desc": "DNS-wijzigingen kunnen tot 48 uur duren om te propageren, hoewel de meeste wijzigingen binnen enkele minuten zichtbaar zijn.",
+		"step3Title": "Verifi\u00ebren",
+		"step3Desc": "Klik op de knop hieronder om te controleren of uw DNS-records correct zijn geconfigureerd.",
+		"verifyBtn": "DNS verifi\u00ebren",
+		"lastChecked": "Laatst gecontroleerd: {date}"
+	},
+	"members": {
+		"title": "Leden",
+		"addMember": "Lid toevoegen",
+		"memberAdded": "Lid succesvol toegevoegd.",
+		"contactUpdated": "Contactpersoon bijgewerkt.",
+		"addTitle": "Nieuw lid toevoegen",
+		"fullName": "Volledige naam",
+		"email": "E-mailadres",
+		"phone": "Telefoonnummer",
+		"optional": "(optioneel)",
+		"cancel": "Annuleren",
+		"emptyTitle": "Nog geen leden",
+		"emptyDescription": "Voeg het eerste lid toe aan uw organisatie.",
+		"name": "Naam",
+		"role": "Rol",
+		"contactPerson": "Contactpersoon",
+		"member": "Lid",
+		"makeContact": "Maak contactpersoon",
+		"removeMember": "Lid verwijderen",
+		"remove": "Verwijderen"
+	},
+	"admin": {
+		"impersonating": "Organisatie nagebootst",
+		"stopImpersonating": "Stop nabootsen",
+		"viewingAs": "Bekijkt als {orgName}",
+		"organizations": {
+			"title": "Organisaties",
+			"pendingRequests": "Openstaande wijzigingsverzoeken ({count})",
+			"allOrgs": "Alle organisaties",
+			"name": "Naam",
+			"domain": "Domein",
+			"signingEmail": "Ondertekenings-e-mail",
+			"status": "Status",
+			"created": "Aangemaakt",
+			"active": "actief",
+			"pending": "in behandeling",
+			"suspended": "opgeschort",
+			"activate": "Activeren",
+			"suspend": "Opschorten",
+			"reactivate": "Heractiveren",
+			"backToOrgs": "Terug naar organisaties",
+			"kvk": "KVK",
+			"contact": "Contact",
+			"impersonate": "Nabootsen",
+			"changeRequests": "Wijzigingsverzoeken",
+			"empty": "(leeg)",
+			"validationNotes": "Validatienotities (wat heeft u gecontroleerd?)",
+			"approve": "Goedkeuren",
+			"reject": "Afwijzen"
+		},
+		"apiKeys": {
+			"title": "Alle API-sleutels",
+			"keyCreated": "Sleutel aangemaakt: {rawKey}",
+			"noKeys": "Geen actieve API-sleutels bij alle organisaties.",
+			"organization": "Organisatie",
+			"keyName": "Sleutelnaam",
+			"prefix": "Prefix",
+			"created": "Aangemaakt",
+			"lastUsed": "Laatst gebruikt",
+			"never": "Nooit",
+			"revoke": "Intrekken",
+			"confirm": "Bevestigen",
+			"cancel": "Annuleren"
+		},
+		"auditLog": {
+			"title": "Admin auditlog",
+			"actionsLogged": "{count} acties gelogd",
+			"noActions": "Nog geen admin-acties gelogd.",
+			"admin": "Admin",
+			"action": "Actie",
+			"target": "Doel",
+			"details": "Details",
+			"ip": "IP",
+			"time": "Tijd",
+			"previous": "Vorige",
+			"pageOf": "Pagina {page} van {totalPages}",
+			"next": "Volgende"
+		},
+		"settings": {
+			"title": "Instellingen",
+			"featureFlags": "Functieschakelaars",
+			"prodNotice": "Productiemodus \u2014 functieschakelaars worden ingesteld via omgevingsvariabelen en kunnen niet tijdens runtime worden gewijzigd.",
+			"on": "AAN",
+			"off": "UIT"
+		}
+	},
+	"common": {
+		"somethingWrong": "Er is iets misgegaan",
+		"goBack": "Ga terug",
+		"chooseTheme": "Kies een thema voor deze website"
 	}
 }

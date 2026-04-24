@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import { enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
@@ -114,8 +115,8 @@
 </script>
 
 <SEO
-	title="Register"
-	description="Register your organization for PostGuard for Business."
+	title={$_('register.title')}
+	description={$_('register.seoDescription')}
 />
 
 <section class="register">
@@ -123,43 +124,41 @@
 		{#if form?.success}
 			<div class="success-message">
 				<Icon icon="mdi:check-circle" width="48" height="48" />
-				<h1>Application submitted</h1>
+				<h1>{$_('register.submitted')}</h1>
 				<p>
-					Thank you for registering. We will review your application and get back to you
-					within 2 business days. You will receive a confirmation email once your
-					organization is approved.
+					{$_('register.submittedMessage')}
 				</p>
-				<a href="/" class="secondary-btn">Back to home</a>
+				<a href="/" class="secondary-btn">{$_('register.backHome')}</a>
 			</div>
 		{:else if yiviStatus === 'idle' || yiviStatus === 'running' || yiviStatus === 'error'}
-			<h1>Register your organization</h1>
+			<h1>{$_('register.heading')}</h1>
 			<p class="register-subtitle">
-				Verify your identity with the Yivi app to register your organization for PostGuard for Business.
+				{$_('register.subtitle')}
 			</p>
 
 			{#if yiviStatus === 'idle'}
 				<div class="yivi-section">
 					<button class="primary-btn yivi-btn" onclick={startYiviFlow}>
 						<Icon icon="mdi:qrcode-scan" width="20" height="20" />
-						Verify with Yivi
+						{$_('register.verifyBtn')}
 					</button>
 				</div>
 			{:else if yiviStatus === 'running'}
 				<div class="yivi-section">
 					<div id="yivi-register-container" class="yivi-container"></div>
-					<p class="yivi-hint">Please disclose your email, full name, and phone number.</p>
+					<p class="yivi-hint">{$_('register.yiviHint')}</p>
 				</div>
 			{:else if yiviStatus === 'error'}
 				<div class="yivi-section error-state">
 					<Icon icon="mdi:alert-circle" width="32" height="32" />
 					<p>{yiviError}</p>
-					<button class="secondary-btn" onclick={retryYivi}>Try again</button>
+					<button class="secondary-btn" onclick={retryYivi}>{$_('auth.tryAgain')}</button>
 				</div>
 			{/if}
 		{:else if disclosed}
-			<h1>Complete registration</h1>
+			<h1>{$_('register.completeTitle')}</h1>
 			<p class="register-subtitle">
-				Your identity has been verified. Fill in the remaining details below.
+				{$_('register.completeSubtitle')}
 			</p>
 
 			{#if form?.errors?.form}
@@ -171,22 +170,22 @@
 
 			<div class="disclosed-info">
 				<div class="disclosed-field">
-					<span class="disclosed-label">Full name</span>
+					<span class="disclosed-label">{$_('register.fullName')}</span>
 					<span class="disclosed-value">{disclosed.fullName}</span>
 				</div>
 				<div class="disclosed-field">
-					<span class="disclosed-label">Email</span>
+					<span class="disclosed-label">{$_('register.email')}</span>
 					<span class="disclosed-value">{disclosed.email}</span>
 				</div>
 				{#if disclosed.phone}
 					<div class="disclosed-field">
-						<span class="disclosed-label">Phone</span>
+						<span class="disclosed-label">{$_('register.phone')}</span>
 						<span class="disclosed-value">{disclosed.phone}</span>
 					</div>
 				{/if}
 				<div class="disclosed-badge">
 					<Icon icon="mdi:check-decagram" width="16" height="16" />
-					Verified with Yivi
+					{$_('register.verifiedYivi')}
 				</div>
 			</div>
 
@@ -197,13 +196,13 @@
 				<input type="hidden" name="domain" value={derivedDomain} />
 
 				<div class="form-group">
-					<label for="name">Organization name *</label>
+					<label for="name">{$_('register.orgName')} *</label>
 					<input
 						id="name"
 						name="name"
 						type="text"
 						class="pg-input"
-						placeholder="Acme B.V."
+						placeholder={$_('register.orgNamePlaceholder')}
 						value={form?.values?.name ?? ''}
 						required
 					/>
@@ -219,7 +218,7 @@
 					</div>
 				{/if}
 
-				<button type="submit" class="primary-btn submit-btn">Submit application</button>
+				<button type="submit" class="primary-btn submit-btn">{$_('register.submit')}</button>
 			</form>
 		{/if}
 	</div>

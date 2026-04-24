@@ -3,12 +3,13 @@ import { test, expect } from '@playwright/test';
 test.describe('Landing page', () => {
 	test('should display the hero section', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.locator('h1')).toContainText('Secure email signing');
+		await expect(page.locator('.hero h1')).toBeVisible();
 	});
 
-	test('should display feature cards', async ({ page }) => {
+	test('should display features section', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.locator('.feature-card')).toHaveCount(6);
+		await expect(page.locator('.features')).toBeVisible();
+		await expect(page.locator('.feature-block')).toHaveCount(6);
 	});
 
 	test('should have working navigation links', async ({ page }) => {
@@ -22,7 +23,7 @@ test.describe('Landing page', () => {
 		await page.goto('/');
 		const cta = page.locator('.cta');
 		await expect(cta).toBeVisible();
-		await expect(cta.locator('a.primary-btn')).toContainText('Register');
+		await expect(cta.locator('a.primary-btn')).toBeVisible();
 	});
 
 	test('should have a footer', async ({ page }) => {

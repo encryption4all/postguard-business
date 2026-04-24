@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types';
@@ -24,17 +25,17 @@
 
 </script>
 
-<SEO title="Settings - Admin" />
+<SEO title="{$_('admin.settings.title')} - Admin" />
 
-<h1>Settings</h1>
+<h1>{$_('admin.settings.title')}</h1>
 
 <section class="flags-section">
-	<h2>Feature Flags</h2>
+	<h2>{$_('admin.settings.featureFlags')}</h2>
 
 	{#if !data.canToggle}
 		<div class="prod-notice">
 			<Icon icon="mdi:lock" width="18" height="18" />
-			<span>Production mode — feature flags are set via environment variables and cannot be changed at runtime.</span>
+			<span>{$_('admin.settings.prodNotice')}</span>
 		</div>
 	{/if}
 
@@ -53,7 +54,7 @@
 						disabled={!data.canToggle || updating === flag}
 						onclick={() => toggleFlag(flag, info.value)}
 					>
-						{info.value ? 'ON' : 'OFF'}
+						{info.value ? $_('admin.settings.on') : $_('admin.settings.off')}
 					</button>
 					</div>
 			</div>

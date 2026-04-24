@@ -4,17 +4,26 @@
 		"pricing": "Pricing",
 		"register": "Register",
 		"login": "Log in",
+		"myPortal": "My portal",
 		"logout": "Log out",
 		"dashboard": "Dashboard",
 		"apiKeys": "API Keys",
 		"organization": "Organization",
 		"emailLog": "Email Log",
+		"members": "Members",
 		"dns": "DNS Verification",
-		"admin": "Admin"
+		"admin": "Admin",
+		"adminPanel": "Admin Panel",
+		"organizations": "Organizations",
+		"auditLog": "Audit Log",
+		"settings": "Settings",
+		"toggleMenu": "Toggle menu",
+		"mainNav": "Main navigation",
+		"mobileNav": "Mobile navigation"
 	},
 	"hero": {
 		"title": "Secure email signing for your organization",
-		"subtitle": "PostGuard for Business lets your organization sign and encrypt emails with identity-verified attributes. Manage API keys, verify your domain, and maintain full audit trails.",
+		"subtitle": "PostGuard for Business lets your organization sign and encrypt emails with identity-verified attributes. Manage API keys and maintain full audit trails.",
 		"cta": "Get started",
 		"pricing": "View pricing"
 	},
@@ -24,17 +33,13 @@
 			"title": "API Key Management",
 			"description": "Create and manage API keys with granular control over which organizational attributes each key signs with."
 		},
-		"dns": {
-			"title": "DNS Verification",
-			"description": "Verify your domain ownership and configure DNS records so PostGuard can sign emails on your behalf."
-		},
-		"auditLog": {
-			"title": "Email Audit Log",
-			"description": "Full audit trail of every signed email. Revoke emails, track read receipts, and export compliance reports."
-		},
 		"identity": {
 			"title": "Identity-Based Signing",
 			"description": "Sign emails with your organization name, KvK number, phone, and email — verified through Yivi."
+		},
+		"hostedEU": {
+			"title": "Hosted in the EU",
+			"description": "All data is stored and processed within the European Union, ensuring full GDPR compliance and data sovereignty."
 		},
 		"encryption": {
 			"title": "End-to-End Encryption",
@@ -43,6 +48,19 @@
 		"openSource": {
 			"title": "Open Source",
 			"description": "Built on the open-source PostGuard protocol. Full transparency, no vendor lock-in, community-driven."
+		},
+		"revocation": {
+			"title": "Email Revocation",
+			"comingSoon": "Coming soon",
+			"description": "Revoke signed emails after sending. Recipients will be notified that the email is no longer valid."
+		},
+		"dns": {
+			"title": "DNS Verification",
+			"description": "Verify your domain ownership and configure DNS records so PostGuard can sign emails on your behalf."
+		},
+		"auditLog": {
+			"title": "Email Audit Log",
+			"description": "Full audit trail of every signed email. Revoke emails, track read receipts, and export compliance reports."
 		}
 	},
 	"cta": {
@@ -51,11 +69,294 @@
 		"button": "Register your organization"
 	},
 	"footer": {
+		"brandName": "PostGuard for Business",
 		"tagline": "Enterprise-grade identity-based email signing",
 		"product": "Product",
 		"resources": "Resources",
 		"personal": "PostGuard Personal",
 		"docs": "Documentation",
-		"copyright": "© {year} PostGuard. All rights reserved."
+		"copyright": "\u00a9 {year} PostGuard. All rights reserved."
+	},
+	"seo": {
+		"siteName": "PostGuard for Business",
+		"defaultDescription": "PostGuard for Business offers enterprise-grade identity-based email signing and encryption for organizations.",
+		"homeTitle": "Enterprise Email Signing & Encryption",
+		"homeDescription": "PostGuard for Business offers enterprise-grade identity-based email signing and encryption. Manage API keys and audit email activity."
+	},
+	"pricing": {
+		"title": "Pricing",
+		"seoDescription": "Transparent per-user pricing for PostGuard for Business. Choose the plan that fits your organization.",
+		"heading": "Transparent, all-in pricing",
+		"subtitle": "Choose the plan that fits your organization.",
+		"small": {
+			"name": "Small",
+			"price": "\u20ac5\u2013\u20ac6",
+			"period": "/user/month",
+			"users": "Up to 100 users",
+			"description": "For organizations with up to 100 users.",
+			"cta": "Get started"
+		},
+		"medium": {
+			"name": "Medium",
+			"price": "\u20ac4\u2013\u20ac5",
+			"period": "/user/month",
+			"users": "Up to 300 users",
+			"description": "For growing organizations with up to 300 users.",
+			"cta": "Get started"
+		},
+		"enterprise": {
+			"name": "Enterprise",
+			"price": "Custom",
+			"users": "300+ users",
+			"description": "For large organizations with specific requirements.",
+			"cta": "Contact us"
+		},
+		"advantages": {
+			"title": "Why PostGuard for Business?",
+			"allIn": "Transparent all-in pricing",
+			"noFees": "No hidden add-on fees",
+			"onboarding": "Easy onboarding",
+			"contracts": "Flexible contracts"
+		}
+	},
+	"auth": {
+		"login": "Log in",
+		"loginSubtitle": "Authenticate with your Yivi app to access your organization portal.",
+		"loginHint": "Disclose your organization email address to log in.",
+		"noAccount": "Don't have an account?",
+		"registerOrg": "Register your organization",
+		"adminLogin": "Admin Login",
+		"adminLoginSubtitle": "Disclose your full name, email address, and phone number to log in as an administrator.",
+		"yiviLoginAdmin": "Login as admin with Yivi",
+		"yiviLoginOrg": "Login with Yivi",
+		"yiviDiscloseAdmin": "Please disclose your name, email, and phone number.",
+		"yiviDiscloseOrg": "Please disclose your organization email address.",
+		"yiviSuccess": "Authentication successful! Redirecting...",
+		"yiviFailed": "Yivi session failed. Please try again.",
+		"tryAgain": "Try again"
+	},
+	"register": {
+		"title": "Register",
+		"seoDescription": "Register your organization for PostGuard for Business.",
+		"heading": "Register your organization",
+		"subtitle": "Verify your identity with the Yivi app to register your organization for PostGuard for Business.",
+		"verifyBtn": "Verify with Yivi",
+		"yiviHint": "Please disclose your email, full name, and phone number.",
+		"submitted": "Application submitted",
+		"submittedMessage": "Thank you for registering. We will review your application and get back to you within 2 business days. You will receive a confirmation email once your organization is approved.",
+		"backHome": "Back to home",
+		"completeTitle": "Complete registration",
+		"completeSubtitle": "Your identity has been verified. Fill in the remaining details below.",
+		"fullName": "Full name",
+		"email": "Email",
+		"phone": "Phone",
+		"verifiedYivi": "Verified with Yivi",
+		"orgName": "Organization name",
+		"orgNamePlaceholder": "Acme B.V.",
+		"submit": "Submit application"
+	},
+	"dashboard": {
+		"title": "Dashboard",
+		"activeKeys": "Active API keys",
+		"emailsMonth": "Emails this month",
+		"dnsStatus": "DNS status",
+		"verified": "Verified",
+		"pending": "Pending",
+		"manage": "Manage",
+		"viewLog": "View log",
+		"configure": "Configure",
+		"quickActions": "Quick actions",
+		"createKey": "Create API key",
+		"editOrg": "Edit organization",
+		"exportLog": "Export audit log"
+	},
+	"apiKeys": {
+		"title": "API Keys",
+		"createKey": "Create key",
+		"emptyTitle": "No API keys yet",
+		"emptyDescription": "Create your first API key to start signing emails.",
+		"createApiKey": "Create API key",
+		"name": "Name",
+		"keyPrefix": "Key prefix",
+		"created": "Created",
+		"lastUsed": "Last used",
+		"expires": "Expires",
+		"never": "Never",
+		"confirm": "Confirm",
+		"cancel": "Cancel",
+		"revoke": "Revoke",
+		"create": {
+			"title": "Create API Key",
+			"created": "API key created",
+			"copyWarning": "Copy this key now. You won't be able to see it again.",
+			"backToKeys": "Back to API keys",
+			"back": "Back",
+			"keyName": "Key name",
+			"keyNamePlaceholder": "e.g. Production Mailer",
+			"keyNameHint": "A descriptive name to identify this key",
+			"expiresIn": "Expires in",
+			"days30": "30 days",
+			"days90": "90 days",
+			"days180": "180 days",
+			"year1": "1 year",
+			"signingAttrs": "Signing attributes",
+			"signingHint": "Choose which organizational attributes this API key will include when signing emails.",
+			"attrEmail": "Email address",
+			"attrOrgName": "Organization name",
+			"attrPhone": "Phone number",
+			"attrKvk": "KvK number",
+			"generate": "Generate API key",
+			"copied": "Copied!",
+			"copy": "Copy"
+		}
+	},
+	"organization": {
+		"title": "Organization",
+		"details": "Organization Details",
+		"changeSubmitted": "Change request for {fieldName} submitted. An admin will review it.",
+		"orgName": "Organization name",
+		"domain": "Domain",
+		"signingEmail": "Signing email",
+		"kvkNumber": "KvK number",
+		"contactPerson": "Contact person",
+		"requestChange": "Request change",
+		"changeRequests": "Change Requests",
+		"field": "Field",
+		"newValue": "New value",
+		"status": "Status",
+		"requested": "Requested"
+	},
+	"emailLog": {
+		"title": "Email Log",
+		"heading": "Email Audit Log",
+		"searchPlaceholder": "Search by recipient or subject...",
+		"search": "Search",
+		"emailsFound": "{count} email(s) found",
+		"noEmails": "No emails found",
+		"noSearchMatch": "No emails match your search.",
+		"noEmailsYet": "No signed emails yet. Emails will appear here once your API keys are used.",
+		"recipient": "Recipient",
+		"subject": "Subject",
+		"signed": "Signed",
+		"read": "Read",
+		"statusCol": "Status",
+		"notRead": "Not read",
+		"revoked": "Revoked",
+		"active": "Active",
+		"revoke": "Revoke",
+		"cancel": "Cancel",
+		"previous": "Previous",
+		"pageOf": "Page {page} of {totalPages}",
+		"next": "Next"
+	},
+	"dns": {
+		"title": "DNS Verification",
+		"domainVerified": "Domain verified",
+		"verificationPending": "Verification pending",
+		"verifiedOn": "Verified on {date}",
+		"verifiedSuccess": "DNS verified successfully!",
+		"instructions": "Setup Instructions",
+		"step1Title": "Add TXT record",
+		"step1Desc": "Add the following TXT record to your domain's DNS configuration:",
+		"type": "Type",
+		"nameHost": "Name/Host",
+		"value": "Value",
+		"step2Title": "Wait for propagation",
+		"step2Desc": "DNS changes can take up to 48 hours to propagate, though most changes are visible within minutes.",
+		"step3Title": "Verify",
+		"step3Desc": "Click the button below to check if your DNS records are configured correctly.",
+		"verifyBtn": "Verify DNS",
+		"lastChecked": "Last checked: {date}"
+	},
+	"members": {
+		"title": "Members",
+		"addMember": "Add member",
+		"memberAdded": "Member added successfully.",
+		"contactUpdated": "Contact person updated.",
+		"addTitle": "Add a new member",
+		"fullName": "Full name",
+		"email": "Email",
+		"phone": "Phone",
+		"optional": "(optional)",
+		"cancel": "Cancel",
+		"emptyTitle": "No members yet",
+		"emptyDescription": "Add the first member to your organization.",
+		"name": "Name",
+		"role": "Role",
+		"contactPerson": "Contact person",
+		"member": "Member",
+		"makeContact": "Make contact person",
+		"removeMember": "Remove member",
+		"remove": "Remove"
+	},
+	"admin": {
+		"impersonating": "Impersonating organization",
+		"stopImpersonating": "Stop impersonating",
+		"viewingAs": "Viewing as {orgName}",
+		"organizations": {
+			"title": "Organizations",
+			"pendingRequests": "Pending change requests ({count})",
+			"allOrgs": "All organizations",
+			"name": "Name",
+			"domain": "Domain",
+			"signingEmail": "Signing email",
+			"status": "Status",
+			"created": "Created",
+			"active": "active",
+			"pending": "pending",
+			"suspended": "suspended",
+			"activate": "Activate",
+			"suspend": "Suspend",
+			"reactivate": "Reactivate",
+			"backToOrgs": "Back to organizations",
+			"kvk": "KVK",
+			"contact": "Contact",
+			"impersonate": "Impersonate",
+			"changeRequests": "Change Requests",
+			"empty": "(empty)",
+			"validationNotes": "Validation notes (what did you check?)",
+			"approve": "Approve",
+			"reject": "Reject"
+		},
+		"apiKeys": {
+			"title": "All API Keys",
+			"keyCreated": "Key created: {rawKey}",
+			"noKeys": "No active API keys across all organizations.",
+			"organization": "Organization",
+			"keyName": "Key name",
+			"prefix": "Prefix",
+			"created": "Created",
+			"lastUsed": "Last used",
+			"never": "Never",
+			"revoke": "Revoke",
+			"confirm": "Confirm",
+			"cancel": "Cancel"
+		},
+		"auditLog": {
+			"title": "Admin Audit Log",
+			"actionsLogged": "{count} actions logged",
+			"noActions": "No admin actions logged yet.",
+			"admin": "Admin",
+			"action": "Action",
+			"target": "Target",
+			"details": "Details",
+			"ip": "IP",
+			"time": "Time",
+			"previous": "Previous",
+			"pageOf": "Page {page} of {totalPages}",
+			"next": "Next"
+		},
+		"settings": {
+			"title": "Settings",
+			"featureFlags": "Feature Flags",
+			"prodNotice": "Production mode \u2014 feature flags are set via environment variables and cannot be changed at runtime.",
+			"on": "ON",
+			"off": "OFF"
+		}
+	},
+	"common": {
+		"somethingWrong": "Something went wrong",
+		"goBack": "Go back",
+		"chooseTheme": "Choose a theme for this website"
 	}
 }

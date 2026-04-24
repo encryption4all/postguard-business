@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
@@ -15,7 +16,7 @@
 	}
 </script>
 
-<SEO title="Admin Login" />
+<SEO title={$_('auth.adminLogin')} />
 
 <section class="login-page">
 	<div class="login-header">
@@ -26,9 +27,9 @@
 		<ThemeSwitcher />
 	</div>
 	<div class="login-card">
-		<h1>Admin Login</h1>
+		<h1>{$_('auth.adminLogin')}</h1>
 		<p class="login-subtitle">
-			Disclose your full name, email address, and phone number to log in as an administrator.
+			{$_('auth.adminLoginSubtitle')}
 		</p>
 
 		<div class="login-content">

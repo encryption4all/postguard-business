@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { _ } from 'svelte-i18n';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -16,10 +17,10 @@
 	}
 </script>
 
-<SEO title="Email Log" />
+<SEO title={$_('emailLog.title')} />
 
 <div class="page-header">
-	<h1>Email Audit Log</h1>
+	<h1>{$_('emailLog.heading')}</h1>
 </div>
 
 <div class="search-bar">
@@ -28,27 +29,27 @@
 			<input
 				type="text"
 				class="pg-input"
-				placeholder="Search by recipient or subject..."
+				placeholder={$_('emailLog.searchPlaceholder')}
 				bind:value={searchInput}
 			/>
 			<button type="submit" class="secondary-btn">
 				<Icon icon="mdi:magnify" width="18" height="18" />
-				Search
+				{$_('emailLog.search')}
 			</button>
 		</div>
 	</form>
-	<p class="result-count">{data.emailLogs.total} email{data.emailLogs.total !== 1 ? 's' : ''} found</p>
+	<p class="result-count">{$_('emailLog.emailsFound', { values: { count: data.emailLogs.total } })}</p>
 </div>
 
 {#if data.emailLogs.logs.length === 0}
 	<div class="empty-state">
 		<Icon icon="mdi:email-search" width="48" height="48" />
-		<h3>No emails found</h3>
+		<h3>{$_('emailLog.noEmails')}</h3>
 		<p>
 			{#if data.search}
-				No emails match your search.
+				{$_('emailLog.noSearchMatch')}
 			{:else}
-				No signed emails yet. Emails will appear here once your API keys are used.
+				{$_('emailLog.noEmailsYet')}
 			{/if}
 		</p>
 	</div>
@@ -57,11 +58,11 @@
 		<table>
 			<thead>
 				<tr>
-					<th>Recipient</th>
-					<th>Subject</th>
-					<th>Signed</th>
-					<th>Read</th>
-					<th>Status</th>
+					<th>{$_('emailLog.recipient')}</th>
+					<th>{$_('emailLog.subject')}</th>
+					<th>{$_('emailLog.signed')}</th>
+					<th>{$_('emailLog.read')}</th>
+					<th>{$_('emailLog.statusCol')}</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -78,14 +79,14 @@
 									{new Date(email.readAt).toLocaleDateString()}
 								</span>
 							{:else}
-								<span class="muted">Not read</span>
+								<span class="muted">{$_('emailLog.notRead')}</span>
 							{/if}
 						</td>
 						<td>
 							{#if email.revokedAt}
-								<span class="revoked-badge">Revoked</span>
+								<span class="revoked-badge">{$_('emailLog.revoked')}</span>
 							{:else}
-								<span class="active-badge">Active</span>
+								<span class="active-badge">{$_('emailLog.active')}</span>
 							{/if}
 						</td>
 						<td>
@@ -94,15 +95,15 @@
 									<form method="POST" action="?/revoke" use:enhance>
 										<input type="hidden" name="emailId" value={email.id} />
 										<div class="confirm-row">
-											<button type="submit" class="danger-btn">Revoke</button>
+											<button type="submit" class="danger-btn">{$_('emailLog.revoke')}</button>
 											<button type="button" class="ghost-btn" onclick={() => (confirmRevoke = null)}>
-												Cancel
+												{$_('emailLog.cancel')}
 											</button>
 										</div>
 									</form>
 								{:else}
 									<button class="ghost-btn danger" onclick={() => (confirmRevoke = email.id)}>
-										Revoke
+										{$_('emailLog.revoke')}
 									</button>
 								{/if}
 							{/if}
@@ -117,13 +118,13 @@
 		<div class="pagination">
 			{#if data.emailLogs.page > 1}
 				<a href="/portal/email-log?page={data.emailLogs.page - 1}{data.search ? `&search=${data.search}` : ''}" class="secondary-btn">
-					Previous
+					{$_('emailLog.previous')}
 				</a>
 			{/if}
-			<span class="page-info">Page {data.emailLogs.page} of {data.emailLogs.totalPages}</span>
+			<span class="page-info">{$_('emailLog.pageOf', { values: { page: data.emailLogs.page, totalPages: data.emailLogs.totalPages } })}</span>
 			{#if data.emailLogs.page < data.emailLogs.totalPages}
 				<a href="/portal/email-log?page={data.emailLogs.page + 1}{data.search ? `&search=${data.search}` : ''}" class="secondary-btn">
-					Next
+					{$_('emailLog.next')}
 				</a>
 			{/if}
 		</div>
