@@ -53,6 +53,10 @@ body {
 	/* Colors — Purple business colorway */
 	--pg-primary: #7c3aed;
 	--pg-primary-contrast: #6d28d9;
+	/* Background shade used wherever white text sits on purple (buttons, badges). */
+	/* Must keep contrast >= 4.5:1 against white in both themes. */
+	--pg-primary-bg: #7c3aed; /* white = 4.76:1, passes AA */
+	--pg-primary-bg-hover: #6d28d9; /* white = 5.84:1 */
 	--pg-general-background: #ffffff;
 	--pg-soft-background: #f5f3ff;
 	--pg-strong-background: #ddd6fe;
@@ -71,7 +75,11 @@ body {
 
 .dark {
 	--pg-primary: #a78bfa;
-	--pg-primary-contrast: #a78bfa;
+	--pg-primary-contrast: #6d28d9;
+	/* Keep the darker purple in dark mode too so white-text-on-purple */
+	/* buttons / badges keep a passing contrast ratio. */
+	--pg-primary-bg: #7c3aed;
+	--pg-primary-bg-hover: #6d28d9;
 	--pg-general-background: #0f0a1e;
 	--pg-soft-background: #1a1030;
 	--pg-strong-background: #2d1b69;
@@ -293,7 +301,7 @@ textarea.pg-input:disabled {
 	font-weight: var(--pg-font-weight-medium);
 	font-family: var(--pg-font-family);
 	border-radius: var(--pg-border-radius-sm);
-	background: var(--pg-primary);
+	background: var(--pg-primary-bg);
 	color: #ffffff;
 	box-shadow: 0 4px 3px -2px rgba(0, 0, 0, 0.3);
 	cursor: pointer;
@@ -306,7 +314,7 @@ textarea.pg-input:disabled {
 }
 
 .primary-btn:hover:not(:disabled) {
-	background: var(--pg-primary-contrast);
+	background: var(--pg-primary-bg-hover);
 	transform: translateY(-1px);
 	box-shadow: 0 6px 4px -2px rgba(0, 0, 0, 0.3);
 }

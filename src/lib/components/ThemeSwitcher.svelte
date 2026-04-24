@@ -60,7 +60,8 @@
 			onchange={() => setTheme('light')}
 		/>
 		<label class="theme-label" for="theme-light">
-			<Icon icon="mdi:white-balance-sunny" width="16" height="16" />
+			<Icon icon="mdi:white-balance-sunny" width="16" height="16" aria-hidden="true" />
+			<span class="visually-hidden">Light mode</span>
 		</label>
 	</div>
 
@@ -74,7 +75,8 @@
 			onchange={() => setTheme('dark')}
 		/>
 		<label class="theme-label" for="theme-dark">
-			<Icon icon="mdi:moon-waning-crescent" width="16" height="16" />
+			<Icon icon="mdi:moon-waning-crescent" width="16" height="16" aria-hidden="true" />
+			<span class="visually-hidden">Dark mode</span>
 		</label>
 	</div>
 </div>

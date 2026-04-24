@@ -174,7 +174,7 @@
 		width: 32px;
 		height: 32px;
 		border-radius: 50%;
-		background: var(--pg-primary);
+		background: var(--pg-primary-bg);
 		color: #fff;
 		display: flex;
 		align-items: center;

@@ -76,7 +76,7 @@
 		font-family: var(--pg-font-family);
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
-		background: var(--pg-primary);
+		background: var(--pg-primary-bg);
 		color: #fff;
 		padding: 2px 6px;
 		border-radius: var(--pg-border-radius-sm);

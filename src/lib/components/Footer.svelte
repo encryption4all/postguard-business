@@ -20,12 +20,12 @@
 
 		<div class="footer-links">
 			<div class="link-group">
-				<h4>{$_('footer.product')}</h4>
+				<h2>{$_('footer.product')}</h2>
 				<a href="/pricing">{$_('nav.pricing')}</a>
 				<a href="/register">{$_('nav.register')}</a>
 			</div>
 			<div class="link-group">
-				<h4>{$_('footer.resources')}</h4>
+				<h2>{$_('footer.resources')}</h2>
 				<a href="https://postguard.eu" target="_blank" rel="noopener">{$_('footer.personal')}</a>
 				<a href="https://docs.postguard.eu" target="_blank" rel="noopener">{$_('footer.docs')}</a>
 			</div>
@@ -83,12 +83,13 @@
 		flex-direction: column;
 		gap: 0.5rem;
 
-		h4 {
+		h2 {
 			font-size: var(--pg-font-size-sm);
 			font-weight: var(--pg-font-weight-bold);
 			color: var(--pg-text-secondary);
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
+			line-height: normal;
 			margin: 0 0 0.25rem;
 		}
 

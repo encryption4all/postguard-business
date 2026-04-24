@@ -6,12 +6,18 @@
 	import logoLight from '$lib/assets/images/logo.svg';
 	import logoDark from '$lib/assets/images/logo-dark.svg';
 
+	type AuthProp =
+		| { loggedIn: true; email: string | null; portalHref: string }
+		| { loggedIn: false; email: null; portalHref: string };
+
 	let {
 		showPricing = true,
-		showRegister = true
+		showRegister = true,
+		auth = { loggedIn: false, email: null, portalHref: '/portal/dashboard' }
 	}: {
 		showPricing?: boolean;
 		showRegister?: boolean;
+		auth?: AuthProp;
 	} = $props();
 
 	let menuOpen = $state(false);
@@ -39,7 +45,14 @@
 			{#each navLinks as link}
 				<a href={link.href}>{link.label}</a>
 			{/each}
-			<a href="/auth/login" class="nav-login">{$_('nav.login')}</a>
+			{#if auth.loggedIn}
+				{#if auth.email}
+					<span class="nav-user" aria-label="Signed in as {auth.email}">{auth.email}</span>
+				{/if}
+				<a href={auth.portalHref} class="nav-login">{$_('nav.myPortal')}</a>
+			{:else}
+				<a href="/auth/login" class="nav-login">{$_('nav.login')}</a>
+			{/if}
 		</nav>
 
 		<div class="header-actions">
@@ -61,7 +74,14 @@
 			{#each navLinks as link}
 				<a href={link.href} onclick={() => (menuOpen = false)}>{link.label}</a>
 			{/each}
-			<a href="/auth/login" onclick={() => (menuOpen = false)}>{$_('nav.login')}</a>
+			{#if auth.loggedIn}
+				{#if auth.email}
+					<span class="mobile-user">{auth.email}</span>
+				{/if}
+				<a href={auth.portalHref} onclick={() => (menuOpen = false)}>{$_('nav.myPortal')}</a>
+			{:else}
+				<a href="/auth/login" onclick={() => (menuOpen = false)}>{$_('nav.login')}</a>
+			{/if}
 			<LocaleSwitcher />
 		</nav>
 	{/if}
@@ -97,7 +117,7 @@
 		font-family: var(--pg-font-family);
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
-		background: var(--pg-primary);
+		background: var(--pg-primary-bg);
 		color: #fff;
 		padding: 2px 6px;
 		border-radius: var(--pg-border-radius-sm);
@@ -128,6 +148,16 @@
 			font-weight: var(--pg-font-weight-bold);
 		}
 
+		.nav-user {
+			font-family: var(--pg-font-family);
+			font-size: var(--pg-font-size-sm);
+			color: var(--pg-text-secondary);
+			max-width: 240px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
 		@media only screen and (max-width: 768px) {
 			display: none;
 		}
@@ -149,6 +179,13 @@
 		flex-direction: column;
 		padding: 0.5rem 1.5rem 1rem;
 		border-top: 1px solid var(--pg-strong-background);
+
+		.mobile-user {
+			font-family: var(--pg-font-family);
+			font-size: var(--pg-font-size-sm);
+			color: var(--pg-text-secondary);
+			padding: 0.75rem 0 0.25rem;
+		}
 
 		a {
 			font-family: var(--pg-font-family);
