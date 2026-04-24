@@ -155,7 +155,7 @@
 		top: -12px;
 		left: 50%;
 		transform: translateX(-50%);
-		background: var(--pg-primary);
+		background: var(--pg-primary-bg);
 		color: #fff;
 		font-family: var(--pg-font-family);
 		font-size: var(--pg-font-size-xs);
