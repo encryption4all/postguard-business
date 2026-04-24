@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/encryption4all/postguard-business/compare/v1.1.0...v1.1.1) (2026-04-24)
+
+
+### Bug Fixes
+
+* remove unused .key-banner code CSS selector ([0e519b9](https://github.com/encryption4all/postguard-business/commit/0e519b94e4e9011cdeb98df03ef0f5cb5be85c6b))
+* **seo:** add structured data, canonical tags, security headers, sitemap ([21fe32b](https://github.com/encryption4all/postguard-business/commit/21fe32b311e178585b7350f4afdcb7c103739765))
+* **seo:** structured data, canonical tags, security headers, sitemap ([830cd9f](https://github.com/encryption4all/postguard-business/commit/830cd9fa0c646d836cd719cf32f5fb6724b52ecb))
+
 ## [1.1.0](https://github.com/encryption4all/postguard-business/compare/v1.0.0...v1.1.0) (2026-04-24)
 
 
