@@ -87,8 +87,6 @@
 		margin-bottom: 1.5rem;
 		font-size: var(--pg-font-size-sm);
 		color: #16a34a;
-
-		code { word-break: break-all; }
 	}
 
 	.table-wrapper { overflow-x: auto; }
