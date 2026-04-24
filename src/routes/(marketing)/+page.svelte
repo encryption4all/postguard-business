@@ -50,38 +50,32 @@
 
 	<div class="bento">
 		<div class="bento-item wide">
-			<div class="bento-icon"><Icon icon="mdi:key-variant" width="28" height="28" /></div>
-			<h3>{$_('features.apiKeys.title')}</h3>
+			<h3><Icon icon="mdi:key-variant" width="20" height="20" />{$_('features.apiKeys.title')}</h3>
 			<p>{$_('features.apiKeys.description')}</p>
 		</div>
 
 		<div class="bento-item">
-			<div class="bento-icon"><Icon icon="mdi:shield-account" width="28" height="28" /></div>
-			<h3>{$_('features.identity.title')}</h3>
+			<h3><Icon icon="mdi:shield-account" width="20" height="20" />{$_('features.identity.title')}</h3>
 			<p>{$_('features.identity.description')}</p>
 		</div>
 
 		<div class="bento-item">
-			<div class="bento-icon"><Icon icon="mdi:server-security" width="28" height="28" /></div>
-			<h3>{$_('features.hostedEU.title')}</h3>
+			<h3><Icon icon="mdi:server-security" width="20" height="20" />{$_('features.hostedEU.title')}</h3>
 			<p>{$_('features.hostedEU.description')}</p>
 		</div>
 
 		<div class="bento-item">
-			<div class="bento-icon"><Icon icon="mdi:lock-check" width="28" height="28" /></div>
-			<h3>{$_('features.encryption.title')}</h3>
+			<h3><Icon icon="mdi:lock-check" width="20" height="20" />{$_('features.encryption.title')}</h3>
 			<p>{$_('features.encryption.description')}</p>
 		</div>
 
 		<div class="bento-item wide">
-			<div class="bento-icon"><Icon icon="mdi:source-branch" width="28" height="28" /></div>
-			<h3>{$_('features.openSource.title')}</h3>
+			<h3><Icon icon="mdi:source-branch" width="20" height="20" />{$_('features.openSource.title')}</h3>
 			<p>{$_('features.openSource.description')}</p>
 		</div>
 
 		<div class="bento-item muted">
-			<div class="bento-icon"><Icon icon="mdi:email-remove" width="28" height="28" /></div>
-			<h3>{$_('features.revocation.title')} <span class="coming-soon">{$_('features.revocation.comingSoon')}</span></h3>
+			<h3><Icon icon="mdi:email-remove" width="20" height="20" />{$_('features.revocation.title')} <span class="coming-soon">{$_('features.revocation.comingSoon')}</span></h3>
 			<p>{$_('features.revocation.description')}</p>
 		</div>
 	</div>
@@ -229,7 +223,15 @@
 		}
 
 		h3 {
-			margin: 0.6rem 0 0.35rem;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			margin: 0 0 0.35rem;
+
+			:global(svg) {
+				color: var(--pg-primary);
+				flex-shrink: 0;
+			}
 		}
 
 		p {
@@ -237,10 +239,6 @@
 			font-size: var(--pg-font-size-md);
 			line-height: 1.5;
 		}
-	}
-
-	.bento-icon {
-		color: var(--pg-primary);
 	}
 
 	.coming-soon {
