@@ -234,7 +234,7 @@
 			var(--pg-soft-background) 0%,
 			var(--pg-general-background) 100%
 		);
-		min-height: 80vh;
+		flex: 1;
 	}
 
 	.register-card {
