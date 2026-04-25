@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.2](https://github.com/encryption4all/postguard-business/compare/v1.1.1...v1.1.2) (2026-04-25)
+
+
+### Bug Fixes
+
+* **security:** strict match on DNS TXT verification record ([ed780dd](https://github.com/encryption4all/postguard-business/commit/ed780dda00a5d762771e74fb7a6dd5726a829525))
+* update pricing to €5 Small / €3 Medium ([01b5fce](https://github.com/encryption4all/postguard-business/commit/01b5fce9469e935ca4ffab4f0acfb775257ed6fa))
+* update pricing to €5/user for Small and €3/user for Medium ([d5ef578](https://github.com/encryption4all/postguard-business/commit/d5ef5780d6603cc250fe50290b3355947ff3dba0))
+
 ## [1.1.1](https://github.com/encryption4all/postguard-business/compare/v1.1.0...v1.1.1) (2026-04-24)
 
 
