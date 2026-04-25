@@ -90,7 +90,7 @@
 		"subtitle": "Kies het plan dat bij uw organisatie past.",
 		"small": {
 			"name": "Small",
-			"price": "\u20ac5\u2013\u20ac6",
+			"price": "\u20ac5",
 			"period": "/gebruiker/maand",
 			"users": "Tot 100 gebruikers",
 			"description": "Voor organisaties met maximaal 100 gebruikers.",
@@ -98,7 +98,7 @@
 		},
 		"medium": {
 			"name": "Medium",
-			"price": "\u20ac4\u2013\u20ac5",
+			"price": "\u20ac3",
 			"period": "/gebruiker/maand",
 			"users": "Tot 300 gebruikers",
 			"description": "Voor groeiende organisaties met maximaal 300 gebruikers.",
