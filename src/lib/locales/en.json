@@ -90,7 +90,7 @@
 		"subtitle": "Choose the plan that fits your organization.",
 		"small": {
 			"name": "Small",
-			"price": "\u20ac5\u2013\u20ac6",
+			"price": "\u20ac5",
 			"period": "/user/month",
 			"users": "Up to 100 users",
 			"description": "For organizations with up to 100 users.",
@@ -98,7 +98,7 @@
 		},
 		"medium": {
 			"name": "Medium",
-			"price": "\u20ac4\u2013\u20ac5",
+			"price": "\u20ac3",
 			"period": "/user/month",
 			"users": "Up to 300 users",
 			"description": "For growing organizations with up to 300 users.",
