@@ -161,7 +161,6 @@
 					<th>{$_('admin.organizations.signingEmail')}</th>
 					{#if data.orgStatusEnabled}<th>{$_('admin.organizations.status')}</th>{/if}
 					<th>{$_('admin.organizations.created')}</th>
-					{#if data.orgStatusEnabled}<th></th>{/if}
 				</tr>
 			</thead>
 			<tbody>
@@ -178,26 +177,6 @@
 							</td>
 						{/if}
 						<td>{new Date(org.createdAt).toLocaleDateString()}</td>
-						{#if data.orgStatusEnabled}
-							<td class="actions">
-								{#if org.status === 'pending'}
-									<form method="POST" action="?/activate" use:enhance>
-										<input type="hidden" name="orgId" value={org.id} />
-										<button type="submit" class="action-btn approve">{$_('admin.organizations.activate')}</button>
-									</form>
-								{:else if org.status === 'active'}
-									<form method="POST" action="?/suspend" use:enhance>
-										<input type="hidden" name="orgId" value={org.id} />
-										<button type="submit" class="action-btn suspend">{$_('admin.organizations.suspend')}</button>
-									</form>
-								{:else}
-									<form method="POST" action="?/activate" use:enhance>
-										<input type="hidden" name="orgId" value={org.id} />
-										<button type="submit" class="action-btn approve">{$_('admin.organizations.reactivate')}</button>
-									</form>
-								{/if}
-							</td>
-						{/if}
 					</tr>
 				{/each}
 			</tbody>
@@ -276,15 +255,6 @@
 		&.suspended { color: var(--pg-input-error); }
 	}
 
-	.actions {
-		white-space: nowrap;
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
-
-		form { display: inline-flex; }
-	}
-
 	.action-btn {
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-medium);
@@ -294,8 +264,6 @@
 
 		&.approve { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
 		&.approve:hover { background: rgba(22, 163, 74, 0.2); }
-		&.suspend { background: rgba(182, 22, 22, 0.1); color: var(--pg-input-error); }
-		&.suspend:hover { background: rgba(182, 22, 22, 0.2); }
 	}
 
 	.banner {

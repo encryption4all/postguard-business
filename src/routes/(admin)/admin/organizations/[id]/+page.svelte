@@ -10,6 +10,7 @@
 
 	let confirmName = $state('');
 	let dialogEl: HTMLDialogElement | null = $state(null);
+	let statusDialogEl: HTMLDialogElement | null = $state(null);
 
 	function openDelete() {
 		confirmName = '';
@@ -20,6 +21,43 @@
 		dialogEl?.close();
 		confirmName = '';
 	}
+
+	function openStatusChange() {
+		statusDialogEl?.showModal();
+	}
+
+	function closeStatusChange() {
+		statusDialogEl?.close();
+	}
+
+	const statusAction = $derived.by(() => {
+		const status = data.organization.status;
+		if (status === 'active') {
+			return {
+				key: 'suspend' as const,
+				labelKey: 'admin.organizations.suspend',
+				titleKey: 'admin.organizations.suspendConfirmTitle',
+				introKey: 'admin.organizations.suspendConfirmIntro',
+				confirmKey: 'admin.organizations.suspendConfirmAction'
+			};
+		}
+		if (status === 'pending') {
+			return {
+				key: 'activate' as const,
+				labelKey: 'admin.organizations.activate',
+				titleKey: 'admin.organizations.activateConfirmTitle',
+				introKey: 'admin.organizations.activateConfirmIntro',
+				confirmKey: 'admin.organizations.activateConfirmAction'
+			};
+		}
+		return {
+			key: 'activate' as const,
+			labelKey: 'admin.organizations.reactivate',
+			titleKey: 'admin.organizations.reactivateConfirmTitle',
+			introKey: 'admin.organizations.reactivateConfirmIntro',
+			confirmKey: 'admin.organizations.reactivateConfirmAction'
+		};
+	});
 </script>
 
 <SEO title="{data.organization.name} - Admin" />
@@ -31,7 +69,12 @@
 
 <div class="org-header">
 	<h1>{data.organization.name}</h1>
-	<span class="status" class:active={data.organization.status === 'active'} class:pending={data.organization.status === 'pending'}>
+	<span
+		class="status"
+		class:active={data.organization.status === 'active'}
+		class:pending={data.organization.status === 'pending'}
+		class:suspended={data.organization.status === 'suspended'}
+	>
 		{data.organization.status}
 	</span>
 </div>
@@ -48,6 +91,11 @@
 		<Icon icon="mdi:alert-circle" width="18" height="18" />
 		<span>{$_('admin.organizations.deleteFailedNameMismatch')}</span>
 	</div>
+{:else if form?.statusChanged}
+	<div class="banner success" role="status">
+		<Icon icon="mdi:check-circle" width="18" height="18" />
+		<span>{$_(`admin.organizations.statusChangedTo_${form.statusChanged}`)}</span>
+	</div>
 {/if}
 
 {#if data.impersonationEnabled || data.orgStatusEnabled}
@@ -61,6 +109,20 @@
 			</form>
 		{/if}
 		{#if data.orgStatusEnabled}
+			<button
+				type="button"
+				class="status-btn"
+				class:status-btn-suspend={statusAction.key === 'suspend'}
+				class:status-btn-activate={statusAction.key === 'activate'}
+				onclick={openStatusChange}
+			>
+				<Icon
+					icon={statusAction.key === 'suspend' ? 'mdi:pause-circle-outline' : 'mdi:check-circle-outline'}
+					width="16"
+					height="16"
+				/>
+				{$_(statusAction.labelKey)}
+			</button>
 			<button type="button" class="danger-outline-btn" onclick={openDelete}>
 				<Icon icon="mdi:delete" width="16" height="16" />
 				{$_('admin.organizations.delete')}
@@ -157,6 +219,35 @@
 	</section>
 {/if}
 
+<dialog bind:this={statusDialogEl} class="confirm-dialog">
+	<form
+		method="POST"
+		action="?/{statusAction.key}"
+		use:enhance={() => {
+			return async ({ update }) => {
+				await update();
+				statusDialogEl?.close();
+			};
+		}}
+	>
+		<h2>{$_(statusAction.titleKey)}</h2>
+		<p class="dialog-intro">
+			{$_(statusAction.introKey, { values: { name: data.organization.name } })}
+		</p>
+		<div class="dialog-actions">
+			<button type="button" class="ghost-btn" onclick={closeStatusChange}>
+				{$_('admin.organizations.cancel')}
+			</button>
+			<button
+				type="submit"
+				class={statusAction.key === 'suspend' ? 'danger-btn' : 'primary-confirm-btn'}
+			>
+				{$_(statusAction.confirmKey)}
+			</button>
+		</div>
+	</form>
+</dialog>
+
 <dialog
 	bind:this={dialogEl}
 	class="delete-dialog"
@@ -234,6 +325,7 @@
 		font-family: var(--pg-font-family);
 		&.active { background: rgba(22, 163, 74, 0.12); color: #16a34a; }
 		&.pending { background: rgba(180, 83, 9, 0.12); color: #b45309; }
+		&.suspended { background: rgba(182, 22, 22, 0.12); color: var(--pg-input-error); }
 	}
 
 	.org-details {
@@ -279,6 +371,52 @@
 		font-size: var(--pg-font-size-sm);
 
 		&.error { background: rgba(182, 22, 22, 0.08); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
+		&.success { background: rgba(22, 163, 74, 0.08); border: 1px solid #16a34a; color: #16a34a; }
+	}
+
+	.status-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		font-family: var(--pg-font-family);
+		background: transparent;
+		border: 1px solid;
+
+		&.status-btn-suspend { color: var(--pg-input-error); border-color: rgba(182, 22, 22, 0.3); }
+		&.status-btn-suspend:hover { background: rgba(182, 22, 22, 0.08); }
+		&.status-btn-activate { color: #16a34a; border-color: rgba(22, 163, 74, 0.35); }
+		&.status-btn-activate:hover { background: rgba(22, 163, 74, 0.08); }
+	}
+
+	.confirm-dialog {
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.5rem;
+		max-width: 26rem;
+		width: calc(100% - 2rem);
+		background: var(--pg-general-background);
+		color: var(--pg-text);
+
+		&::backdrop { background: rgba(0, 0, 0, 0.5); }
+
+		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
+
+		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 1rem; }
+	}
+
+	.primary-confirm-btn {
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		background: #16a34a;
+		color: #fff;
+		font-family: var(--pg-font-family);
+		&:hover { background: #15803d; }
 	}
 
 	.danger-outline-btn {

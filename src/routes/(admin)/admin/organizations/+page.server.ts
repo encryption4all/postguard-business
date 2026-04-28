@@ -3,8 +3,6 @@ import { error, fail } from '@sveltejs/kit';
 import {
 	listOrganizations,
 	listPendingRequests,
-	activateOrganization,
-	suspendOrganization,
 	createOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
@@ -26,28 +24,6 @@ export const load: PageServerLoad = async ({ url }) => {
 };
 
 export const actions: Actions = {
-	activate: async ({ request, locals }) => {
-		if (!isEnabled('adminOrgStatus')) return fail(404);
-		const adminId = locals.session?.adminId;
-		if (!adminId) error(401, 'Not authenticated');
-		const data = await request.formData();
-		const orgId = data.get('orgId')?.toString();
-		if (!orgId) return;
-
-		await activateOrganization(orgId);
-		await logAdminAction(adminId, 'activate_org', 'organization', orgId, {}, null);
-	},
-	suspend: async ({ request, locals }) => {
-		if (!isEnabled('adminOrgStatus')) return fail(404);
-		const adminId = locals.session?.adminId;
-		if (!adminId) error(401, 'Not authenticated');
-		const data = await request.formData();
-		const orgId = data.get('orgId')?.toString();
-		if (!orgId) return;
-
-		await suspendOrganization(orgId);
-		await logAdminAction(adminId, 'suspend_org', 'organization', orgId, {}, null);
-	},
 	create: async ({ request, locals }) => {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;

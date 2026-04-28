@@ -5,6 +5,8 @@ import {
 	approveChangeRequest,
 	rejectChangeRequest,
 	deleteOrganization,
+	activateOrganization,
+	suspendOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
 import { setImpersonation } from '$lib/server/auth/session';
@@ -71,6 +73,24 @@ export const actions: Actions = {
 		if (!locals.session) return fail(401);
 		await setImpersonation(locals.session.id, params.id);
 		redirect(303, '/portal/dashboard');
+	},
+
+	activate: async ({ params, locals }) => {
+		if (!isEnabled('adminOrgStatus')) return fail(404);
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
+		await activateOrganization(params.id);
+		await logAdminAction(adminId, 'activate_org', 'organization', params.id, {}, null);
+		return { statusChanged: 'active' };
+	},
+
+	suspend: async ({ params, locals }) => {
+		if (!isEnabled('adminOrgStatus')) return fail(404);
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
+		await suspendOrganization(params.id);
+		await logAdminAction(adminId, 'suspend_org', 'organization', params.id, {}, null);
+		return { statusChanged: 'suspended' };
 	},
 
 	delete: async ({ params, request, locals }) => {
