@@ -276,6 +276,9 @@
 
 	.header-actions {
 		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.portal-title {

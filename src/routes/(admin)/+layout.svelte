@@ -243,6 +243,9 @@
 
 	.header-actions {
 		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.header-title { font-size: var(--pg-font-size-lg); margin: 0; }
