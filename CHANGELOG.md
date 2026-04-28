@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0](https://github.com/encryption4all/postguard-business/compare/v1.1.2...v1.2.0) (2026-04-28)
+
+
+### Features
+
+* **admin:** allow adding users to an organisation from the detail page ([789d548](https://github.com/encryption4all/postguard-business/commit/789d5484976b515ea53a51adb264fce4894f598e))
+* **admin:** allow creating and deleting organizations from the admin panel ([58f131b](https://github.com/encryption4all/postguard-business/commit/58f131b9f21764f6449f952dbc20e65b3e565167))
+* **admin:** create/delete organizations + fix header toggle layout ([053435f](https://github.com/encryption4all/postguard-business/commit/053435f50f33c0411f37193c198659e225d11540))
+
+
+### Bug Fixes
+
+* **admin,portal:** align theme and language toggles in header ([29314ac](https://github.com/encryption4all/postguard-business/commit/29314ac6ee1af5d69231b5d259ce9331474b02f0))
+* **admin:** include org name in suspend/activate audit log entries ([42308fc](https://github.com/encryption4all/postguard-business/commit/42308fc2fc25801f13264853c06a437dc765d0b6))
+* **admin:** record client IP in admin audit log ([f39251c](https://github.com/encryption4all/postguard-business/commit/f39251c9dc8cc75de6e09bc9934504f9b0014bbe))
+* prevent register page from forcing scroll on short viewports ([e5b41a5](https://github.com/encryption4all/postguard-business/commit/e5b41a58f603cdae0d066f9e4b8c1c779ae6637e))
+* prevent register page from forcing scroll on short viewports ([123a6ef](https://github.com/encryption4all/postguard-business/commit/123a6ef83d55e91b7f7a5f75f0a82b825610db39)), closes [#30](https://github.com/encryption4all/postguard-business/issues/30)
+
 ## [1.1.2](https://github.com/encryption4all/postguard-business/compare/v1.1.1...v1.1.2) (2026-04-25)
 
 
