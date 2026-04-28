@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ url }) => {
 };
 
 export const actions: Actions = {
-	create: async ({ request, locals }) => {
+	create: async ({ request, locals, getClientAddress }) => {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
@@ -38,7 +38,14 @@ export const actions: Actions = {
 
 		try {
 			const org = await createOrganization(values);
-			await logAdminAction(adminId, 'create_org', 'organization', org.id, { ...values }, null);
+			await logAdminAction(
+				adminId,
+				'create_org',
+				'organization',
+				org.id,
+				{ ...values },
+				getClientAddress()
+			);
 			return { created: true, createdName: values.name };
 		} catch (err: unknown) {
 			if (isDuplicateKeyError(err)) {

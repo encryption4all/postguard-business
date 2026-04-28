@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ params }) => {
 };
 
 export const actions: Actions = {
-	approve: async ({ request, locals }) => {
+	approve: async ({ request, locals, getClientAddress }) => {
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
@@ -42,13 +42,13 @@ export const actions: Actions = {
 				'change_request',
 				requestId,
 				{ fieldName: req.fieldName, newValue: req.newValue, reviewNotes },
-				null
+				getClientAddress()
 			);
 		}
 		return { approved: true };
 	},
 
-	reject: async ({ request, locals }) => {
+	reject: async ({ request, locals, getClientAddress }) => {
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
 		const data = await request.formData();
@@ -64,7 +64,7 @@ export const actions: Actions = {
 			'change_request',
 			requestId,
 			{ reviewNotes },
-			null
+			getClientAddress()
 		);
 		return { rejected: true };
 	},
@@ -76,7 +76,7 @@ export const actions: Actions = {
 		redirect(303, '/portal/dashboard');
 	},
 
-	activate: async ({ params, locals }) => {
+	activate: async ({ params, locals, getClientAddress }) => {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
@@ -90,12 +90,12 @@ export const actions: Actions = {
 			'organization',
 			params.id,
 			{ name: org.name, domain: org.domain, previousStatus: org.status },
-			null
+			getClientAddress()
 		);
 		return { statusChanged: 'active' };
 	},
 
-	suspend: async ({ params, locals }) => {
+	suspend: async ({ params, locals, getClientAddress }) => {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
@@ -109,12 +109,12 @@ export const actions: Actions = {
 			'organization',
 			params.id,
 			{ name: org.name, domain: org.domain, previousStatus: org.status },
-			null
+			getClientAddress()
 		);
 		return { statusChanged: 'suspended' };
 	},
 
-	delete: async ({ params, request, locals }) => {
+	delete: async ({ params, request, locals, getClientAddress }) => {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
@@ -135,7 +135,7 @@ export const actions: Actions = {
 			'organization',
 			params.id,
 			{ name: result.organization.name, domain: result.organization.domain },
-			null
+			getClientAddress()
 		);
 		redirect(303, `/admin/organizations?deleted=${encodeURIComponent(result.organization.name)}`);
 	}
