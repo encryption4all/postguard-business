@@ -2,6 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { error, fail, redirect } from '@sveltejs/kit';
 import {
 	getOrganizationWithRequests,
+	getOrganizationById,
 	approveChangeRequest,
 	rejectChangeRequest,
 	deleteOrganization,
@@ -79,8 +80,18 @@ export const actions: Actions = {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
+		const org = await getOrganizationById(params.id);
+		if (!org) error(404, 'Organization not found');
+
 		await activateOrganization(params.id);
-		await logAdminAction(adminId, 'activate_org', 'organization', params.id, {}, null);
+		await logAdminAction(
+			adminId,
+			'activate_org',
+			'organization',
+			params.id,
+			{ name: org.name, domain: org.domain, previousStatus: org.status },
+			null
+		);
 		return { statusChanged: 'active' };
 	},
 
@@ -88,8 +99,18 @@ export const actions: Actions = {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
 		const adminId = locals.session?.adminId;
 		if (!adminId) error(401, 'Not authenticated');
+		const org = await getOrganizationById(params.id);
+		if (!org) error(404, 'Organization not found');
+
 		await suspendOrganization(params.id);
-		await logAdminAction(adminId, 'suspend_org', 'organization', params.id, {}, null);
+		await logAdminAction(
+			adminId,
+			'suspend_org',
+			'organization',
+			params.id,
+			{ name: org.name, domain: org.domain, previousStatus: org.status },
+			null
+		);
 		return { statusChanged: 'suspended' };
 	},
 
