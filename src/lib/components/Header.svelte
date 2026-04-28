@@ -3,8 +3,8 @@
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
 	import LocaleSwitcher from './LocaleSwitcher.svelte';
 	import Icon from '@iconify/svelte';
-	import logoLight from '$lib/assets/images/logo.svg';
-	import logoDark from '$lib/assets/images/logo-dark.svg';
+	import logoLight from '$lib/assets/images/logo-wide.svg';
+	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
 
 	type AuthProp =
 		| { loggedIn: true; email: string | null; portalHref: string }

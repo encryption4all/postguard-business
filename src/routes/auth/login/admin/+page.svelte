@@ -4,8 +4,8 @@
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
 	import Icon from '@iconify/svelte';
-	import logoLight from '$lib/assets/images/logo.svg';
-	import logoDark from '$lib/assets/images/logo-dark.svg';
+	import logoLight from '$lib/assets/images/logo-wide.svg';
+	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
 	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 
