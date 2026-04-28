@@ -7,23 +7,7 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let deleteTarget = $state<{ id: string; name: string } | null>(null);
-	let confirmName = $state('');
-	let dialogEl: HTMLDialogElement | null = $state(null);
-
 	let showCreate = $state(false);
-
-	function openDelete(id: string, name: string) {
-		deleteTarget = { id, name };
-		confirmName = '';
-		dialogEl?.showModal();
-	}
-
-	function closeDelete() {
-		dialogEl?.close();
-		deleteTarget = null;
-		confirmName = '';
-	}
 
 	$effect(() => {
 		if (form?.created) showCreate = false;
@@ -34,20 +18,15 @@
 
 <h1>{$_('admin.organizations.title')}</h1>
 
-{#if form?.deleted}
+{#if data.deletedOrgName}
 	<div class="banner success" role="status">
 		<Icon icon="mdi:check-circle" width="18" height="18" />
-		<span>{$_('admin.organizations.deleteSuccess', { values: { name: form.orgName } })}</span>
+		<span>{$_('admin.organizations.deleteSuccess', { values: { name: data.deletedOrgName } })}</span>
 	</div>
 {:else if form?.created}
 	<div class="banner success" role="status">
 		<Icon icon="mdi:check-circle" width="18" height="18" />
 		<span>{$_('admin.organizations.createSuccess', { values: { name: form.createdName } })}</span>
-	</div>
-{:else if form?.error === 'name_mismatch'}
-	<div class="banner error" role="alert">
-		<Icon icon="mdi:alert-circle" width="18" height="18" />
-		<span>{$_('admin.organizations.deleteFailedNameMismatch')}</span>
 	</div>
 {/if}
 
@@ -217,14 +196,6 @@
 										<button type="submit" class="action-btn approve">{$_('admin.organizations.reactivate')}</button>
 									</form>
 								{/if}
-								<button
-									type="button"
-									class="action-btn delete"
-									onclick={() => openDelete(org.id, org.name)}
-								>
-									<Icon icon="mdi:delete" width="14" height="14" />
-									{$_('admin.organizations.delete')}
-								</button>
 							</td>
 						{/if}
 					</tr>
@@ -233,67 +204,6 @@
 		</table>
 	</div>
 </section>
-
-<dialog
-	bind:this={dialogEl}
-	class="delete-dialog"
-	onclose={() => {
-		deleteTarget = null;
-		confirmName = '';
-	}}
->
-	{#if deleteTarget}
-		<form
-			method="POST"
-			action="?/delete"
-			use:enhance={() => {
-				return async ({ update }) => {
-					await update();
-					dialogEl?.close();
-				};
-			}}
-		>
-			<h2>{$_('admin.organizations.deleteConfirmTitle')}</h2>
-			<p class="dialog-intro">
-				{$_('admin.organizations.deleteConfirmIntro', { values: { name: deleteTarget.name } })}
-			</p>
-			<p class="dialog-warn">
-				<Icon icon="mdi:alert" width="16" height="16" />
-				{$_('admin.organizations.deleteConfirmWarning')}
-			</p>
-			<label class="dialog-label" for="confirm-name-input">
-				{$_('admin.organizations.deleteConfirmLabel')}
-			</label>
-			<p class="dialog-name-display">
-				<code>{deleteTarget.name}</code>
-			</p>
-			<input
-				id="confirm-name-input"
-				type="text"
-				class="pg-input"
-				name="confirmName"
-				bind:value={confirmName}
-				autocomplete="off"
-				autocorrect="off"
-				autocapitalize="off"
-				spellcheck="false"
-			/>
-			<input type="hidden" name="orgId" value={deleteTarget.id} />
-			<div class="dialog-actions">
-				<button type="button" class="ghost-btn" onclick={closeDelete}>
-					{$_('admin.organizations.cancel')}
-				</button>
-				<button
-					type="submit"
-					class="danger-btn"
-					disabled={confirmName.trim() !== deleteTarget.name.trim()}
-				>
-					{$_('admin.organizations.deleteConfirm')}
-				</button>
-			</div>
-		</form>
-	{/if}
-</dialog>
 
 <style lang="scss">
 	h1 { margin: 0 0 1.5rem; }
@@ -386,16 +296,6 @@
 		&.approve:hover { background: rgba(22, 163, 74, 0.2); }
 		&.suspend { background: rgba(182, 22, 22, 0.1); color: var(--pg-input-error); }
 		&.suspend:hover { background: rgba(182, 22, 22, 0.2); }
-		&.delete {
-			display: inline-flex;
-			align-items: center;
-			gap: 0.25rem;
-			margin-left: 0.35rem;
-			background: transparent;
-			color: var(--pg-input-error);
-			border: 1px solid rgba(182, 22, 22, 0.25);
-		}
-		&.delete:hover { background: rgba(182, 22, 22, 0.1); }
 	}
 
 	.banner {
@@ -461,88 +361,5 @@
 		display: flex;
 		justify-content: flex-end;
 		margin-top: 1rem;
-	}
-
-	.delete-dialog {
-		border: 1px solid var(--pg-strong-background);
-		border-radius: var(--pg-border-radius-lg);
-		padding: 1.5rem;
-		max-width: 28rem;
-		width: calc(100% - 2rem);
-		background: var(--pg-general-background);
-		color: var(--pg-text);
-
-		&::backdrop { background: rgba(0, 0, 0, 0.5); }
-
-		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
-
-		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 0.75rem; }
-
-		.dialog-warn {
-			display: flex;
-			align-items: center;
-			gap: 0.4rem;
-			background: rgba(182, 22, 22, 0.08);
-			color: var(--pg-input-error);
-			border: 1px solid rgba(182, 22, 22, 0.25);
-			border-radius: var(--pg-border-radius-md);
-			padding: 0.5rem 0.75rem;
-			font-size: var(--pg-font-size-sm);
-			margin: 0 0 1rem;
-		}
-
-		.dialog-label {
-			display: block;
-			font-size: var(--pg-font-size-xs);
-			color: var(--pg-text-secondary);
-			text-transform: uppercase;
-			font-weight: var(--pg-font-weight-medium);
-			margin-bottom: 0.35rem;
-			font-family: var(--pg-font-family);
-		}
-
-		.dialog-name-display {
-			margin: 0 0 0.5rem;
-			code {
-				display: inline-block;
-				background: var(--pg-strong-background);
-				color: var(--pg-text);
-				border-radius: var(--pg-border-radius-sm);
-				padding: 2px 8px;
-				font-family: monospace;
-				font-size: var(--pg-font-size-sm);
-				user-select: all;
-			}
-		}
-
-		input.pg-input { width: 100%; height: 2.25rem; font-size: var(--pg-font-size-sm); }
-	}
-
-	.dialog-actions {
-		display: flex;
-		justify-content: flex-end;
-		gap: 0.5rem;
-		margin-top: 1.25rem;
-	}
-
-	.ghost-btn {
-		padding: 6px 14px;
-		border-radius: var(--pg-border-radius-sm);
-		font-size: var(--pg-font-size-sm);
-		color: var(--pg-text-secondary);
-		font-family: var(--pg-font-family);
-		&:hover { background: var(--pg-soft-background); }
-	}
-
-	.danger-btn {
-		padding: 6px 14px;
-		border-radius: var(--pg-border-radius-sm);
-		font-size: var(--pg-font-size-sm);
-		font-weight: var(--pg-font-weight-medium);
-		background: var(--pg-input-error);
-		color: #fff;
-		font-family: var(--pg-font-family);
-		&:disabled { opacity: 0.4; cursor: not-allowed; }
-		&:not(:disabled):hover { opacity: 0.9; }
 	}
 </style>

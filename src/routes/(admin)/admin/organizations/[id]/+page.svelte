@@ -7,6 +7,19 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let reviewNotes = $state('');
+
+	let confirmName = $state('');
+	let dialogEl: HTMLDialogElement | null = $state(null);
+
+	function openDelete() {
+		confirmName = '';
+		dialogEl?.showModal();
+	}
+
+	function closeDelete() {
+		dialogEl?.close();
+		confirmName = '';
+	}
 </script>
 
 <SEO title="{data.organization.name} - Admin" />
@@ -30,14 +43,29 @@
 	<div class="detail"><span class="label">{$_('admin.organizations.contact')}</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
 </div>
 
-{#if data.impersonationEnabled}
+{#if form?.error === 'name_mismatch'}
+	<div class="banner error" role="alert">
+		<Icon icon="mdi:alert-circle" width="18" height="18" />
+		<span>{$_('admin.organizations.deleteFailedNameMismatch')}</span>
+	</div>
+{/if}
+
+{#if data.impersonationEnabled || data.orgStatusEnabled}
 	<div class="admin-actions">
-		<form method="POST" action="?/impersonate" use:enhance>
-			<button type="submit" class="secondary-btn">
-				<Icon icon="mdi:eye" width="16" height="16" />
-				{$_('admin.organizations.impersonate')}
+		{#if data.impersonationEnabled}
+			<form method="POST" action="?/impersonate" use:enhance>
+				<button type="submit" class="secondary-btn">
+					<Icon icon="mdi:eye" width="16" height="16" />
+					{$_('admin.organizations.impersonate')}
+				</button>
+			</form>
+		{/if}
+		{#if data.orgStatusEnabled}
+			<button type="button" class="danger-outline-btn" onclick={openDelete}>
+				<Icon icon="mdi:delete" width="16" height="16" />
+				{$_('admin.organizations.delete')}
 			</button>
-		</form>
+		{/if}
 	</div>
 {/if}
 
@@ -129,6 +157,54 @@
 	</section>
 {/if}
 
+<dialog
+	bind:this={dialogEl}
+	class="delete-dialog"
+	onclose={() => {
+		confirmName = '';
+	}}
+>
+	<form method="POST" action="?/delete" use:enhance>
+		<h2>{$_('admin.organizations.deleteConfirmTitle')}</h2>
+		<p class="dialog-intro">
+			{$_('admin.organizations.deleteConfirmIntro', { values: { name: data.organization.name } })}
+		</p>
+		<p class="dialog-warn">
+			<Icon icon="mdi:alert" width="16" height="16" />
+			{$_('admin.organizations.deleteConfirmWarning')}
+		</p>
+		<label class="dialog-label" for="confirm-name-input">
+			{$_('admin.organizations.deleteConfirmLabel')}
+		</label>
+		<p class="dialog-name-display">
+			<code>{data.organization.name}</code>
+		</p>
+		<input
+			id="confirm-name-input"
+			type="text"
+			class="pg-input"
+			name="confirmName"
+			bind:value={confirmName}
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="off"
+			spellcheck="false"
+		/>
+		<div class="dialog-actions">
+			<button type="button" class="ghost-btn" onclick={closeDelete}>
+				{$_('admin.organizations.cancel')}
+			</button>
+			<button
+				type="submit"
+				class="danger-btn"
+				disabled={confirmName.trim() !== data.organization.name.trim()}
+			>
+				{$_('admin.organizations.deleteConfirm')}
+			</button>
+		</div>
+	</form>
+</dialog>
+
 <style lang="scss">
 	.back-link {
 		display: inline-flex;
@@ -186,7 +262,122 @@
 		font-family: var(--pg-font-family);
 	}
 
-	.admin-actions { margin-bottom: 2rem; }
+	.admin-actions {
+		margin-bottom: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.banner {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: var(--pg-border-radius-md);
+		padding: 0.6rem 0.85rem;
+		margin-bottom: 1rem;
+		font-size: var(--pg-font-size-sm);
+
+		&.error { background: rgba(182, 22, 22, 0.08); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
+	}
+
+	.danger-outline-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		font-family: var(--pg-font-family);
+		background: transparent;
+		color: var(--pg-input-error);
+		border: 1px solid rgba(182, 22, 22, 0.3);
+		&:hover { background: rgba(182, 22, 22, 0.08); }
+	}
+
+	.delete-dialog {
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.5rem;
+		max-width: 28rem;
+		width: calc(100% - 2rem);
+		background: var(--pg-general-background);
+		color: var(--pg-text);
+
+		&::backdrop { background: rgba(0, 0, 0, 0.5); }
+
+		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
+
+		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 0.75rem; }
+
+		.dialog-warn {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			background: rgba(182, 22, 22, 0.08);
+			color: var(--pg-input-error);
+			border: 1px solid rgba(182, 22, 22, 0.25);
+			border-radius: var(--pg-border-radius-md);
+			padding: 0.5rem 0.75rem;
+			font-size: var(--pg-font-size-sm);
+			margin: 0 0 1rem;
+		}
+
+		.dialog-label {
+			display: block;
+			font-size: var(--pg-font-size-xs);
+			color: var(--pg-text-secondary);
+			text-transform: uppercase;
+			font-weight: var(--pg-font-weight-medium);
+			margin-bottom: 0.35rem;
+			font-family: var(--pg-font-family);
+		}
+
+		.dialog-name-display {
+			margin: 0 0 0.5rem;
+			code {
+				display: inline-block;
+				background: var(--pg-strong-background);
+				color: var(--pg-text);
+				border-radius: var(--pg-border-radius-sm);
+				padding: 2px 8px;
+				font-family: monospace;
+				font-size: var(--pg-font-size-sm);
+				user-select: all;
+			}
+		}
+
+		input.pg-input { width: 100%; height: 2.25rem; font-size: var(--pg-font-size-sm); }
+	}
+
+	.dialog-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+	}
+
+	.ghost-btn {
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		color: var(--pg-text-secondary);
+		font-family: var(--pg-font-family);
+		&:hover { background: var(--pg-soft-background); }
+	}
+
+	.danger-btn {
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		background: var(--pg-input-error);
+		color: #fff;
+		font-family: var(--pg-font-family);
+		&:disabled { opacity: 0.4; cursor: not-allowed; }
+		&:not(:disabled):hover { opacity: 0.9; }
+	}
 
 	.users {
 		margin-bottom: 2rem;

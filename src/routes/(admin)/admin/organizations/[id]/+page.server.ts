@@ -4,6 +4,7 @@ import {
 	getOrganizationWithRequests,
 	approveChangeRequest,
 	rejectChangeRequest,
+	deleteOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
 import { setImpersonation } from '$lib/server/auth/session';
@@ -13,7 +14,11 @@ export const load: PageServerLoad = async ({ params }) => {
 	if (!isEnabled('adminPanel')) error(404, 'Not found');
 	const result = await getOrganizationWithRequests(params.id);
 	if (!result) error(404, 'Organization not found');
-	return { ...result, impersonationEnabled: isEnabled('adminImpersonation') };
+	return {
+		...result,
+		impersonationEnabled: isEnabled('adminImpersonation'),
+		orgStatusEnabled: isEnabled('adminOrgStatus')
+	};
 };
 
 export const actions: Actions = {
@@ -66,5 +71,31 @@ export const actions: Actions = {
 		if (!locals.session) return fail(401);
 		await setImpersonation(locals.session.id, params.id);
 		redirect(303, '/portal/dashboard');
+	},
+
+	delete: async ({ params, request, locals }) => {
+		if (!isEnabled('adminOrgStatus')) return fail(404);
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
+		const data = await request.formData();
+		const confirmName = data.get('confirmName')?.toString() ?? '';
+
+		const result = await getOrganizationWithRequests(params.id);
+		if (!result) error(404, 'Organization not found');
+
+		if (confirmName.trim() !== result.organization.name.trim()) {
+			return fail(400, { error: 'name_mismatch' });
+		}
+
+		await deleteOrganization(params.id);
+		await logAdminAction(
+			adminId,
+			'delete_org',
+			'organization',
+			params.id,
+			{ name: result.organization.name, domain: result.organization.domain },
+			null
+		);
+		redirect(303, `/admin/organizations?deleted=${encodeURIComponent(result.organization.name)}`);
 	}
 };

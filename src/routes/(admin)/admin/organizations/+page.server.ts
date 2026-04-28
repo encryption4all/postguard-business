@@ -5,14 +5,12 @@ import {
 	listPendingRequests,
 	activateOrganization,
 	suspendOrganization,
-	deleteOrganization,
-	getOrganizationById,
 	createOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
 import { isEnabled } from '$lib/feature-flags';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ url }) => {
 	if (!isEnabled('adminPanel')) error(404, 'Not found');
 	const [orgs, pendingRequests] = await Promise.all([
 		listOrganizations(),
@@ -22,7 +20,8 @@ export const load: PageServerLoad = async () => {
 	return {
 		organizations: orgs,
 		pendingRequests,
-		orgStatusEnabled: isEnabled('adminOrgStatus')
+		orgStatusEnabled: isEnabled('adminOrgStatus'),
+		deletedOrgName: url.searchParams.get('deleted')
 	};
 };
 
@@ -48,33 +47,6 @@ export const actions: Actions = {
 
 		await suspendOrganization(orgId);
 		await logAdminAction(adminId, 'suspend_org', 'organization', orgId, {}, null);
-	},
-	delete: async ({ request, locals }) => {
-		if (!isEnabled('adminOrgStatus')) return fail(404);
-		const adminId = locals.session?.adminId;
-		if (!adminId) error(401, 'Not authenticated');
-		const data = await request.formData();
-		const orgId = data.get('orgId')?.toString();
-		const confirmName = data.get('confirmName')?.toString() ?? '';
-		if (!orgId) return fail(400, { error: 'Missing organization ID' });
-
-		const org = await getOrganizationById(orgId);
-		if (!org) return fail(404, { error: 'Organization not found' });
-
-		if (confirmName.trim() !== org.name.trim()) {
-			return fail(400, { error: 'name_mismatch' });
-		}
-
-		await deleteOrganization(orgId);
-		await logAdminAction(
-			adminId,
-			'delete_org',
-			'organization',
-			orgId,
-			{ name: org.name, domain: org.domain },
-			null
-		);
-		return { deleted: true, orgName: org.name };
 	},
 	create: async ({ request, locals }) => {
 		if (!isEnabled('adminOrgStatus')) return fail(404);
