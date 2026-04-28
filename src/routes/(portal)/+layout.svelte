@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
 	import Icon from '@iconify/svelte';
-	import logoLight from '$lib/assets/images/logo.svg';
-	import logoDark from '$lib/assets/images/logo-dark.svg';
+	import logoLight from '$lib/assets/images/logo-wide.svg';
+	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import LocaleSwitcher from '$lib/components/LocaleSwitcher.svelte';
 	import type { LayoutData } from './$types';
@@ -276,6 +276,9 @@
 
 	.header-actions {
 		margin-left: auto;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.portal-title {

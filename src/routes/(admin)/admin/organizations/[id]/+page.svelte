@@ -7,6 +7,62 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 	let reviewNotes = $state('');
+
+	let confirmName = $state('');
+	let dialogEl: HTMLDialogElement | null = $state(null);
+	let statusDialogEl: HTMLDialogElement | null = $state(null);
+	let showAddUser = $state(false);
+
+	$effect(() => {
+		if (form?.userAdded) showAddUser = false;
+	});
+
+	function openDelete() {
+		confirmName = '';
+		dialogEl?.showModal();
+	}
+
+	function closeDelete() {
+		dialogEl?.close();
+		confirmName = '';
+	}
+
+	function openStatusChange() {
+		statusDialogEl?.showModal();
+	}
+
+	function closeStatusChange() {
+		statusDialogEl?.close();
+	}
+
+	const statusAction = $derived.by(() => {
+		const status = data.organization.status;
+		if (status === 'active') {
+			return {
+				key: 'suspend' as const,
+				labelKey: 'admin.organizations.suspend',
+				titleKey: 'admin.organizations.suspendConfirmTitle',
+				introKey: 'admin.organizations.suspendConfirmIntro',
+				confirmKey: 'admin.organizations.suspendConfirmAction'
+			};
+		}
+		if (status === 'pending') {
+			return {
+				key: 'activate' as const,
+				labelKey: 'admin.organizations.activate',
+				titleKey: 'admin.organizations.activateConfirmTitle',
+				introKey: 'admin.organizations.activateConfirmIntro',
+				confirmKey: 'admin.organizations.activateConfirmAction'
+			};
+		}
+		return {
+			key: 'activate' as const,
+			labelKey: 'admin.organizations.reactivate',
+			titleKey: 'admin.organizations.reactivateConfirmTitle',
+			introKey: 'admin.organizations.reactivateConfirmIntro',
+			confirmKey: 'admin.organizations.reactivateConfirmAction'
+		};
+	});
 </script>
 
 <SEO title="{data.organization.name} - Admin" />
@@ -18,7 +74,12 @@
 
 <div class="org-header">
 	<h1>{data.organization.name}</h1>
-	<span class="status" class:active={data.organization.status === 'active'} class:pending={data.organization.status === 'pending'}>
+	<span
+		class="status"
+		class:active={data.organization.status === 'active'}
+		class:pending={data.organization.status === 'pending'}
+		class:suspended={data.organization.status === 'suspended'}
+	>
 		{data.organization.status}
 	</span>
 </div>
@@ -30,19 +91,133 @@
 	<div class="detail"><span class="label">{$_('admin.organizations.contact')}</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
 </div>
 
-{#if data.impersonationEnabled}
+{#if form?.error === 'name_mismatch'}
+	<div class="banner error" role="alert">
+		<Icon icon="mdi:alert-circle" width="18" height="18" />
+		<span>{$_('admin.organizations.deleteFailedNameMismatch')}</span>
+	</div>
+{:else if form?.statusChanged}
+	<div class="banner success" role="status">
+		<Icon icon="mdi:check-circle" width="18" height="18" />
+		<span>{$_(`admin.organizations.statusChangedTo_${form.statusChanged}`)}</span>
+	</div>
+{/if}
+
+{#if data.impersonationEnabled || data.orgStatusEnabled}
 	<div class="admin-actions">
-		<form method="POST" action="?/impersonate" use:enhance>
-			<button type="submit" class="secondary-btn">
-				<Icon icon="mdi:eye" width="16" height="16" />
-				{$_('admin.organizations.impersonate')}
+		{#if data.impersonationEnabled}
+			<form method="POST" action="?/impersonate" use:enhance>
+				<button type="submit" class="secondary-btn">
+					<Icon icon="mdi:eye" width="16" height="16" />
+					{$_('admin.organizations.impersonate')}
+				</button>
+			</form>
+		{/if}
+		{#if data.orgStatusEnabled}
+			<button
+				type="button"
+				class="status-btn"
+				class:status-btn-suspend={statusAction.key === 'suspend'}
+				class:status-btn-activate={statusAction.key === 'activate'}
+				onclick={openStatusChange}
+			>
+				<Icon
+					icon={statusAction.key === 'suspend' ? 'mdi:pause-circle-outline' : 'mdi:check-circle-outline'}
+					width="16"
+					height="16"
+				/>
+				{$_(statusAction.labelKey)}
 			</button>
-		</form>
+			<button type="button" class="danger-outline-btn" onclick={openDelete}>
+				<Icon icon="mdi:delete" width="16" height="16" />
+				{$_('admin.organizations.delete')}
+			</button>
+		{/if}
 	</div>
 {/if}
 
 <section class="users">
-	<h2>Users <span class="count">({data.users.length})</span></h2>
+	<div class="users-header">
+		<h2>{$_('admin.organizations.usersTitle')} <span class="count">({data.users.length})</span></h2>
+		{#if data.orgStatusEnabled}
+			<button
+				type="button"
+				class="action-btn approve toggle-add-user"
+				onclick={() => (showAddUser = !showAddUser)}
+				aria-expanded={showAddUser}
+			>
+				<Icon icon={showAddUser ? 'mdi:close' : 'mdi:account-plus'} width="14" height="14" />
+				{showAddUser ? $_('admin.organizations.cancel') : $_('admin.organizations.addUser')}
+			</button>
+		{/if}
+	</div>
+
+	{#if form?.userAdded}
+		<div class="banner success" role="status">
+			<Icon icon="mdi:check-circle" width="18" height="18" />
+			<span>{$_('admin.organizations.addUserSuccess', { values: { name: form.addedUserName } })}</span>
+		</div>
+	{/if}
+
+	{#if showAddUser && data.orgStatusEnabled}
+		<form method="POST" action="?/addUser" class="add-user-form" use:enhance>
+			{#if form?.addUserErrors?.form}
+				<div class="banner error" role="alert">
+					<Icon icon="mdi:alert-circle" width="18" height="18" />
+					<span>{$_(`admin.organizations.${form.addUserErrors.form}`)}</span>
+				</div>
+			{/if}
+
+			<div class="grid">
+				<label>
+					<span>{$_('admin.organizations.userFullName')}</span>
+					<input
+						type="text"
+						class="pg-input"
+						name="fullName"
+						required
+						value={form?.addUserValues?.fullName ?? ''}
+					/>
+					{#if form?.addUserErrors?.fullName}
+						<span class="field-err"
+							>{$_(`admin.organizations.${form.addUserErrors.fullName}`)}</span
+						>
+					{/if}
+				</label>
+
+				<label>
+					<span>{$_('admin.organizations.userEmail')}</span>
+					<input
+						type="email"
+						class="pg-input"
+						name="email"
+						required
+						value={form?.addUserValues?.email ?? ''}
+					/>
+					{#if form?.addUserErrors?.email}
+						<span class="field-err">{$_(`admin.organizations.${form.addUserErrors.email}`)}</span>
+					{/if}
+				</label>
+
+				<label>
+					<span>{$_('admin.organizations.userPhone')}</span>
+					<input
+						type="text"
+						class="pg-input"
+						name="phone"
+						value={form?.addUserValues?.phone ?? ''}
+					/>
+				</label>
+			</div>
+
+			<div class="add-user-actions">
+				<button type="submit" class="action-btn approve">
+					{$_('admin.organizations.addUserSubmit')}
+				</button>
+			</div>
+		</form>
+	{/if}
+
 	{#if data.users.length === 0}
 		<p class="empty">No users belong to this organisation yet.</p>
 	{:else}
@@ -129,6 +304,83 @@
 	</section>
 {/if}
 
+<dialog bind:this={statusDialogEl} class="confirm-dialog">
+	<form
+		method="POST"
+		action="?/{statusAction.key}"
+		use:enhance={() => {
+			return async ({ update }) => {
+				await update();
+				statusDialogEl?.close();
+			};
+		}}
+	>
+		<h2>{$_(statusAction.titleKey)}</h2>
+		<p class="dialog-intro">
+			{$_(statusAction.introKey, { values: { name: data.organization.name } })}
+		</p>
+		<div class="dialog-actions">
+			<button type="button" class="ghost-btn" onclick={closeStatusChange}>
+				{$_('admin.organizations.cancel')}
+			</button>
+			<button
+				type="submit"
+				class={statusAction.key === 'suspend' ? 'danger-btn' : 'primary-confirm-btn'}
+			>
+				{$_(statusAction.confirmKey)}
+			</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog
+	bind:this={dialogEl}
+	class="delete-dialog"
+	onclose={() => {
+		confirmName = '';
+	}}
+>
+	<form method="POST" action="?/delete" use:enhance>
+		<h2>{$_('admin.organizations.deleteConfirmTitle')}</h2>
+		<p class="dialog-intro">
+			{$_('admin.organizations.deleteConfirmIntro', { values: { name: data.organization.name } })}
+		</p>
+		<p class="dialog-warn">
+			<Icon icon="mdi:alert" width="16" height="16" />
+			{$_('admin.organizations.deleteConfirmWarning')}
+		</p>
+		<label class="dialog-label" for="confirm-name-input">
+			{$_('admin.organizations.deleteConfirmLabel')}
+		</label>
+		<p class="dialog-name-display">
+			<code>{data.organization.name}</code>
+		</p>
+		<input
+			id="confirm-name-input"
+			type="text"
+			class="pg-input"
+			name="confirmName"
+			bind:value={confirmName}
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="off"
+			spellcheck="false"
+		/>
+		<div class="dialog-actions">
+			<button type="button" class="ghost-btn" onclick={closeDelete}>
+				{$_('admin.organizations.cancel')}
+			</button>
+			<button
+				type="submit"
+				class="danger-btn"
+				disabled={confirmName.trim() !== data.organization.name.trim()}
+			>
+				{$_('admin.organizations.deleteConfirm')}
+			</button>
+		</div>
+	</form>
+</dialog>
+
 <style lang="scss">
 	.back-link {
 		display: inline-flex;
@@ -158,6 +410,7 @@
 		font-family: var(--pg-font-family);
 		&.active { background: rgba(22, 163, 74, 0.12); color: #16a34a; }
 		&.pending { background: rgba(180, 83, 9, 0.12); color: #b45309; }
+		&.suspended { background: rgba(182, 22, 22, 0.12); color: var(--pg-input-error); }
 	}
 
 	.org-details {
@@ -186,11 +439,172 @@
 		font-family: var(--pg-font-family);
 	}
 
-	.admin-actions { margin-bottom: 2rem; }
+	.admin-actions {
+		margin-bottom: 2rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.banner {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: var(--pg-border-radius-md);
+		padding: 0.6rem 0.85rem;
+		margin-bottom: 1rem;
+		font-size: var(--pg-font-size-sm);
+
+		&.error { background: rgba(182, 22, 22, 0.08); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
+		&.success { background: rgba(22, 163, 74, 0.08); border: 1px solid #16a34a; color: #16a34a; }
+	}
+
+	.status-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		font-family: var(--pg-font-family);
+		background: transparent;
+		border: 1px solid;
+
+		&.status-btn-suspend { color: var(--pg-input-error); border-color: rgba(182, 22, 22, 0.3); }
+		&.status-btn-suspend:hover { background: rgba(182, 22, 22, 0.08); }
+		&.status-btn-activate { color: #16a34a; border-color: rgba(22, 163, 74, 0.35); }
+		&.status-btn-activate:hover { background: rgba(22, 163, 74, 0.08); }
+	}
+
+	.confirm-dialog {
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.5rem;
+		max-width: 26rem;
+		width: calc(100% - 2rem);
+		background: var(--pg-general-background);
+		color: var(--pg-text);
+
+		&::backdrop { background: rgba(0, 0, 0, 0.5); }
+
+		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
+
+		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 1rem; }
+	}
+
+	.primary-confirm-btn {
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		background: #16a34a;
+		color: #fff;
+		font-family: var(--pg-font-family);
+		&:hover { background: #15803d; }
+	}
+
+	.danger-outline-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		font-family: var(--pg-font-family);
+		background: transparent;
+		color: var(--pg-input-error);
+		border: 1px solid rgba(182, 22, 22, 0.3);
+		&:hover { background: rgba(182, 22, 22, 0.08); }
+	}
+
+	.delete-dialog {
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.5rem;
+		max-width: 28rem;
+		width: calc(100% - 2rem);
+		background: var(--pg-general-background);
+		color: var(--pg-text);
+
+		&::backdrop { background: rgba(0, 0, 0, 0.5); }
+
+		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
+
+		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 0.75rem; }
+
+		.dialog-warn {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			background: rgba(182, 22, 22, 0.08);
+			color: var(--pg-input-error);
+			border: 1px solid rgba(182, 22, 22, 0.25);
+			border-radius: var(--pg-border-radius-md);
+			padding: 0.5rem 0.75rem;
+			font-size: var(--pg-font-size-sm);
+			margin: 0 0 1rem;
+		}
+
+		.dialog-label {
+			display: block;
+			font-size: var(--pg-font-size-xs);
+			color: var(--pg-text-secondary);
+			text-transform: uppercase;
+			font-weight: var(--pg-font-weight-medium);
+			margin-bottom: 0.35rem;
+			font-family: var(--pg-font-family);
+		}
+
+		.dialog-name-display {
+			margin: 0 0 0.5rem;
+			code {
+				display: inline-block;
+				background: var(--pg-strong-background);
+				color: var(--pg-text);
+				border-radius: var(--pg-border-radius-sm);
+				padding: 2px 8px;
+				font-family: monospace;
+				font-size: var(--pg-font-size-sm);
+				user-select: all;
+			}
+		}
+
+		input.pg-input { width: 100%; height: 2.25rem; font-size: var(--pg-font-size-sm); }
+	}
+
+	.dialog-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		margin-top: 1.25rem;
+	}
+
+	.ghost-btn {
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		color: var(--pg-text-secondary);
+		font-family: var(--pg-font-family);
+		&:hover { background: var(--pg-soft-background); }
+	}
+
+	.danger-btn {
+		padding: 6px 14px;
+		border-radius: var(--pg-border-radius-sm);
+		font-size: var(--pg-font-size-sm);
+		font-weight: var(--pg-font-weight-medium);
+		background: var(--pg-input-error);
+		color: #fff;
+		font-family: var(--pg-font-family);
+		&:disabled { opacity: 0.4; cursor: not-allowed; }
+		&:not(:disabled):hover { opacity: 0.9; }
+	}
 
 	.users {
 		margin-bottom: 2rem;
-		h2 { margin-bottom: 1rem; }
+		h2 { margin-bottom: 0; }
 		.count { font-size: var(--pg-font-size-sm); color: var(--pg-text-secondary); font-weight: var(--pg-font-weight-regular); }
 		.empty { color: var(--pg-text-secondary); font-size: var(--pg-font-size-sm); }
 		.table-wrap { overflow-x: auto; }
@@ -198,6 +612,60 @@
 		th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--pg-strong-background); }
 		th { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); text-transform: uppercase; font-weight: var(--pg-font-weight-medium); font-family: var(--pg-font-family); }
 		.badge { background: rgba(22, 163, 74, 0.12); color: #16a34a; font-size: var(--pg-font-size-xs); font-weight: var(--pg-font-weight-bold); padding: 3px 10px; border-radius: 100px; text-transform: uppercase; font-family: var(--pg-font-family); }
+	}
+
+	.users-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.toggle-add-user {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: var(--pg-font-size-sm);
+	}
+
+	.add-user-form {
+		background: var(--pg-soft-background);
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.25rem;
+		margin-bottom: 1rem;
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 0.85rem;
+		}
+
+		label {
+			display: flex;
+			flex-direction: column;
+			gap: 0.3rem;
+			font-size: var(--pg-font-size-sm);
+
+			span:first-child {
+				font-size: var(--pg-font-size-xs);
+				color: var(--pg-text-secondary);
+				text-transform: uppercase;
+				font-weight: var(--pg-font-weight-medium);
+				font-family: var(--pg-font-family);
+			}
+		}
+
+		input.pg-input { height: 2.25rem; font-size: var(--pg-font-size-sm); }
+
+		.field-err { color: var(--pg-input-error); font-size: var(--pg-font-size-xs); }
+	}
+
+	.add-user-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
 	}
 
 	.requests h2 { margin-bottom: 1rem; }
