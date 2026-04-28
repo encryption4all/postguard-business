@@ -11,6 +11,11 @@
 	let confirmName = $state('');
 	let dialogEl: HTMLDialogElement | null = $state(null);
 	let statusDialogEl: HTMLDialogElement | null = $state(null);
+	let showAddUser = $state(false);
+
+	$effect(() => {
+		if (form?.userAdded) showAddUser = false;
+	});
 
 	function openDelete() {
 		confirmName = '';
@@ -132,7 +137,87 @@
 {/if}
 
 <section class="users">
-	<h2>Users <span class="count">({data.users.length})</span></h2>
+	<div class="users-header">
+		<h2>{$_('admin.organizations.usersTitle')} <span class="count">({data.users.length})</span></h2>
+		{#if data.orgStatusEnabled}
+			<button
+				type="button"
+				class="action-btn approve toggle-add-user"
+				onclick={() => (showAddUser = !showAddUser)}
+				aria-expanded={showAddUser}
+			>
+				<Icon icon={showAddUser ? 'mdi:close' : 'mdi:account-plus'} width="14" height="14" />
+				{showAddUser ? $_('admin.organizations.cancel') : $_('admin.organizations.addUser')}
+			</button>
+		{/if}
+	</div>
+
+	{#if form?.userAdded}
+		<div class="banner success" role="status">
+			<Icon icon="mdi:check-circle" width="18" height="18" />
+			<span>{$_('admin.organizations.addUserSuccess', { values: { name: form.addedUserName } })}</span>
+		</div>
+	{/if}
+
+	{#if showAddUser && data.orgStatusEnabled}
+		<form method="POST" action="?/addUser" class="add-user-form" use:enhance>
+			{#if form?.addUserErrors?.form}
+				<div class="banner error" role="alert">
+					<Icon icon="mdi:alert-circle" width="18" height="18" />
+					<span>{$_(`admin.organizations.${form.addUserErrors.form}`)}</span>
+				</div>
+			{/if}
+
+			<div class="grid">
+				<label>
+					<span>{$_('admin.organizations.userFullName')}</span>
+					<input
+						type="text"
+						class="pg-input"
+						name="fullName"
+						required
+						value={form?.addUserValues?.fullName ?? ''}
+					/>
+					{#if form?.addUserErrors?.fullName}
+						<span class="field-err"
+							>{$_(`admin.organizations.${form.addUserErrors.fullName}`)}</span
+						>
+					{/if}
+				</label>
+
+				<label>
+					<span>{$_('admin.organizations.userEmail')}</span>
+					<input
+						type="email"
+						class="pg-input"
+						name="email"
+						required
+						value={form?.addUserValues?.email ?? ''}
+					/>
+					{#if form?.addUserErrors?.email}
+						<span class="field-err">{$_(`admin.organizations.${form.addUserErrors.email}`)}</span>
+					{/if}
+				</label>
+
+				<label>
+					<span>{$_('admin.organizations.userPhone')}</span>
+					<input
+						type="text"
+						class="pg-input"
+						name="phone"
+						value={form?.addUserValues?.phone ?? ''}
+					/>
+				</label>
+			</div>
+
+			<div class="add-user-actions">
+				<button type="submit" class="action-btn approve">
+					{$_('admin.organizations.addUserSubmit')}
+				</button>
+			</div>
+		</form>
+	{/if}
+
 	{#if data.users.length === 0}
 		<p class="empty">No users belong to this organisation yet.</p>
 	{:else}
@@ -519,7 +604,7 @@
 
 	.users {
 		margin-bottom: 2rem;
-		h2 { margin-bottom: 1rem; }
+		h2 { margin-bottom: 0; }
 		.count { font-size: var(--pg-font-size-sm); color: var(--pg-text-secondary); font-weight: var(--pg-font-weight-regular); }
 		.empty { color: var(--pg-text-secondary); font-size: var(--pg-font-size-sm); }
 		.table-wrap { overflow-x: auto; }
@@ -527,6 +612,60 @@
 		th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--pg-strong-background); }
 		th { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); text-transform: uppercase; font-weight: var(--pg-font-weight-medium); font-family: var(--pg-font-family); }
 		.badge { background: rgba(22, 163, 74, 0.12); color: #16a34a; font-size: var(--pg-font-size-xs); font-weight: var(--pg-font-weight-bold); padding: 3px 10px; border-radius: 100px; text-transform: uppercase; font-family: var(--pg-font-family); }
+	}
+
+	.users-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.toggle-add-user {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: var(--pg-font-size-sm);
+	}
+
+	.add-user-form {
+		background: var(--pg-soft-background);
+		border: 1px solid var(--pg-strong-background);
+		border-radius: var(--pg-border-radius-lg);
+		padding: 1.25rem;
+		margin-bottom: 1rem;
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 0.85rem;
+		}
+
+		label {
+			display: flex;
+			flex-direction: column;
+			gap: 0.3rem;
+			font-size: var(--pg-font-size-sm);
+
+			span:first-child {
+				font-size: var(--pg-font-size-xs);
+				color: var(--pg-text-secondary);
+				text-transform: uppercase;
+				font-weight: var(--pg-font-weight-medium);
+				font-family: var(--pg-font-family);
+			}
+		}
+
+		input.pg-input { height: 2.25rem; font-size: var(--pg-font-size-sm); }
+
+		.field-err { color: var(--pg-input-error); font-size: var(--pg-font-size-xs); }
+	}
+
+	.add-user-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-top: 1rem;
 	}
 
 	.requests h2 { margin-bottom: 1rem; }

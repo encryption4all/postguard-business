@@ -346,7 +346,19 @@
 			"create_invalid_domain": "Ongeldig domein (bijv. example.com).",
 			"create_invalid_email": "Ongeldig e-mailadres.",
 			"create_duplicate_domain": "Er bestaat al een organisatie met dit domein.",
-			"create_unexpected": "Er is een onverwachte fout opgetreden. Probeer het opnieuw."
+			"create_unexpected": "Er is een onverwachte fout opgetreden. Probeer het opnieuw.",
+			"usersTitle": "Gebruikers",
+			"addUser": "Gebruiker toevoegen",
+			"addUserSubmit": "Gebruiker toevoegen",
+			"userFullName": "Volledige naam",
+			"userEmail": "E-mailadres",
+			"userPhone": "Telefoonnummer",
+			"addUserSuccess": "Gebruiker \"{name}\" is toegevoegd.",
+			"addUser_required_name": "Volledige naam is verplicht.",
+			"addUser_required_email": "E-mailadres is verplicht.",
+			"addUser_invalid_email": "Ongeldig e-mailadres.",
+			"addUser_duplicate_email": "Er bestaat al een gebruiker met dit e-mailadres.",
+			"addUser_unexpected": "Er is een onverwachte fout opgetreden. Probeer het opnieuw."
 		},
 		"apiKeys": {
 			"title": "Alle API-sleutels",

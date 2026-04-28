@@ -8,6 +8,7 @@ import {
 	deleteOrganization,
 	activateOrganization,
 	suspendOrganization,
+	addUserToOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
 import { setImpersonation } from '$lib/server/auth/session';
@@ -138,5 +139,57 @@ export const actions: Actions = {
 			getClientAddress()
 		);
 		redirect(303, `/admin/organizations?deleted=${encodeURIComponent(result.organization.name)}`);
+	},
+
+	addUser: async ({ params, request, locals, getClientAddress }) => {
+		if (!isEnabled('adminOrgStatus')) return fail(404);
+		const adminId = locals.session?.adminId;
+		if (!adminId) error(401, 'Not authenticated');
+
+		const data = await request.formData();
+		const email = (data.get('email') ?? '').toString().trim().toLowerCase();
+		const fullName = (data.get('fullName') ?? '').toString().trim();
+		const phone = ((data.get('phone') ?? '').toString().trim() || null) as string | null;
+
+		const errors: Record<string, string> = {};
+		if (!fullName) errors.fullName = 'addUser_required_name';
+		if (!email) errors.email = 'addUser_required_email';
+		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = 'addUser_invalid_email';
+
+		if (Object.keys(errors).length > 0) {
+			return fail(400, {
+				addUserErrors: errors,
+				addUserValues: { email, fullName, phone }
+			});
+		}
+
+		const org = await getOrganizationById(params.id);
+		if (!org) error(404, 'Organization not found');
+
+		try {
+			const user = await addUserToOrganization(params.id, { email, fullName, phone });
+			await logAdminAction(
+				adminId,
+				'add_user',
+				'user',
+				user.id,
+				{ orgId: params.id, orgName: org.name, email, fullName },
+				getClientAddress()
+			);
+			return { userAdded: true, addedUserName: fullName };
+		} catch (err: unknown) {
+			const msg = err instanceof Error ? err.message : '';
+			const cause = (err as { cause?: { message?: string } })?.cause?.message ?? '';
+			if (`${msg}\n${cause}`.match(/duplicate key|unique/i)) {
+				return fail(409, {
+					addUserErrors: { email: 'addUser_duplicate_email' } as Record<string, string>,
+					addUserValues: { email, fullName, phone }
+				});
+			}
+			return fail(500, {
+				addUserErrors: { form: 'addUser_unexpected' } as Record<string, string>,
+				addUserValues: { email, fullName, phone }
+			});
+		}
 	}
 };

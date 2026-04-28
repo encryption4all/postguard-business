@@ -184,6 +184,22 @@ export async function createOrganization(input: {
 	return org;
 }
 
+export async function addUserToOrganization(
+	orgId: string,
+	input: { email: string; fullName: string; phone: string | null }
+) {
+	const [user] = await db
+		.insert(users)
+		.values({
+			email: input.email,
+			fullName: input.fullName,
+			phone: input.phone,
+			orgId
+		})
+		.returning();
+	return user;
+}
+
 export async function listAdminAuditLog(page: number = 1) {
 	const pageSize = 50;
 	const offset = (page - 1) * pageSize;

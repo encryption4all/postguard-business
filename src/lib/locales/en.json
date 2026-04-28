@@ -346,7 +346,19 @@
 			"create_invalid_domain": "Invalid domain (e.g. example.com).",
 			"create_invalid_email": "Invalid email address.",
 			"create_duplicate_domain": "An organization with this domain already exists.",
-			"create_unexpected": "An unexpected error occurred. Please try again."
+			"create_unexpected": "An unexpected error occurred. Please try again.",
+			"usersTitle": "Users",
+			"addUser": "Add user",
+			"addUserSubmit": "Add user",
+			"userFullName": "Full name",
+			"userEmail": "Email",
+			"userPhone": "Phone",
+			"addUserSuccess": "User \"{name}\" has been added.",
+			"addUser_required_name": "Full name is required.",
+			"addUser_required_email": "Email is required.",
+			"addUser_invalid_email": "Invalid email address.",
+			"addUser_duplicate_email": "A user with this email already exists.",
+			"addUser_unexpected": "An unexpected error occurred. Please try again."
 		},
 		"apiKeys": {
 			"title": "All API Keys",
