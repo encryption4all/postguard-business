@@ -5,7 +5,8 @@ import {
 	changeRequests,
 	adminAuditLog,
 	apiKeys,
-	adminAccounts
+	adminAccounts,
+	sessions
 } from '$lib/server/db/schema';
 import { eq, desc, and, isNull, or, count, sql } from 'drizzle-orm';
 
@@ -145,6 +146,42 @@ export async function suspendOrganization(orgId: string) {
 		.update(organizations)
 		.set({ status: 'suspended', updatedAt: new Date() })
 		.where(eq(organizations.id, orgId));
+}
+
+export async function getOrganizationById(orgId: string) {
+	const rows = await db
+		.select()
+		.from(organizations)
+		.where(eq(organizations.id, orgId))
+		.limit(1);
+	return rows[0] ?? null;
+}
+
+export async function deleteOrganization(orgId: string) {
+	await db
+		.delete(sessions)
+		.where(or(eq(sessions.orgId, orgId), eq(sessions.impersonatingOrgId, orgId)));
+	await db.delete(organizations).where(eq(organizations.id, orgId));
+}
+
+export async function createOrganization(input: {
+	name: string;
+	domain: string;
+	signingEmail: string;
+	kvkNumber: string | null;
+	status: 'active' | 'pending' | 'suspended';
+}) {
+	const [org] = await db
+		.insert(organizations)
+		.values({
+			name: input.name,
+			domain: input.domain,
+			signingEmail: input.signingEmail,
+			kvkNumber: input.kvkNumber,
+			status: input.status
+		})
+		.returning();
+	return org;
 }
 
 export async function listAdminAuditLog(page: number = 1) {
