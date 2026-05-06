@@ -35,4 +35,8 @@ describe('SvelteKit CSP configuration', () => {
 	it('allows data: images for inline icon SVGs', () => {
 		expect(csp!.reportOnly!['img-src']).toContain('data:');
 	});
+
+	it('points violations at the in-app CSP report sink', () => {
+		expect(csp!.reportOnly!['report-uri']).toEqual(['/api/csp-report']);
+	});
 });

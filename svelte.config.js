@@ -22,7 +22,8 @@ const config = {
 				'frame-ancestors': ['none'],
 				'base-uri': ['self'],
 				'form-action': ['self'],
-				'object-src': ['none']
+				'object-src': ['none'],
+				'report-uri': ['/api/csp-report']
 			}
 		},
 		alias: {
