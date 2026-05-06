@@ -13,6 +13,7 @@ declare global {
 				impersonatingOrgId: string | null;
 				yiviAttributes: Record<string, string>;
 			} | null;
+			locale: string;
 		}
 		// interface PageData {}
 		// interface PageState {}
