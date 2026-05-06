@@ -17,7 +17,7 @@
 				url: 'https://business.postguard.eu/pg_logo.png'
 			},
 			description:
-				'PostGuard for Business offers enterprise-grade identity-based email signing and encryption for organizations.',
+				'Identity-based email signing and encryption for organizations.',
 			sameAs: ['https://postguard.eu', 'https://docs.postguard.eu']
 		},
 		{

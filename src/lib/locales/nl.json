@@ -39,7 +39,7 @@
 		},
 		"hostedEU": {
 			"title": "Gehost in de EU",
-			"description": "Alle gegevens worden opgeslagen en verwerkt binnen de Europese Unie, voor volledige AVG-naleving en datasoevereiniteit."
+			"description": "Alle gegevens worden opgeslagen en verwerkt in de Europese Unie. Standaard AVG-conform."
 		},
 		"encryption": {
 			"title": "End-to-end versleuteling",
@@ -47,7 +47,7 @@
 		},
 		"openSource": {
 			"title": "Open source",
-			"description": "Gebouwd op het open-source PostGuard-protocol. Volledige transparantie, geen vendor lock-in, community-gedreven."
+			"description": "Gebouwd op het open-source PostGuard-protocol. Bekijk de code of draai het op uw eigen infrastructuur."
 		},
 		"revocation": {
 			"title": "E-mailintrekking",
@@ -70,7 +70,7 @@
 	},
 	"footer": {
 		"brandName": "PostGuard for Business",
-		"tagline": "Enterprise-grade identiteitsgebaseerde e-mailondertekening",
+		"tagline": "Identiteitsgebaseerde e-mailondertekening voor organisaties",
 		"product": "Product",
 		"resources": "Bronnen",
 		"personal": "PostGuard Persoonlijk",
@@ -79,9 +79,9 @@
 	},
 	"seo": {
 		"siteName": "PostGuard for Business",
-		"defaultDescription": "PostGuard for Business biedt enterprise-grade identiteitsgebaseerde e-mailondertekening en versleuteling voor organisaties.",
+		"defaultDescription": "Identiteitsgebaseerde e-mailondertekening en versleuteling voor organisaties.",
 		"homeTitle": "Veilige e-mailondertekening voor uw organisatie",
-		"homeDescription": "PostGuard for Business biedt enterprise-grade identiteitsgebaseerde e-mailondertekening en versleuteling. Beheer API-sleutels en controleer e-mailactiviteit."
+		"homeDescription": "Identiteitsgebaseerde e-mailondertekening en versleuteling voor organisaties. Beheer API-sleutels en controleer e-mailactiviteit."
 	},
 	"pricing": {
 		"title": "Prijzen",

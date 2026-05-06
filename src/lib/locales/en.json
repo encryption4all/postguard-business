@@ -39,7 +39,7 @@
 		},
 		"hostedEU": {
 			"title": "Hosted in the EU",
-			"description": "All data is stored and processed within the European Union, ensuring full GDPR compliance and data sovereignty."
+			"description": "All data is stored and processed in the European Union. GDPR-compliant by default."
 		},
 		"encryption": {
 			"title": "End-to-End Encryption",
@@ -47,7 +47,7 @@
 		},
 		"openSource": {
 			"title": "Open Source",
-			"description": "Built on the open-source PostGuard protocol. Full transparency, no vendor lock-in, community-driven."
+			"description": "Built on the open-source PostGuard protocol. Audit the code or run it on your own infrastructure."
 		},
 		"revocation": {
 			"title": "Email Revocation",
@@ -70,7 +70,7 @@
 	},
 	"footer": {
 		"brandName": "PostGuard for Business",
-		"tagline": "Enterprise-grade identity-based email signing",
+		"tagline": "Identity-based email signing for organizations",
 		"product": "Product",
 		"resources": "Resources",
 		"personal": "PostGuard Personal",
@@ -79,9 +79,9 @@
 	},
 	"seo": {
 		"siteName": "PostGuard for Business",
-		"defaultDescription": "PostGuard for Business offers enterprise-grade identity-based email signing and encryption for organizations.",
+		"defaultDescription": "Identity-based email signing and encryption for organizations.",
 		"homeTitle": "Secure Email Signing for Your Organization",
-		"homeDescription": "PostGuard for Business offers enterprise-grade identity-based email signing and encryption. Manage API keys and audit email activity."
+		"homeDescription": "Identity-based email signing and encryption for organizations. Manage API keys and audit email activity."
 	},
 	"pricing": {
 		"title": "Pricing",

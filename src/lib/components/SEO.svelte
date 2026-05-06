@@ -13,7 +13,7 @@
 
 	const siteName = 'PostGuard for Business';
 	const defaultDescription =
-		'PostGuard for Business offers enterprise-grade identity-based email signing and encryption for organizations.';
+		'Identity-based email signing and encryption for organizations.';
 
 	const siteUrl = $derived(env.PUBLIC_SITE_URL || `${page.url.protocol}//${page.url.host}`);
 	const defaultImage = $derived(`${siteUrl}/pg_logo.png`);
