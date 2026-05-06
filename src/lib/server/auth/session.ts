@@ -14,6 +14,7 @@ export interface SessionData {
 }
 
 const SESSION_DURATION_HOURS = 8;
+const LAST_ACTIVE_THROTTLE_MS = 5 * 60 * 1000;
 
 function hashToken(token: string): string {
 	return createHash('sha256').update(token).digest('hex');
@@ -60,11 +61,15 @@ export async function resolveSession(token: string): Promise<SessionData | null>
 
 	const session = result[0];
 
-	// Update last active timestamp
-	await db
-		.update(sessions)
-		.set({ lastActiveAt: new Date() })
-		.where(eq(sessions.id, session.id));
+	// Throttle the lastActiveAt write: this runs on every authenticated request,
+	// but the field is only used for coarse-grained admin/audit views, so a
+	// ~5-minute resolution is plenty and avoids a write per request.
+	if (Date.now() - session.lastActiveAt.getTime() > LAST_ACTIVE_THROTTLE_MS) {
+		await db
+			.update(sessions)
+			.set({ lastActiveAt: new Date() })
+			.where(eq(sessions.id, session.id));
+	}
 
 	return {
 		id: session.id,
