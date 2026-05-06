@@ -10,6 +10,21 @@ const config = {
 	},
 	kit: {
 		adapter: adapter({ out: 'build' }),
+		csp: {
+			mode: 'auto',
+			reportOnly: {
+				'default-src': ['self'],
+				'script-src': ['self'],
+				'style-src': ['self', 'unsafe-inline'],
+				'img-src': ['self', 'data:'],
+				'font-src': ['self'],
+				'connect-src': ['self'],
+				'frame-ancestors': ['none'],
+				'base-uri': ['self'],
+				'form-action': ['self'],
+				'object-src': ['none']
+			}
+		},
 		alias: {
 			$components: 'src/lib/components',
 			$stores: 'src/lib/stores',
