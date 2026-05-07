@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.3.0](https://github.com/encryption4all/postguard-business/compare/v1.2.0...v1.3.0) (2026-05-07)
+
+
+### Features
+
+* add Content-Security-Policy in Report-Only mode ([b64b6fa](https://github.com/encryption4all/postguard-business/commit/b64b6fa8197ffd41db4845bf97bd1e00141cb631))
+* add Content-Security-Policy in Report-Only mode ([2e77065](https://github.com/encryption4all/postguard-business/commit/2e77065621d9f95cbbe6b81aa3b7268c92b231c9)), closes [#39](https://github.com/encryption4all/postguard-business/issues/39)
+
+
+### Bug Fixes
+
+* **a11y:** WCAG 2.2 AA fixes for portal, admin, marketing layouts ([fb3d670](https://github.com/encryption4all/postguard-business/commit/fb3d67027b4c808df21e9f15543deca0dfa92349)), closes [#49](https://github.com/encryption4all/postguard-business/issues/49)
+* **a11y:** WCAG 2.2 AA fixes for portal/admin/marketing layouts ([72dd0cf](https://github.com/encryption4all/postguard-business/commit/72dd0cf68c7533f072aea3e61256add1f499f548))
+* add report-uri to CSP and create /api/csp-report sink ([c9cf0aa](https://github.com/encryption4all/postguard-business/commit/c9cf0aae4642e7af7dead47db792a4853659baa4))
+* stop mutating global svelte-i18n locale store from server hook ([66a30d2](https://github.com/encryption4all/postguard-business/commit/66a30d26a34a204972c90f20b57c34cb3a0290cb))
+* stop mutating global svelte-i18n locale store from server hook ([94d63f2](https://github.com/encryption4all/postguard-business/commit/94d63f2ebe4db6cbe334ea0aae8cf0f8f9420134))
+
+
+### Performance Improvements
+
+* **auth:** throttle session lastActiveAt write ([afca92d](https://github.com/encryption4all/postguard-business/commit/afca92d58a9a2a3bf4054b67e9042a4a8d25b539))
+* **auth:** throttle session lastActiveAt write to once per 5 minutes ([77ed921](https://github.com/encryption4all/postguard-business/commit/77ed92150c6dde5cba42b36cf647fa264f9eaf62)), closes [#38](https://github.com/encryption4all/postguard-business/issues/38)
+
 ## [1.2.0](https://github.com/encryption4all/postguard-business/compare/v1.1.2...v1.2.0) (2026-04-28)
 
 
