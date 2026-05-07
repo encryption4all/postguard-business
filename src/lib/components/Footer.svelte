@@ -19,16 +19,22 @@
 		</div>
 
 		<div class="footer-links">
-			<div class="link-group">
-				<span class="group-title">{$_('footer.product')}</span>
+			<nav class="link-group" aria-labelledby="footer-product-title">
+				<h2 id="footer-product-title" class="group-title">{$_('footer.product')}</h2>
 				<a href="/pricing">{$_('nav.pricing')}</a>
 				<a href="/register">{$_('nav.register')}</a>
-			</div>
-			<div class="link-group">
-				<span class="group-title">{$_('footer.resources')}</span>
-				<a href="https://postguard.eu" target="_blank" rel="noopener">{$_('footer.personal')}</a>
-				<a href="https://docs.postguard.eu" target="_blank" rel="noopener">{$_('footer.docs')}</a>
-			</div>
+			</nav>
+			<nav class="link-group" aria-labelledby="footer-resources-title">
+				<h2 id="footer-resources-title" class="group-title">{$_('footer.resources')}</h2>
+				<a href="https://postguard.eu" target="_blank" rel="noopener noreferrer">
+					{$_('footer.personal')}
+					<span class="visually-hidden"> ({$_('common.opensInNewWindow', { default: 'opens in new window' })})</span>
+				</a>
+				<a href="https://docs.postguard.eu" target="_blank" rel="noopener noreferrer">
+					{$_('footer.docs')}
+					<span class="visually-hidden"> ({$_('common.opensInNewWindow', { default: 'opens in new window' })})</span>
+				</a>
+			</nav>
 		</div>
 
 		<div class="footer-bottom">
@@ -92,6 +98,19 @@
 			letter-spacing: 0.5px;
 			line-height: normal;
 			margin: 0 0 0.25rem;
+			font-family: inherit;
+		}
+
+		.visually-hidden {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border: 0;
 		}
 
 		a {

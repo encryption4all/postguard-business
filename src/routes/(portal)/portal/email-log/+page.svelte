@@ -26,14 +26,16 @@
 <div class="search-bar">
 	<form onsubmit={(e) => { e.preventDefault(); search(); }}>
 		<div class="search-row">
+			<label for="email-log-search" class="visually-hidden">{$_('emailLog.search')}</label>
 			<input
-				type="text"
+				id="email-log-search"
+				type="search"
 				class="pg-input"
 				placeholder={$_('emailLog.searchPlaceholder')}
 				bind:value={searchInput}
 			/>
 			<button type="submit" class="secondary-btn">
-				<Icon icon="mdi:magnify" width="18" height="18" />
+				<Icon icon="mdi:magnify" width="18" height="18" aria-hidden="true" />
 				{$_('emailLog.search')}
 			</button>
 		</div>

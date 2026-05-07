@@ -11,6 +11,26 @@
 	});
 </script>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <div id="app">
 	{@render children()}
 </div>
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -40px;
+		left: 0;
+		padding: 8px 16px;
+		background: var(--pg-primary-bg, #7c3aed);
+		color: #fff;
+		text-decoration: none;
+		z-index: 1000;
+	}
+	.skip-link:focus {
+		top: 0;
+		outline: 2px solid #fff;
+		outline-offset: 2px;
+	}
+</style>

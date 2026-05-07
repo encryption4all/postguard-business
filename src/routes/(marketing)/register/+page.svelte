@@ -196,18 +196,26 @@
 				<input type="hidden" name="domain" value={derivedDomain} />
 
 				<div class="form-group">
-					<label for="name">{$_('register.orgName')} *</label>
+					<label for="name">
+						{$_('register.orgName')}
+						<span aria-hidden="true">*</span>
+						<span class="sr-only">({$_('common.required', { default: 'required' })})</span>
+					</label>
 					<input
 						id="name"
 						name="name"
 						type="text"
+						autocomplete="organization"
 						class="pg-input"
 						placeholder={$_('register.orgNamePlaceholder')}
 						value={form?.values?.name ?? ''}
 						required
+						aria-required="true"
+						aria-invalid={form?.errors?.name ? 'true' : undefined}
+						aria-describedby={form?.errors?.name ? 'name-error' : undefined}
 					/>
 					{#if form?.errors?.name}
-						<span class="field-error">{form.errors.name}</span>
+						<span id="name-error" class="field-error">{form.errors.name}</span>
 					{/if}
 				</div>
 
