@@ -217,15 +217,15 @@ textarea.pg-input:hover {
 input.pg-input:focus,
 select.pg-input:focus,
 textarea.pg-input:focus {
-	outline: none;
 	border-color: var(--pg-primary-contrast);
-}
-
-input.pg-input:focus-visible,
-select.pg-input:focus-visible,
-textarea.pg-input:focus-visible {
 	outline: 2px solid var(--pg-primary);
 	outline-offset: 1px;
+}
+
+input.pg-input:focus:not(:focus-visible),
+select.pg-input:focus:not(:focus-visible),
+textarea.pg-input:focus:not(:focus-visible) {
+	outline: none;
 }
 
 input.pg-input:invalid:not(:focus):not(:placeholder-shown),
@@ -263,7 +263,8 @@ textarea.pg-input:disabled {
 }
 
 /* Utility classes */
-.sr-only {
+.sr-only,
+.visually-hidden {
 	position: absolute;
 	left: -10000px;
 	top: auto;

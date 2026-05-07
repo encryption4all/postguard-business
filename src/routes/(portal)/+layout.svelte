@@ -42,14 +42,18 @@
 {/if}
 
 <div class="portal">
-	<aside class="sidebar" class:open={sidebarOpen}>
+	<aside id="portal-sidebar" class="sidebar" class:open={sidebarOpen}>
 		<div class="sidebar-header">
 			<a href="/" class="sidebar-logo">
 				<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
 				<span class="logo-badge">Business</span>
 			</a>
-			<button class="sidebar-close desktop-hide" onclick={() => (sidebarOpen = false)}>
-				<Icon icon="mdi:close" width="20" height="20" />
+			<button
+				class="sidebar-close desktop-hide"
+				onclick={() => (sidebarOpen = false)}
+				aria-label={$_('nav.closeMenu', { default: 'Close navigation menu' })}
+			>
+				<Icon icon="mdi:close" width="20" height="20" aria-hidden="true" />
 			</button>
 		</div>
 
@@ -79,24 +83,42 @@
 
 	<div class="portal-main">
 		<header class="portal-header">
-			<button class="hamburger desktop-hide" onclick={() => (sidebarOpen = true)}>
+			<button
+				class="hamburger desktop-hide"
+				onclick={() => (sidebarOpen = true)}
+				aria-label={$_('nav.openMenu', { default: 'Open navigation menu' })}
+				aria-expanded={sidebarOpen}
+				aria-controls="portal-sidebar"
+			>
 				<Icon icon="mdi:menu" width="24" height="24" />
 			</button>
-			<h2 class="portal-title">{data.organization.name}</h2>
+			<p class="portal-title" role="presentation">{data.organization.name}</p>
 			<div class="header-actions">
 				<LocaleSwitcher />
 				<ThemeSwitcher />
 			</div>
 		</header>
-		<div class="portal-content">
+		<main id="main-content" class="portal-content">
 			{@render children()}
-		</div>
+		</main>
 	</div>
 </div>
 </div>
 
 {#if sidebarOpen}
-	<div class="sidebar-overlay desktop-hide" role="presentation" onclick={() => (sidebarOpen = false)}></div>
+	<div
+		class="sidebar-overlay desktop-hide"
+		role="button"
+		tabindex="0"
+		aria-label={$_('nav.closeMenu', { default: 'Close navigation menu' })}
+		onclick={() => (sidebarOpen = false)}
+		onkeydown={(e) => {
+			if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+				e.preventDefault();
+				sidebarOpen = false;
+			}
+		}}
+	></div>
 {/if}
 
 <style lang="scss">
