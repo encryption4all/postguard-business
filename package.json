@@ -55,5 +55,16 @@
 		"@privacybydesign/yivi-web": "^1.0.0-beta.6",
 		"sass": "^1.99.0",
 		"svelte-i18n": "^4.0.1"
+	},
+	"overrides": {
+		"@sveltejs/kit": {
+			"cookie": "^0.7.2"
+		},
+		"svelte-i18n": {
+			"esbuild": "^0.25.0"
+		},
+		"@esbuild-kit/core-utils": {
+			"esbuild": "^0.25.0"
+		}
 	}
 }
