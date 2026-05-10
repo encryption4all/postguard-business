@@ -23,13 +23,13 @@
 		"db:check": "tsx scripts/check-migrations.ts"
 	},
 	"devDependencies": {
-		"@eslint/compat": "^2.0.5",
+		"@eslint/compat": "^2.1.0",
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.59.1",
 		"@sveltejs/adapter-node": "^5.5.4",
 		"@sveltejs/kit": "^2.59.1",
 		"@sveltejs/vite-plugin-svelte": "^7.1.1",
-		"@types/node": "^25.6.0",
+		"@types/node": "^25.6.2",
 		"drizzle-kit": "^0.31.10",
 		"drizzle-orm": "^0.45.2",
 		"eslint": "^10.3.0",
@@ -51,7 +51,7 @@
 		"@iconify/svelte": "^5.2.1",
 		"@privacybydesign/yivi-client": "^1.0.0-beta.6",
 		"@privacybydesign/yivi-core": "^1.0.0-beta.6",
-		"@privacybydesign/yivi-css": "^1.0.0-beta.6",
+		"@privacybydesign/yivi-css": "^1.0.0-beta.7",
 		"@privacybydesign/yivi-web": "^1.0.0-beta.6",
 		"sass": "^1.99.0",
 		"svelte-i18n": "^4.0.1"
