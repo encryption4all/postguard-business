@@ -72,8 +72,9 @@ export const actions: Actions = {
 
 	impersonate: async ({ params, locals }) => {
 		if (!isEnabled('adminImpersonation')) return fail(404);
-		if (!locals.session) return fail(401);
-		await setImpersonation(locals.session.id, params.id);
+		const session = locals.session;
+		if (!session?.adminId) error(401, 'Not authenticated');
+		await setImpersonation(session.id, params.id);
 		redirect(303, '/portal/dashboard');
 	},
 
