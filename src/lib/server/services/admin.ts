@@ -48,11 +48,7 @@ export async function listPendingRequests() {
 }
 
 export async function getOrganizationWithRequests(orgId: string) {
-	const orgs = await db
-		.select()
-		.from(organizations)
-		.where(eq(organizations.id, orgId))
-		.limit(1);
+	const orgs = await db.select().from(organizations).where(eq(organizations.id, orgId)).limit(1);
 
 	if (!orgs[0]) return null;
 
@@ -92,7 +88,6 @@ export async function approveChangeRequest(
 	const req = reqs[0];
 
 	// Apply the change to the organization
-	const updateData: Record<string, string> = {};
 	const fieldMap: Record<string, string> = {
 		name: 'name',
 		domain: 'domain',
@@ -102,7 +97,9 @@ export async function approveChangeRequest(
 
 	if (fieldMap[req.fieldName]) {
 		// Use raw SQL for dynamic column update
-		await db.execute(sql`UPDATE organizations SET ${sql.raw(fieldMap[req.fieldName])} = ${req.newValue}, updated_at = NOW() WHERE id = ${req.orgId}`);
+		await db.execute(
+			sql`UPDATE organizations SET ${sql.raw(fieldMap[req.fieldName])} = ${req.newValue}, updated_at = NOW() WHERE id = ${req.orgId}`
+		);
 	}
 
 	await db
@@ -118,11 +115,7 @@ export async function approveChangeRequest(
 	return req;
 }
 
-export async function rejectChangeRequest(
-	requestId: string,
-	adminId: string,
-	reviewNotes: string
-) {
+export async function rejectChangeRequest(requestId: string, adminId: string, reviewNotes: string) {
 	await db
 		.update(changeRequests)
 		.set({
@@ -149,11 +142,7 @@ export async function suspendOrganization(orgId: string) {
 }
 
 export async function getOrganizationById(orgId: string) {
-	const rows = await db
-		.select()
-		.from(organizations)
-		.where(eq(organizations.id, orgId))
-		.limit(1);
+	const rows = await db.select().from(organizations).where(eq(organizations.id, orgId)).limit(1);
 	return rows[0] ?? null;
 }
 

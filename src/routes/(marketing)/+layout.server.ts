@@ -8,8 +8,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		? {
 				loggedIn: true as const,
 				email: session.yiviAttributes?.[ATTR.email] ?? null,
-				portalHref:
-					session.userType === 'admin' ? '/admin/organizations' : '/portal/dashboard'
+				portalHref: session.userType === 'admin' ? '/admin/organizations' : '/portal/dashboard'
 			}
 		: { loggedIn: false as const, email: null, portalHref: '/portal/dashboard' };
 

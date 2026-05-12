@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types';
@@ -16,8 +17,7 @@
 				'@type': 'ImageObject',
 				url: 'https://business.postguard.eu/pg_logo.png'
 			},
-			description:
-				'Identity-based email signing and encryption for organizations.',
+			description: 'Identity-based email signing and encryption for organizations.',
 			sameAs: ['https://postguard.eu', 'https://docs.postguard.eu']
 		},
 		{
@@ -58,11 +58,7 @@
 	];
 </script>
 
-<SEO
-	title={$_('seo.homeTitle')}
-	description={$_('seo.homeDescription')}
-	{jsonLd}
-/>
+<SEO title={$_('seo.homeTitle')} description={$_('seo.homeDescription')} {jsonLd} />
 
 <section class="hero">
 	<div class="hero-inner">
@@ -72,9 +68,9 @@
 				{$_('hero.subtitle')}
 			</p>
 			<div class="hero-actions">
-				<a href="/register" class="primary-btn">{$_('hero.cta')}</a>
+				<a href={resolve('/register')} class="primary-btn">{$_('hero.cta')}</a>
 				{#if data.marketingFlags.pricing}
-					<a href="/pricing" class="secondary-btn">{$_('hero.pricing')}</a>
+					<a href={resolve('/pricing')} class="secondary-btn">{$_('hero.pricing')}</a>
 				{/if}
 			</div>
 		</div>
@@ -133,7 +129,10 @@
 
 		<div class="feature-block muted">
 			<div class="bg-icon"><Icon icon="mdi:email-remove" width="120" height="120" /></div>
-			<h3>{$_('features.revocation.title')} <span class="coming-soon">{$_('features.revocation.comingSoon')}</span></h3>
+			<h3>
+				{$_('features.revocation.title')}
+				<span class="coming-soon">{$_('features.revocation.comingSoon')}</span>
+			</h3>
 			<p>{$_('features.revocation.description')}</p>
 		</div>
 	</div>
@@ -143,7 +142,7 @@
 	<div class="cta-inner">
 		<h2>{$_('cta.title')}</h2>
 		<p>{$_('cta.subtitle')}</p>
-		<a href="/register" class="primary-btn">{$_('cta.button')}</a>
+		<a href={resolve('/register')} class="primary-btn">{$_('cta.button')}</a>
 	</div>
 </section>
 

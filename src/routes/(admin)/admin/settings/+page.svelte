@@ -22,7 +22,6 @@
 		}
 		updating = null;
 	}
-
 </script>
 
 <SEO title="{$_('admin.settings.title')} - Admin" />
@@ -40,7 +39,7 @@
 	{/if}
 
 	<div class="flags-list">
-		{#each Object.entries(flags) as [flag, info]}
+		{#each Object.entries(flags) as [flag, info] (flag)}
 			<div class="flag-row">
 				<div class="flag-info">
 					<span class="flag-label">{data.labels[flag as keyof typeof data.labels]}</span>
@@ -56,7 +55,7 @@
 					>
 						{info.value ? $_('admin.settings.on') : $_('admin.settings.off')}
 					</button>
-					</div>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -131,7 +130,9 @@
 		border-radius: var(--pg-border-radius-sm);
 		min-width: 50px;
 		text-align: center;
-		transition: background 0.15s, color 0.15s;
+		transition:
+			background 0.15s,
+			color 0.15s;
 
 		&.on {
 			background: var(--pg-success-soft);
@@ -148,5 +149,4 @@
 			cursor: not-allowed;
 		}
 	}
-
 </style>

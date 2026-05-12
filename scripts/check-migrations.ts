@@ -100,7 +100,8 @@ const RULES: {
 		rule: 'no-alter-column-type',
 		severity: 'warning',
 		message: 'Changing column type can fail or lose data, and may require a full table rewrite.',
-		suggestion: 'Use expand/contract: add new column with new type, backfill, switch code, drop old.'
+		suggestion:
+			'Use expand/contract: add new column with new type, backfill, switch code, drop old.'
 	},
 	{
 		pattern: /\bTRUNCATE\b/i,
@@ -195,7 +196,9 @@ function main() {
 	const errors = relevant.filter((v) => v.severity === 'error');
 	const warnings = relevant.filter((v) => v.severity === 'warning');
 
-	console.log(`\nMigration safety check: ${errors.length} error(s), ${warnings.length} warning(s)\n`);
+	console.log(
+		`\nMigration safety check: ${errors.length} error(s), ${warnings.length} warning(s)\n`
+	);
 
 	for (const v of relevant) {
 		const icon = v.severity === 'error' ? '✗' : '⚠';

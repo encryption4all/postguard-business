@@ -32,9 +32,7 @@ function getClientInitialLocale(): string {
 // svelte-i18n locale store (see hooks.server.ts), which avoids a stale
 // global locale leaking from one request into another between hook calls.
 export function initI18n(serverLocale?: string | null): void {
-	const initialLocale = browser
-		? getClientInitialLocale()
-		: normalizeLocale(serverLocale);
+	const initialLocale = browser ? getClientInitialLocale() : normalizeLocale(serverLocale);
 	init({
 		fallbackLocale: defaultLanguage,
 		initialLocale

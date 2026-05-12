@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -21,7 +22,8 @@
 {#if data.deletedOrgName}
 	<div class="banner success" role="status">
 		<Icon icon="mdi:check-circle" width="18" height="18" />
-		<span>{$_('admin.organizations.deleteSuccess', { values: { name: data.deletedOrgName } })}</span>
+		<span>{$_('admin.organizations.deleteSuccess', { values: { name: data.deletedOrgName } })}</span
+		>
 	</div>
 {:else if form?.created}
 	<div class="banner success" role="status">
@@ -134,16 +136,21 @@
 	<section class="pending-section">
 		<h2>
 			<Icon icon="mdi:bell-ring" width="20" height="20" />
-			{$_('admin.organizations.pendingRequests', { values: { count: data.pendingRequests.length } })}
+			{$_('admin.organizations.pendingRequests', {
+				values: { count: data.pendingRequests.length }
+			})}
 		</h2>
 		<div class="pending-list">
-			{#each data.pendingRequests as item}
-				<a href="/admin/organizations/{item.request.orgId}" class="pending-card">
+			{#each data.pendingRequests as item (item.request.id)}
+				<a href={resolve(`/admin/organizations/${item.request.orgId}`)} class="pending-card">
 					<div>
 						<span class="pending-org">{item.orgName}</span>
-						<span class="pending-field">{item.request.fieldName} &rarr; {item.request.newValue}</span>
+						<span class="pending-field"
+							>{item.request.fieldName} &rarr; {item.request.newValue}</span
+						>
 					</div>
-					<span class="pending-date">{new Date(item.request.requestedAt).toLocaleDateString()}</span>
+					<span class="pending-date">{new Date(item.request.requestedAt).toLocaleDateString()}</span
+					>
 				</a>
 			{/each}
 		</div>
@@ -164,14 +171,22 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.organizations as org}
+				{#each data.organizations as org (org.id)}
 					<tr>
-						<td><a href="/admin/organizations/{org.id}" class="org-link">{org.name}</a></td>
+						<td
+							><a href={resolve(`/admin/organizations/${org.id}`)} class="org-link">{org.name}</a
+							></td
+						>
 						<td>{org.domain}</td>
 						<td>{org.signingEmail}</td>
 						{#if data.orgStatusEnabled}
 							<td>
-								<span class="status" class:active={org.status === 'active'} class:pending={org.status === 'pending'} class:suspended={org.status === 'suspended'}>
+								<span
+									class="status"
+									class:active={org.status === 'active'}
+									class:pending={org.status === 'pending'}
+									class:suspended={org.status === 'suspended'}
+								>
 									{$_(`admin.organizations.${org.status}`)}
 								</span>
 							</td>
@@ -185,7 +200,9 @@
 </section>
 
 <style lang="scss">
-	h1 { margin: 0 0 1.5rem; }
+	h1 {
+		margin: 0 0 1.5rem;
+	}
 
 	.pending-section {
 		margin-bottom: 2rem;
@@ -197,11 +214,17 @@
 			color: var(--pg-warning);
 			margin-bottom: 1rem;
 
-			:global(svg) { color: var(--pg-warning); }
+			:global(svg) {
+				color: var(--pg-warning);
+			}
 		}
 	}
 
-	.pending-list { display: flex; flex-direction: column; gap: 0.5rem; }
+	.pending-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
 
 	.pending-card {
 		display: flex;
@@ -213,14 +236,29 @@
 		padding: 0.75rem 1rem;
 		text-decoration: none;
 		transition: background 0.15s;
-		&:hover { background: var(--pg-warning-soft); filter: brightness(0.95); }
+		&:hover {
+			background: var(--pg-warning-soft);
+			filter: brightness(0.95);
+		}
 	}
 
-	.pending-org { font-weight: var(--pg-font-weight-medium); color: var(--pg-text); display: block; }
-	.pending-field { font-size: var(--pg-font-size-sm); color: var(--pg-text-secondary); }
-	.pending-date { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); }
+	.pending-org {
+		font-weight: var(--pg-font-weight-medium);
+		color: var(--pg-text);
+		display: block;
+	}
+	.pending-field {
+		font-size: var(--pg-font-size-sm);
+		color: var(--pg-text-secondary);
+	}
+	.pending-date {
+		font-size: var(--pg-font-size-xs);
+		color: var(--pg-text-secondary);
+	}
 
-	.table-wrapper { overflow-x: auto; }
+	.table-wrapper {
+		overflow-x: auto;
+	}
 
 	table {
 		width: 100%;
@@ -244,15 +282,24 @@
 		white-space: nowrap;
 	}
 
-	.org-link { color: var(--pg-primary); font-weight: var(--pg-font-weight-medium); }
+	.org-link {
+		color: var(--pg-primary);
+		font-weight: var(--pg-font-weight-medium);
+	}
 
 	.status {
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
 		text-transform: uppercase;
-		&.active { color: var(--pg-success); }
-		&.pending { color: var(--pg-warning); }
-		&.suspended { color: var(--pg-input-error); }
+		&.active {
+			color: var(--pg-success);
+		}
+		&.pending {
+			color: var(--pg-warning);
+		}
+		&.suspended {
+			color: var(--pg-input-error);
+		}
 	}
 
 	.action-btn {
@@ -262,8 +309,14 @@
 		border-radius: var(--pg-border-radius-sm);
 		font-family: var(--pg-font-family);
 
-		&.approve { background: var(--pg-success-soft); color: var(--pg-success); }
-		&.approve:hover { background: var(--pg-success-soft); filter: brightness(0.95); }
+		&.approve {
+			background: var(--pg-success-soft);
+			color: var(--pg-success);
+		}
+		&.approve:hover {
+			background: var(--pg-success-soft);
+			filter: brightness(0.95);
+		}
 	}
 
 	.banner {
@@ -275,11 +328,21 @@
 		margin-bottom: 1rem;
 		font-size: var(--pg-font-size-sm);
 
-		&.success { background: var(--pg-success-soft); border: 1px solid var(--pg-success); color: var(--pg-success); }
-		&.error { background: var(--pg-danger-soft); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
+		&.success {
+			background: var(--pg-success-soft);
+			border: 1px solid var(--pg-success);
+			color: var(--pg-success);
+		}
+		&.error {
+			background: var(--pg-danger-soft);
+			border: 1px solid var(--pg-input-error);
+			color: var(--pg-input-error);
+		}
 	}
 
-	.create-section { margin-bottom: 1.5rem; }
+	.create-section {
+		margin-bottom: 1.5rem;
+	}
 
 	.toggle-create {
 		display: inline-flex;
@@ -296,7 +359,10 @@
 		border-radius: var(--pg-border-radius-lg);
 		padding: 1.25rem;
 
-		h2 { margin: 0 0 1rem; font-size: var(--pg-font-size-lg); }
+		h2 {
+			margin: 0 0 1rem;
+			font-size: var(--pg-font-size-lg);
+		}
 
 		.grid {
 			display: grid;
@@ -320,9 +386,15 @@
 		}
 
 		input.pg-input,
-		select.pg-input { height: 2.25rem; font-size: var(--pg-font-size-sm); }
+		select.pg-input {
+			height: 2.25rem;
+			font-size: var(--pg-font-size-sm);
+		}
 
-		.field-err { color: var(--pg-input-error); font-size: var(--pg-font-size-xs); }
+		.field-err {
+			color: var(--pg-input-error);
+			font-size: var(--pg-font-size-xs);
+		}
 	}
 
 	.create-actions {

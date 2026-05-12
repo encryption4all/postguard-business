@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -11,9 +13,9 @@
 	let confirmRevoke = $state<string | null>(null);
 
 	function search() {
-		const params = new URLSearchParams();
+		const params = new SvelteURLSearchParams();
 		if (searchInput) params.set('search', searchInput);
-		goto(`/portal/email-log?${params.toString()}`);
+		goto(resolve(`/portal/email-log?${params.toString()}`));
 	}
 </script>
 
@@ -24,7 +26,12 @@
 </div>
 
 <div class="search-bar">
-	<form onsubmit={(e) => { e.preventDefault(); search(); }}>
+	<form
+		onsubmit={(e) => {
+			e.preventDefault();
+			search();
+		}}
+	>
 		<div class="search-row">
 			<label for="email-log-search" class="visually-hidden">{$_('emailLog.search')}</label>
 			<input
@@ -40,7 +47,9 @@
 			</button>
 		</div>
 	</form>
-	<p class="result-count">{$_('emailLog.emailsFound', { values: { count: data.emailLogs.total } })}</p>
+	<p class="result-count">
+		{$_('emailLog.emailsFound', { values: { count: data.emailLogs.total } })}
+	</p>
 </div>
 
 {#if data.emailLogs.logs.length === 0}
@@ -69,7 +78,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.emailLogs.logs as email}
+				{#each data.emailLogs.logs as email (email.id)}
 					<tr>
 						<td>{email.recipient}</td>
 						<td class="subject">{email.subject ?? '—'}</td>
@@ -98,7 +107,11 @@
 										<input type="hidden" name="emailId" value={email.id} />
 										<div class="confirm-row">
 											<button type="submit" class="danger-btn">{$_('emailLog.revoke')}</button>
-											<button type="button" class="ghost-btn" onclick={() => (confirmRevoke = null)}>
+											<button
+												type="button"
+												class="ghost-btn"
+												onclick={() => (confirmRevoke = null)}
+											>
 												{$_('emailLog.cancel')}
 											</button>
 										</div>
@@ -119,13 +132,27 @@
 	{#if data.emailLogs.totalPages > 1}
 		<div class="pagination">
 			{#if data.emailLogs.page > 1}
-				<a href="/portal/email-log?page={data.emailLogs.page - 1}{data.search ? `&search=${data.search}` : ''}" class="secondary-btn">
+				<a
+					href={resolve(
+						`/portal/email-log?page=${data.emailLogs.page - 1}${data.search ? `&search=${data.search}` : ''}`
+					)}
+					class="secondary-btn"
+				>
 					{$_('emailLog.previous')}
 				</a>
 			{/if}
-			<span class="page-info">{$_('emailLog.pageOf', { values: { page: data.emailLogs.page, totalPages: data.emailLogs.totalPages } })}</span>
+			<span class="page-info"
+				>{$_('emailLog.pageOf', {
+					values: { page: data.emailLogs.page, totalPages: data.emailLogs.totalPages }
+				})}</span
+			>
 			{#if data.emailLogs.page < data.emailLogs.totalPages}
-				<a href="/portal/email-log?page={data.emailLogs.page + 1}{data.search ? `&search=${data.search}` : ''}" class="secondary-btn">
+				<a
+					href={resolve(
+						`/portal/email-log?page=${data.emailLogs.page + 1}${data.search ? `&search=${data.search}` : ''}`
+					)}
+					class="secondary-btn"
+				>
 					{$_('emailLog.next')}
 				</a>
 			{/if}
@@ -137,7 +164,9 @@
 	.page-header {
 		margin-bottom: 1rem;
 
-		h1 { margin: 0; }
+		h1 {
+			margin: 0;
+		}
 	}
 
 	.search-bar {
@@ -148,7 +177,9 @@
 		display: flex;
 		gap: 0.5rem;
 
-		input { flex: 1; }
+		input {
+			flex: 1;
+		}
 	}
 
 	.result-count {
@@ -162,11 +193,19 @@
 		padding: 3rem 1rem;
 		color: var(--pg-text-secondary);
 
-		:global(svg) { color: var(--pg-strong-background); margin-bottom: 1rem; }
-		h3 { color: var(--pg-text); margin-bottom: 0.5rem; }
+		:global(svg) {
+			color: var(--pg-strong-background);
+			margin-bottom: 1rem;
+		}
+		h3 {
+			color: var(--pg-text);
+			margin-bottom: 0.5rem;
+		}
 	}
 
-	.table-wrapper { overflow-x: auto; }
+	.table-wrapper {
+		overflow-x: auto;
+	}
 
 	table {
 		width: 100%;
@@ -190,8 +229,14 @@
 		white-space: nowrap;
 	}
 
-	.subject { max-width: 200px; overflow: hidden; text-overflow: ellipsis; }
-	.muted { color: var(--pg-text-secondary); }
+	.subject {
+		max-width: 200px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.muted {
+		color: var(--pg-text-secondary);
+	}
 
 	.read-badge {
 		display: inline-flex;
@@ -213,7 +258,10 @@
 		color: var(--pg-input-error);
 	}
 
-	.confirm-row { display: flex; gap: 0.5rem; }
+	.confirm-row {
+		display: flex;
+		gap: 0.5rem;
+	}
 
 	.ghost-btn {
 		padding: 4px 8px;
@@ -222,8 +270,12 @@
 		color: var(--pg-text-secondary);
 		font-family: var(--pg-font-family);
 
-		&:hover { background: var(--pg-soft-background); }
-		&.danger { color: var(--pg-input-error); }
+		&:hover {
+			background: var(--pg-soft-background);
+		}
+		&.danger {
+			color: var(--pg-input-error);
+		}
 	}
 
 	.danger-btn {

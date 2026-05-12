@@ -12,14 +12,19 @@
 	} = $props();
 
 	const siteName = 'PostGuard for Business';
-	const defaultDescription =
-		'Identity-based email signing and encryption for organizations.';
+	const defaultDescription = 'Identity-based email signing and encryption for organizations.';
 
 	const siteUrl = $derived(env.PUBLIC_SITE_URL || `${page.url.protocol}//${page.url.host}`);
 	const defaultImage = $derived(`${siteUrl}/pg_logo.png`);
 	const canonicalUrl = $derived(canonical || `${siteUrl}${page.url.pathname}`);
 	const isStaging = $derived(page.url.hostname.includes('staging'));
-	const jsonLdString = $derived(jsonLd ? JSON.stringify(Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : null);
+	const jsonLdString = $derived(
+		jsonLd ? JSON.stringify(Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : null
+	);
+	// Split the literal tags so the Svelte compiler doesn't try to parse a nested <script> element.
+	const jsonLdScript = $derived(
+		jsonLdString ? `<${'script'} type="application/ld+json">${jsonLdString}</${'script'}>` : ''
+	);
 </script>
 
 <svelte:head>
@@ -38,6 +43,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content={ogImage || defaultImage} />
 	{#if jsonLdString}
-		{@html `<script type="application/ld+json">${jsonLdString}</script>`}
+		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+		{@html jsonLdScript}
 	{/if}
 </svelte:head>

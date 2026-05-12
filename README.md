@@ -46,12 +46,12 @@ docker compose up
 
 This starts:
 
-| Service | URL | Purpose |
-|---------|-----|---------|
-| **App** | http://localhost:8080 | SvelteKit dev server (via nginx) |
-| **Adminer** | http://localhost:8081 | Database admin UI |
-| **MailCrab** | http://localhost:1080 | Email capture UI |
-| **IRMA server** | http://localhost:8088 | Yivi/IRMA dev server |
+| Service         | URL                   | Purpose                          |
+| --------------- | --------------------- | -------------------------------- |
+| **App**         | http://localhost:8080 | SvelteKit dev server (via nginx) |
+| **Adminer**     | http://localhost:8081 | Database admin UI                |
+| **MailCrab**    | http://localhost:1080 | Email capture UI                 |
+| **IRMA server** | http://localhost:8088 | Yivi/IRMA dev server             |
 
 The `db-setup` service automatically runs migrations and seeds a demo admin account + example organization on first start.
 
@@ -59,12 +59,12 @@ The `db-setup` service automatically runs migrations and seeds a demo admin acco
 
 The seed script creates demo accounts that work with `irma-demo` attributes:
 
-| Role | Attribute | Value |
-|------|-----------|-------|
-| **Admin** | Email | `admin@postguard.eu` |
-| | Full name | `Jan de Admin` |
-| | Phone | `0612345678` |
-| **Org user** | Email | `info@acme.example.nl` |
+| Role         | Attribute | Value                  |
+| ------------ | --------- | ---------------------- |
+| **Admin**    | Email     | `admin@postguard.eu`   |
+|              | Full name | `Jan de Admin`         |
+|              | Phone     | `0612345678`           |
+| **Org user** | Email     | `info@acme.example.nl` |
 
 Admin login is at `/auth/login/admin`. Org login is at `/auth/login`.
 
@@ -74,18 +74,18 @@ Override admin credentials via `ADMIN_EMAIL`, `ADMIN_FULL_NAME`, `ADMIN_PHONE` i
 
 Toggle features via environment variables in `.env`:
 
-| Flag | Controls |
-|------|----------|
-| `FF_PRICING_PAGE` | Pricing page visibility |
-| `FF_REGISTRATION` | Organization registration form |
-| `FF_PORTAL_API_KEYS` | API key management in portal |
-| `FF_PORTAL_ORG_INFO` | Organization info page |
-| `FF_PORTAL_EMAIL_LOG` | Email audit log |
-| `FF_PORTAL_DNS` | DNS verification page |
-| `FF_ADMIN_PANEL` | Entire admin panel |
-| `FF_ADMIN_ORG_STATUS` | Activate/suspend org buttons |
-| `FF_ADMIN_AUDIT_LOG` | Admin audit log page |
-| `FF_ADMIN_IMPERSONATION` | Admin impersonation feature |
+| Flag                     | Controls                       |
+| ------------------------ | ------------------------------ |
+| `FF_PRICING_PAGE`        | Pricing page visibility        |
+| `FF_REGISTRATION`        | Organization registration form |
+| `FF_PORTAL_API_KEYS`     | API key management in portal   |
+| `FF_PORTAL_ORG_INFO`     | Organization info page         |
+| `FF_PORTAL_EMAIL_LOG`    | Email audit log                |
+| `FF_PORTAL_DNS`          | DNS verification page          |
+| `FF_ADMIN_PANEL`         | Entire admin panel             |
+| `FF_ADMIN_ORG_STATUS`    | Activate/suspend org buttons   |
+| `FF_ADMIN_AUDIT_LOG`     | Admin audit log page           |
+| `FF_ADMIN_IMPERSONATION` | Admin impersonation feature    |
 
 In development mode, flags can also be toggled at runtime from the admin settings page.
 
@@ -156,22 +156,22 @@ The business portal and the PKG server share the same PostgreSQL instance. To av
 
 ### Available scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start SvelteKit dev server |
-| `npm run build` | Production build |
-| `npm run check` | TypeScript + Svelte type checking |
-| `npm run lint` | Prettier + ESLint |
-| `npm run format` | Auto-format with Prettier |
-| `npm run test` | Run unit + E2E tests |
-| `npm run test:unit` | Vitest unit tests |
-| `npm run test:e2e` | Playwright E2E tests |
+| Command               | Description                                |
+| --------------------- | ------------------------------------------ |
+| `npm run dev`         | Start SvelteKit dev server                 |
+| `npm run build`       | Production build                           |
+| `npm run check`       | TypeScript + Svelte type checking          |
+| `npm run lint`        | Prettier + ESLint                          |
+| `npm run format`      | Auto-format with Prettier                  |
+| `npm run test`        | Run unit + E2E tests                       |
+| `npm run test:unit`   | Vitest unit tests                          |
+| `npm run test:e2e`    | Playwright E2E tests                       |
 | `npm run db:generate` | Generate SQL migration from schema changes |
-| `npm run db:migrate` | Run pending migrations |
-| `npm run db:push` | Push schema directly (dev only) |
-| `npm run db:seed` | Seed demo data |
-| `npm run db:studio` | Open Drizzle Studio |
-| `npm run db:check` | Check migrations for dangerous patterns |
+| `npm run db:migrate`  | Run pending migrations                     |
+| `npm run db:push`     | Push schema directly (dev only)            |
+| `npm run db:seed`     | Seed demo data                             |
+| `npm run db:studio`   | Open Drizzle Studio                        |
+| `npm run db:check`    | Check migrations for dangerous patterns    |
 
 ### Pre-commit hooks
 
@@ -230,11 +230,11 @@ Runs on every push to `main` and on pull requests:
 
 ### Docker image tags
 
-| Trigger | Tag | Example |
-|---------|-----|---------|
-| Push to main | `edge` | `ghcr.io/encryption4all/postguard-business:edge` |
-| Pull request | `pr-N` | `ghcr.io/encryption4all/postguard-business:pr-42` |
-| Release | `X.Y.Z` | `ghcr.io/encryption4all/postguard-business:1.2.0` |
+| Trigger      | Tag     | Example                                           |
+| ------------ | ------- | ------------------------------------------------- |
+| Push to main | `edge`  | `ghcr.io/encryption4all/postguard-business:edge`  |
+| Pull request | `pr-N`  | `ghcr.io/encryption4all/postguard-business:pr-42` |
+| Release      | `X.Y.Z` | `ghcr.io/encryption4all/postguard-business:1.2.0` |
 
 ## Releases
 
@@ -242,11 +242,11 @@ This project uses [Release Please](https://github.com/googleapis/release-please)
 
 ### Commit message format
 
-| Prefix | Version bump | Example |
-|--------|-------------|---------|
-| `fix:` | Patch (1.0.x) | `fix: resolve login redirect loop` |
-| `feat:` | Minor (1.x.0) | `feat: add email revocation` |
-| `feat!:` or `BREAKING CHANGE:` | Major (x.0.0) | `feat!: change API key format` |
+| Prefix                         | Version bump  | Example                            |
+| ------------------------------ | ------------- | ---------------------------------- |
+| `fix:`                         | Patch (1.0.x) | `fix: resolve login redirect loop` |
+| `feat:`                        | Minor (1.x.0) | `feat: add email revocation`       |
+| `feat!:` or `BREAKING CHANGE:` | Major (x.0.0) | `feat!: change API key format`     |
 
 Other prefixes (`chore:`, `docs:`, `refactor:`, `test:`) do not trigger a release.
 
@@ -304,13 +304,13 @@ Managed in [postguard-ops](https://github.com/encryption4all/postguard-ops) via 
 
 ### Key Terraform variables
 
-| Variable | Description |
-|----------|-------------|
-| `deploy_business` | Enable/disable business portal |
-| `postguard_business_image_tag` | Docker image tag to deploy |
-| `business_host` | Public hostname |
-| `business_database_user` | PostgreSQL user (key in K8s `postgres` secret) |
-| `business_admin_secret_id` | Scaleway secret with admin credentials |
+| Variable                       | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `deploy_business`              | Enable/disable business portal                 |
+| `postguard_business_image_tag` | Docker image tag to deploy                     |
+| `business_host`                | Public hostname                                |
+| `business_database_user`       | PostgreSQL user (key in K8s `postgres` secret) |
+| `business_admin_secret_id`     | Scaleway secret with admin credentials         |
 
 ### Architecture
 

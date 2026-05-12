@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import { enhance } from '$app/forms';
 	import Icon from '@iconify/svelte';
 	import '@privacybydesign/yivi-css';
+	import type { SessionPtr, FrontendRequest } from '@privacybydesign/yivi-core';
 	import type { PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: FormResult | null } = $props();
@@ -39,7 +41,7 @@
 				session: {
 					url: '/irma',
 					start: {
-						url: (o: any) => `${o.url}/session`,
+						url: (o) => `${o.url}/session`,
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
@@ -48,12 +50,13 @@
 						})
 					},
 					mapping: {
-						sessionPtr: (r: any) => r.sessionPtr,
-						sessionToken: (r: any) => {
-							irmaToken = r.token;
-							return r.token;
+						sessionPtr: (r) => (r as { sessionPtr: SessionPtr }).sessionPtr,
+						sessionToken: (r) => {
+							const token = (r as { token: string }).token;
+							irmaToken = token;
+							return token;
 						},
-						frontendRequest: (r: any) => r.frontendRequest
+						frontendRequest: (r) => (r as { frontendRequest: FrontendRequest }).frontendRequest
 					}
 				},
 				state: {
@@ -114,10 +117,7 @@
 	}
 </script>
 
-<SEO
-	title={$_('register.title')}
-	description={$_('register.seoDescription')}
-/>
+<SEO title={$_('register.title')} description={$_('register.seoDescription')} />
 
 <section class="register">
 	<div class="register-card">
@@ -128,7 +128,7 @@
 				<p>
 					{$_('register.submittedMessage')}
 				</p>
-				<a href="/" class="secondary-btn">{$_('register.backHome')}</a>
+				<a href={resolve('/')} class="secondary-btn">{$_('register.backHome')}</a>
 			</div>
 		{:else if yiviStatus === 'idle' || yiviStatus === 'running' || yiviStatus === 'error'}
 			<h1>{$_('register.heading')}</h1>

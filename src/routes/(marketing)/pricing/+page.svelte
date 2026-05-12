@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { _ } from 'svelte-i18n';
@@ -20,7 +21,7 @@
 			<span class="period">{$_('pricing.small.period')}</span>
 		</div>
 		<p class="plan-description">{$_('pricing.small.description')}</p>
-		<a href="/register?plan=small" class="secondary-btn">{$_('pricing.small.cta')}</a>
+		<a href={resolve('/register?plan=small')} class="secondary-btn">{$_('pricing.small.cta')}</a>
 	</div>
 
 	<div class="plan-card highlighted">
@@ -31,7 +32,7 @@
 			<span class="period">{$_('pricing.medium.period')}</span>
 		</div>
 		<p class="plan-description">{$_('pricing.medium.description')}</p>
-		<a href="/register?plan=medium" class="primary-btn">{$_('pricing.medium.cta')}</a>
+		<a href={resolve('/register?plan=medium')} class="primary-btn">{$_('pricing.medium.cta')}</a>
 	</div>
 
 	<div class="plan-card">
@@ -41,7 +42,9 @@
 			<span class="price">{$_('pricing.enterprise.price')}</span>
 		</div>
 		<p class="plan-description">{$_('pricing.enterprise.description')}</p>
-		<a href="/register?plan=enterprise" class="secondary-btn">{$_('pricing.enterprise.cta')}</a>
+		<a href={resolve('/register?plan=enterprise')} class="secondary-btn"
+			>{$_('pricing.enterprise.cta')}</a
+		>
 	</div>
 </section>
 

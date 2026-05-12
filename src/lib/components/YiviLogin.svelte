@@ -2,6 +2,7 @@
 	import { _, locale } from 'svelte-i18n';
 	import '@privacybydesign/yivi-css';
 	import Icon from '@iconify/svelte';
+	import type { SessionPtr, FrontendRequest } from '@privacybydesign/yivi-core';
 
 	let {
 		type = 'org',
@@ -40,7 +41,7 @@
 				session: {
 					url: '/irma',
 					start: {
-						url: (o: any) => `${o.url}/session`,
+						url: (o) => `${o.url}/session`,
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
@@ -49,12 +50,13 @@
 						})
 					},
 					mapping: {
-						sessionPtr: (r: any) => r.sessionPtr,
-						sessionToken: (r: any) => {
-							irmaToken = r.token;
-							return r.token;
+						sessionPtr: (r) => (r as { sessionPtr: SessionPtr }).sessionPtr,
+						sessionToken: (r) => {
+							const token = (r as { token: string }).token;
+							irmaToken = token;
+							return token;
 						},
-						frontendRequest: (r: any) => r.frontendRequest
+						frontendRequest: (r) => (r as { frontendRequest: FrontendRequest }).frontendRequest
 					}
 				},
 				state: {
@@ -90,8 +92,7 @@
 		} catch (e: unknown) {
 			if (status === 'running') {
 				status = 'error';
-				errorMessage =
-					e instanceof Error ? e.message : 'Yivi session failed. Please try again.';
+				errorMessage = e instanceof Error ? e.message : 'Yivi session failed. Please try again.';
 			}
 		}
 	}

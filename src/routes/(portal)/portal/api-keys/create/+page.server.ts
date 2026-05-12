@@ -1,5 +1,5 @@
 import type { Actions } from './$types';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { createApiKey } from '$lib/server/services/api-keys';
 import { isEnabled } from '$lib/feature-flags';
 

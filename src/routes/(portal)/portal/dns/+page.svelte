@@ -32,7 +32,11 @@
 		</div>
 	</div>
 	{#if data.dns.verifiedAt}
-		<p class="verified-date">{$_('dns.verifiedOn', { values: { date: new Date(data.dns.verifiedAt).toLocaleDateString() } })}</p>
+		<p class="verified-date">
+			{$_('dns.verifiedOn', {
+				values: { date: new Date(data.dns.verifiedAt).toLocaleDateString() }
+			})}
+		</p>
 	{/if}
 </div>
 
@@ -100,14 +104,20 @@
 				</button>
 			</form>
 			{#if data.dns.lastCheckedAt}
-				<p class="last-check">{$_('dns.lastChecked', { values: { date: new Date(data.dns.lastCheckedAt).toLocaleString() } })}</p>
+				<p class="last-check">
+					{$_('dns.lastChecked', {
+						values: { date: new Date(data.dns.lastCheckedAt).toLocaleString() }
+					})}
+				</p>
 			{/if}
 		</div>
 	</div>
 </section>
 
 <style lang="scss">
-	h1 { margin: 0 0 1.5rem; }
+	h1 {
+		margin: 0 0 1.5rem;
+	}
 
 	.status-card {
 		background: var(--pg-soft-background);
@@ -118,10 +128,14 @@
 
 		&.verified {
 			border-color: var(--pg-success);
-			:global(svg) { color: var(--pg-success); }
+			:global(svg) {
+				color: var(--pg-success);
+			}
 		}
 
-		:global(svg) { color: var(--pg-warning); }
+		:global(svg) {
+			color: var(--pg-warning);
+		}
 	}
 
 	.status-header {
@@ -129,8 +143,15 @@
 		align-items: center;
 		gap: 0.75rem;
 
-		h2 { margin: 0; font-size: var(--pg-font-size-lg); }
-		.domain { color: var(--pg-text-secondary); font-size: var(--pg-font-size-sm); margin: 0; }
+		h2 {
+			margin: 0;
+			font-size: var(--pg-font-size-lg);
+		}
+		.domain {
+			color: var(--pg-text-secondary);
+			font-size: var(--pg-font-size-sm);
+			margin: 0;
+		}
 	}
 
 	.verified-date {
@@ -139,7 +160,8 @@
 		margin: 0.5rem 0 0;
 	}
 
-	.verify-error, .verify-success {
+	.verify-error,
+	.verify-success {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
@@ -161,8 +183,12 @@
 		color: var(--pg-success);
 	}
 
-	.instructions { max-width: 650px; }
-	.instructions h2 { margin-bottom: 1.5rem; }
+	.instructions {
+		max-width: 650px;
+	}
+	.instructions h2 {
+		margin-bottom: 1.5rem;
+	}
 
 	.step {
 		display: flex;
@@ -188,8 +214,13 @@
 	.step-content {
 		flex: 1;
 
-		h3 { margin: 0.25rem 0 0.5rem; }
-		p { color: var(--pg-text-secondary); line-height: 1.5; }
+		h3 {
+			margin: 0.25rem 0 0.5rem;
+		}
+		p {
+			color: var(--pg-text-secondary);
+			line-height: 1.5;
+		}
 	}
 
 	.record-box {
@@ -206,7 +237,9 @@
 		gap: 1rem;
 		padding: 0.35rem 0;
 
-		&:not(:last-child) { border-bottom: 1px solid var(--pg-strong-background); }
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--pg-strong-background);
+		}
 	}
 
 	.record-label {
@@ -234,10 +267,14 @@
 		color: var(--pg-primary);
 		padding: 4px;
 		border-radius: var(--pg-border-radius-sm);
-		&:hover { background: var(--pg-strong-background); }
+		&:hover {
+			background: var(--pg-strong-background);
+		}
 	}
 
-	.ghost-btn { font-family: var(--pg-font-family); }
+	.ghost-btn {
+		font-family: var(--pg-font-family);
+	}
 
 	.last-check {
 		font-size: var(--pg-font-size-xs);

@@ -12,17 +12,11 @@ export async function listEmailLogs(orgId: string, page: number = 1, search?: st
 	if (search) {
 		whereClause = and(
 			whereClause,
-			or(
-				like(emailAuditLog.recipient, `%${search}%`),
-				like(emailAuditLog.subject, `%${search}%`)
-			)
+			or(like(emailAuditLog.recipient, `%${search}%`), like(emailAuditLog.subject, `%${search}%`))
 		)!;
 	}
 
-	const [totalResult] = await db
-		.select({ count: count() })
-		.from(emailAuditLog)
-		.where(whereClause);
+	const [totalResult] = await db.select({ count: count() }).from(emailAuditLog).where(whereClause);
 
 	const logs = await db
 		.select()

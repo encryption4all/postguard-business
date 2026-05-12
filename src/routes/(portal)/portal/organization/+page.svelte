@@ -16,9 +16,24 @@
 	const fields = $derived([
 		{ key: 'name', label: $_('organization.orgName'), value: org.name, editable: true },
 		{ key: 'domain', label: $_('organization.domain'), value: org.domain, editable: true },
-		{ key: 'signingEmail', label: $_('organization.signingEmail'), value: org.signingEmail, editable: true },
-		{ key: 'kvkNumber', label: $_('organization.kvkNumber'), value: org.kvkNumber ?? '—', editable: true },
-		{ key: 'contactPerson', label: $_('organization.contactPerson'), value: contactPerson ? `${contactPerson.fullName} (${contactPerson.email})` : '—', editable: false }
+		{
+			key: 'signingEmail',
+			label: $_('organization.signingEmail'),
+			value: org.signingEmail,
+			editable: true
+		},
+		{
+			key: 'kvkNumber',
+			label: $_('organization.kvkNumber'),
+			value: org.kvkNumber ?? '—',
+			editable: true
+		},
+		{
+			key: 'contactPerson',
+			label: $_('organization.contactPerson'),
+			value: contactPerson ? `${contactPerson.fullName} (${contactPerson.email})` : '—',
+			editable: false
+		}
 	]);
 
 	function startEdit(key: string, currentValue: string) {
@@ -45,12 +60,16 @@
 
 <div class="info-card">
 	<div class="status-row">
-		<span class="status-badge" class:active={org.status === 'active'} class:pending={org.status === 'pending'}>
+		<span
+			class="status-badge"
+			class:active={org.status === 'active'}
+			class:pending={org.status === 'pending'}
+		>
 			{org.status}
 		</span>
 	</div>
 
-	{#each fields as field}
+	{#each fields as field (field.key)}
 		<div class="field-row">
 			<div class="field-info">
 				<span class="field-label">{field.label}</span>
@@ -58,12 +77,16 @@
 			</div>
 			{#if field.editable}
 				{#if editingField === field.key}
-					<form method="POST" action="?/requestChange" use:enhance={() => {
-						return async ({ update }) => {
-							cancelEdit();
-							await update();
-						};
-					}}>
+					<form
+						method="POST"
+						action="?/requestChange"
+						use:enhance={() => {
+							return async ({ update }) => {
+								cancelEdit();
+								await update();
+							};
+						}}
+					>
 						<input type="hidden" name="fieldName" value={field.key} />
 						<input type="hidden" name="oldValue" value={field.value} />
 						<div class="edit-row">
@@ -108,12 +131,17 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each data.requests as req}
+					{#each data.requests as req (req.id)}
 						<tr>
 							<td>{req.fieldName}</td>
 							<td>{req.newValue}</td>
 							<td>
-								<span class="req-status" class:approved={req.status === 'approved'} class:rejected={req.status === 'rejected'} class:pending={req.status === 'pending'}>
+								<span
+									class="req-status"
+									class:approved={req.status === 'approved'}
+									class:rejected={req.status === 'rejected'}
+									class:pending={req.status === 'pending'}
+								>
 									{req.status}
 								</span>
 							</td>
@@ -289,8 +317,14 @@
 		font-weight: var(--pg-font-weight-bold);
 		text-transform: uppercase;
 
-		&.approved { color: var(--pg-success); }
-		&.rejected { color: var(--pg-input-error); }
-		&.pending { color: var(--pg-warning); }
+		&.approved {
+			color: var(--pg-success);
+		}
+		&.rejected {
+			color: var(--pg-input-error);
+		}
+		&.pending {
+			color: var(--pg-warning);
+		}
 	}
 </style>

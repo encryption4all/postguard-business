@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import Icon from '@iconify/svelte';
 	import logoLight from '$lib/assets/images/logo-wide.svg';
 	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
@@ -11,98 +12,128 @@
 	let sidebarOpen = $state(false);
 
 	const navItems = $derived([
-		{ href: '/portal/dashboard', label: $_('nav.dashboard'), icon: 'mdi:view-dashboard' },
+		{ href: resolve('/portal/dashboard'), label: $_('nav.dashboard'), icon: 'mdi:view-dashboard' },
 		...(data.featureFlags.apiKeys
-			? [{ href: '/portal/api-keys', label: $_('nav.apiKeys'), icon: 'mdi:key-variant' }]
+			? [
+					{
+						href: resolve('/portal/api-keys'),
+						label: $_('nav.apiKeys'),
+						icon: 'mdi:key-variant'
+					}
+				]
 			: []),
 		...(data.featureFlags.orgInfo
-			? [{ href: '/portal/organization', label: $_('nav.organization'), icon: 'mdi:office-building' }]
+			? [
+					{
+						href: resolve('/portal/organization'),
+						label: $_('nav.organization'),
+						icon: 'mdi:office-building'
+					}
+				]
 			: []),
 		...(data.featureFlags.emailLog
-			? [{ href: '/portal/email-log', label: $_('nav.emailLog'), icon: 'mdi:email-search' }]
+			? [
+					{
+						href: resolve('/portal/email-log'),
+						label: $_('nav.emailLog'),
+						icon: 'mdi:email-search'
+					}
+				]
 			: []),
 		...(data.featureFlags.members
-			? [{ href: '/portal/members', label: $_('nav.members'), icon: 'mdi:account-group' }]
+			? [
+					{
+						href: resolve('/portal/members'),
+						label: $_('nav.members'),
+						icon: 'mdi:account-group'
+					}
+				]
 			: []),
 		...(data.featureFlags.dns
-			? [{ href: '/portal/dns', label: $_('nav.dns'), icon: 'mdi:dns' }]
+			? [{ href: resolve('/portal/dns'), label: $_('nav.dns'), icon: 'mdi:dns' }]
 			: [])
 	]);
 </script>
 
 <div class="layout-shell">
-{#if data.isImpersonating}
-	<div class="impersonation-bar">
-		<Icon icon="mdi:eye" width="16" height="16" />
-		<span>{$_('admin.viewingAs', { values: { orgName: data.organization.name } })}</span>
-		<form method="POST" action="/api/admin/impersonate/stop">
-			<button type="submit" class="stop-btn">{$_('admin.stopImpersonating')}</button>
-		</form>
-	</div>
-{/if}
-
-<div class="portal">
-	<aside id="portal-sidebar" class="sidebar" class:open={sidebarOpen}>
-		<div class="sidebar-header">
-			<a href="/" class="sidebar-logo">
-				<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
-				<span class="logo-badge">Business</span>
-			</a>
-			<button
-				class="sidebar-close desktop-hide"
-				onclick={() => (sidebarOpen = false)}
-				aria-label={$_('nav.closeMenu', { default: 'Close navigation menu' })}
-			>
-				<Icon icon="mdi:close" width="20" height="20" aria-hidden="true" />
-			</button>
-		</div>
-
-		<div class="sidebar-org">
-			<p class="org-name">{data.organization.name}</p>
-			<p class="org-domain">{data.organization.domain}</p>
-		</div>
-
-		<nav class="sidebar-nav">
-			{#each navItems as item}
-				<a href={item.href} class="nav-item" onclick={() => (sidebarOpen = false)}>
-					<Icon icon={item.icon} width="20" height="20" />
-					<span>{item.label}</span>
-				</a>
-			{/each}
-		</nav>
-
-		<div class="sidebar-footer">
-			<form method="POST" action="/auth/logout">
-				<button type="submit" class="nav-item logout-btn">
-					<Icon icon="mdi:logout" width="20" height="20" />
-					<span>{$_('nav.logout')}</span>
-				</button>
+	{#if data.isImpersonating}
+		<div class="impersonation-bar">
+			<Icon icon="mdi:eye" width="16" height="16" />
+			<span>{$_('admin.viewingAs', { values: { orgName: data.organization.name } })}</span>
+			<form method="POST" action="/api/admin/impersonate/stop">
+				<button type="submit" class="stop-btn">{$_('admin.stopImpersonating')}</button>
 			</form>
 		</div>
-	</aside>
+	{/if}
 
-	<div class="portal-main">
-		<header class="portal-header">
-			<button
-				class="hamburger desktop-hide"
-				onclick={() => (sidebarOpen = true)}
-				aria-label={$_('nav.openMenu', { default: 'Open navigation menu' })}
-				aria-expanded={sidebarOpen}
-				aria-controls="portal-sidebar"
-			>
-				<Icon icon="mdi:menu" width="24" height="24" />
-			</button>
-			<p class="portal-title" role="presentation">{data.organization.name}</p>
-			<div class="header-actions">
-				<LocaleSwitcher />
-				<ThemeSwitcher />
+	<div class="portal">
+		<aside id="portal-sidebar" class="sidebar" class:open={sidebarOpen}>
+			<div class="sidebar-header">
+				<a href={resolve('/')} class="sidebar-logo">
+					<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img
+						src={logoDark}
+						alt="PostGuard"
+						class="logo-img dark-only"
+						height="22"
+					/>
+					<span class="logo-badge">Business</span>
+				</a>
+				<button
+					class="sidebar-close desktop-hide"
+					onclick={() => (sidebarOpen = false)}
+					aria-label={$_('nav.closeMenu', { default: 'Close navigation menu' })}
+				>
+					<Icon icon="mdi:close" width="20" height="20" aria-hidden="true" />
+				</button>
 			</div>
-		</header>
-		<main id="main-content" class="portal-content">
-			{@render children()}
-		</main>
+
+			<div class="sidebar-org">
+				<p class="org-name">{data.organization.name}</p>
+				<p class="org-domain">{data.organization.domain}</p>
+			</div>
+
+			<nav class="sidebar-nav">
+				{#each navItems as item (item.href)}
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+					<a href={item.href} class="nav-item" onclick={() => (sidebarOpen = false)}>
+						<Icon icon={item.icon} width="20" height="20" />
+						<span>{item.label}</span>
+					</a>
+				{/each}
+			</nav>
+
+			<div class="sidebar-footer">
+				<form method="POST" action="/auth/logout">
+					<button type="submit" class="nav-item logout-btn">
+						<Icon icon="mdi:logout" width="20" height="20" />
+						<span>{$_('nav.logout')}</span>
+					</button>
+				</form>
+			</div>
+		</aside>
+
+		<div class="portal-main">
+			<header class="portal-header">
+				<button
+					class="hamburger desktop-hide"
+					onclick={() => (sidebarOpen = true)}
+					aria-label={$_('nav.openMenu', { default: 'Open navigation menu' })}
+					aria-expanded={sidebarOpen}
+					aria-controls="portal-sidebar"
+				>
+					<Icon icon="mdi:menu" width="24" height="24" />
+				</button>
+				<p class="portal-title" role="presentation">{data.organization.name}</p>
+				<div class="header-actions">
+					<LocaleSwitcher />
+					<ThemeSwitcher />
+				</div>
+			</header>
+			<main id="main-content" class="portal-content">
+				{@render children()}
+			</main>
+		</div>
 	</div>
-</div>
 </div>
 
 {#if sidebarOpen}
@@ -252,7 +283,9 @@
 		font-weight: var(--pg-font-weight-medium);
 		color: var(--pg-text-secondary);
 		text-decoration: none;
-		transition: background 0.15s, color 0.15s;
+		transition:
+			background 0.15s,
+			color 0.15s;
 
 		&:hover {
 			background: var(--pg-strong-background);

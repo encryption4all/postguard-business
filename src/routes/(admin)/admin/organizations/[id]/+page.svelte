@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -67,7 +68,7 @@
 
 <SEO title="{data.organization.name} - Admin" />
 
-<a href="/admin/organizations" class="back-link">
+<a href={resolve('/admin/organizations')} class="back-link">
 	<Icon icon="mdi:arrow-left" width="16" height="16" />
 	{$_('admin.organizations.backToOrgs')}
 </a>
@@ -85,10 +86,28 @@
 </div>
 
 <div class="org-details">
-	<div class="detail"><span class="label">{$_('admin.organizations.domain')}</span><span>{data.organization.domain}</span></div>
-	<div class="detail"><span class="label">{$_('admin.organizations.signingEmail')}</span><span>{data.organization.signingEmail}</span></div>
-	<div class="detail"><span class="label">{$_('admin.organizations.kvk')}</span><span>{data.organization.kvkNumber ?? '—'}</span></div>
-	<div class="detail"><span class="label">{$_('admin.organizations.contact')}</span><span>{data.contactPerson ? `${data.contactPerson.fullName} (${data.contactPerson.email})` : '—'}</span></div>
+	<div class="detail">
+		<span class="label">{$_('admin.organizations.domain')}</span><span
+			>{data.organization.domain}</span
+		>
+	</div>
+	<div class="detail">
+		<span class="label">{$_('admin.organizations.signingEmail')}</span><span
+			>{data.organization.signingEmail}</span
+		>
+	</div>
+	<div class="detail">
+		<span class="label">{$_('admin.organizations.kvk')}</span><span
+			>{data.organization.kvkNumber ?? '—'}</span
+		>
+	</div>
+	<div class="detail">
+		<span class="label">{$_('admin.organizations.contact')}</span><span
+			>{data.contactPerson
+				? `${data.contactPerson.fullName} (${data.contactPerson.email})`
+				: '—'}</span
+		>
+	</div>
 </div>
 
 {#if form?.error === 'name_mismatch'}
@@ -122,7 +141,9 @@
 				onclick={openStatusChange}
 			>
 				<Icon
-					icon={statusAction.key === 'suspend' ? 'mdi:pause-circle-outline' : 'mdi:check-circle-outline'}
+					icon={statusAction.key === 'suspend'
+						? 'mdi:pause-circle-outline'
+						: 'mdi:check-circle-outline'}
 					width="16"
 					height="16"
 				/>
@@ -155,7 +176,9 @@
 	{#if form?.userAdded}
 		<div class="banner success" role="status">
 			<Icon icon="mdi:check-circle" width="18" height="18" />
-			<span>{$_('admin.organizations.addUserSuccess', { values: { name: form.addedUserName } })}</span>
+			<span
+				>{$_('admin.organizations.addUserSuccess', { values: { name: form.addedUserName } })}</span
+			>
 		</div>
 	{/if}
 
@@ -179,8 +202,7 @@
 						value={form?.addUserValues?.fullName ?? ''}
 					/>
 					{#if form?.addUserErrors?.fullName}
-						<span class="field-err"
-							>{$_(`admin.organizations.${form.addUserErrors.fullName}`)}</span
+						<span class="field-err">{$_(`admin.organizations.${form.addUserErrors.fullName}`)}</span
 						>
 					{/if}
 				</label>
@@ -255,11 +277,16 @@
 {#if data.requests.length > 0}
 	<section class="requests">
 		<h2>{$_('admin.organizations.changeRequests')}</h2>
-		{#each data.requests as req}
+		{#each data.requests as req (req.id)}
 			<div class="request-card" class:pending={req.status === 'pending'}>
 				<div class="request-header">
 					<span class="req-field">{req.fieldName}</span>
-					<span class="req-status" class:approved={req.status === 'approved'} class:rejected={req.status === 'rejected'} class:pending-status={req.status === 'pending'}>
+					<span
+						class="req-status"
+						class:approved={req.status === 'approved'}
+						class:rejected={req.status === 'rejected'}
+						class:pending-status={req.status === 'pending'}
+					>
 						{req.status}
 					</span>
 				</div>
@@ -282,12 +309,16 @@
 							<form method="POST" action="?/approve" use:enhance>
 								<input type="hidden" name="requestId" value={req.id} />
 								<input type="hidden" name="reviewNotes" value={reviewNotes} />
-								<button type="submit" class="action-btn approve">{$_('admin.organizations.approve')}</button>
+								<button type="submit" class="action-btn approve"
+									>{$_('admin.organizations.approve')}</button
+								>
 							</form>
 							<form method="POST" action="?/reject" use:enhance>
 								<input type="hidden" name="requestId" value={req.id} />
 								<input type="hidden" name="reviewNotes" value={reviewNotes} />
-								<button type="submit" class="action-btn reject">{$_('admin.organizations.reject')}</button>
+								<button type="submit" class="action-btn reject"
+									>{$_('admin.organizations.reject')}</button
+								>
 							</form>
 						</div>
 					</div>
@@ -390,7 +421,9 @@
 		color: var(--pg-text-secondary);
 		text-decoration: none;
 		margin-bottom: 1rem;
-		&:hover { color: var(--pg-primary); }
+		&:hover {
+			color: var(--pg-primary);
+		}
 	}
 
 	.org-header {
@@ -398,7 +431,9 @@
 		align-items: center;
 		gap: 1rem;
 		margin-bottom: 1.5rem;
-		h1 { margin: 0; }
+		h1 {
+			margin: 0;
+		}
 	}
 
 	.status {
@@ -408,9 +443,18 @@
 		border-radius: 100px;
 		text-transform: uppercase;
 		font-family: var(--pg-font-family);
-		&.active { background: var(--pg-success-soft); color: var(--pg-success); }
-		&.pending { background: var(--pg-warning-soft); color: var(--pg-warning); }
-		&.suspended { background: var(--pg-danger-soft); color: var(--pg-input-error); }
+		&.active {
+			background: var(--pg-success-soft);
+			color: var(--pg-success);
+		}
+		&.pending {
+			background: var(--pg-warning-soft);
+			color: var(--pg-warning);
+		}
+		&.suspended {
+			background: var(--pg-danger-soft);
+			color: var(--pg-input-error);
+		}
 	}
 
 	.org-details {
@@ -428,7 +472,9 @@
 		border-bottom: 1px solid var(--pg-strong-background);
 		font-size: var(--pg-font-size-md);
 		align-items: baseline;
-		&:last-child { border-bottom: none; }
+		&:last-child {
+			border-bottom: none;
+		}
 	}
 
 	.label {
@@ -455,8 +501,16 @@
 		margin-bottom: 1rem;
 		font-size: var(--pg-font-size-sm);
 
-		&.error { background: var(--pg-danger-soft); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
-		&.success { background: var(--pg-success-soft); border: 1px solid var(--pg-success); color: var(--pg-success); }
+		&.error {
+			background: var(--pg-danger-soft);
+			border: 1px solid var(--pg-input-error);
+			color: var(--pg-input-error);
+		}
+		&.success {
+			background: var(--pg-success-soft);
+			border: 1px solid var(--pg-success);
+			color: var(--pg-success);
+		}
 	}
 
 	.status-btn {
@@ -471,10 +525,20 @@
 		background: transparent;
 		border: 1px solid;
 
-		&.status-btn-suspend { color: var(--pg-input-error); border-color: var(--pg-input-error); }
-		&.status-btn-suspend:hover { background: var(--pg-danger-soft); }
-		&.status-btn-activate { color: var(--pg-success); border-color: var(--pg-success); }
-		&.status-btn-activate:hover { background: var(--pg-success-soft); }
+		&.status-btn-suspend {
+			color: var(--pg-input-error);
+			border-color: var(--pg-input-error);
+		}
+		&.status-btn-suspend:hover {
+			background: var(--pg-danger-soft);
+		}
+		&.status-btn-activate {
+			color: var(--pg-success);
+			border-color: var(--pg-success);
+		}
+		&.status-btn-activate:hover {
+			background: var(--pg-success-soft);
+		}
 	}
 
 	.confirm-dialog {
@@ -486,11 +550,19 @@
 		background: var(--pg-general-background);
 		color: var(--pg-text);
 
-		&::backdrop { background: rgba(0, 0, 0, 0.5); }
+		&::backdrop {
+			background: rgba(0, 0, 0, 0.5);
+		}
 
-		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
+		h2 {
+			margin: 0 0 0.75rem;
+			font-size: var(--pg-font-size-lg);
+		}
 
-		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 1rem; }
+		.dialog-intro {
+			font-size: var(--pg-font-size-sm);
+			margin: 0 0 1rem;
+		}
 	}
 
 	.primary-confirm-btn {
@@ -501,7 +573,9 @@
 		background: var(--pg-success-solid);
 		color: #fff;
 		font-family: var(--pg-font-family);
-		&:hover { filter: brightness(0.92); }
+		&:hover {
+			filter: brightness(0.92);
+		}
 	}
 
 	.danger-outline-btn {
@@ -516,7 +590,9 @@
 		background: transparent;
 		color: var(--pg-input-error);
 		border: 1px solid var(--pg-input-error);
-		&:hover { background: var(--pg-danger-soft); }
+		&:hover {
+			background: var(--pg-danger-soft);
+		}
 	}
 
 	.delete-dialog {
@@ -528,11 +604,19 @@
 		background: var(--pg-general-background);
 		color: var(--pg-text);
 
-		&::backdrop { background: rgba(0, 0, 0, 0.5); }
+		&::backdrop {
+			background: rgba(0, 0, 0, 0.5);
+		}
 
-		h2 { margin: 0 0 0.75rem; font-size: var(--pg-font-size-lg); }
+		h2 {
+			margin: 0 0 0.75rem;
+			font-size: var(--pg-font-size-lg);
+		}
 
-		.dialog-intro { font-size: var(--pg-font-size-sm); margin: 0 0 0.75rem; }
+		.dialog-intro {
+			font-size: var(--pg-font-size-sm);
+			margin: 0 0 0.75rem;
+		}
 
 		.dialog-warn {
 			display: flex;
@@ -571,7 +655,11 @@
 			}
 		}
 
-		input.pg-input { width: 100%; height: 2.25rem; font-size: var(--pg-font-size-sm); }
+		input.pg-input {
+			width: 100%;
+			height: 2.25rem;
+			font-size: var(--pg-font-size-sm);
+		}
 	}
 
 	.dialog-actions {
@@ -587,7 +675,9 @@
 		font-size: var(--pg-font-size-sm);
 		color: var(--pg-text-secondary);
 		font-family: var(--pg-font-family);
-		&:hover { background: var(--pg-soft-background); }
+		&:hover {
+			background: var(--pg-soft-background);
+		}
 	}
 
 	.danger-btn {
@@ -598,20 +688,60 @@
 		background: var(--pg-danger-solid);
 		color: #fff;
 		font-family: var(--pg-font-family);
-		&:disabled { opacity: 0.4; cursor: not-allowed; }
-		&:not(:disabled):hover { opacity: 0.9; }
+		&:disabled {
+			opacity: 0.4;
+			cursor: not-allowed;
+		}
+		&:not(:disabled):hover {
+			opacity: 0.9;
+		}
 	}
 
 	.users {
 		margin-bottom: 2rem;
-		h2 { margin-bottom: 0; }
-		.count { font-size: var(--pg-font-size-sm); color: var(--pg-text-secondary); font-weight: var(--pg-font-weight-regular); }
-		.empty { color: var(--pg-text-secondary); font-size: var(--pg-font-size-sm); }
-		.table-wrap { overflow-x: auto; }
-		table { width: 100%; border-collapse: collapse; font-size: var(--pg-font-size-sm); }
-		th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--pg-strong-background); }
-		th { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); text-transform: uppercase; font-weight: var(--pg-font-weight-medium); font-family: var(--pg-font-family); }
-		.badge { background: var(--pg-success-soft); color: var(--pg-success); font-size: var(--pg-font-size-xs); font-weight: var(--pg-font-weight-bold); padding: 3px 10px; border-radius: 100px; text-transform: uppercase; font-family: var(--pg-font-family); }
+		h2 {
+			margin-bottom: 0;
+		}
+		.count {
+			font-size: var(--pg-font-size-sm);
+			color: var(--pg-text-secondary);
+			font-weight: var(--pg-font-weight-regular);
+		}
+		.empty {
+			color: var(--pg-text-secondary);
+			font-size: var(--pg-font-size-sm);
+		}
+		.table-wrap {
+			overflow-x: auto;
+		}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: var(--pg-font-size-sm);
+		}
+		th,
+		td {
+			text-align: left;
+			padding: 0.5rem 0.75rem;
+			border-bottom: 1px solid var(--pg-strong-background);
+		}
+		th {
+			font-size: var(--pg-font-size-xs);
+			color: var(--pg-text-secondary);
+			text-transform: uppercase;
+			font-weight: var(--pg-font-weight-medium);
+			font-family: var(--pg-font-family);
+		}
+		.badge {
+			background: var(--pg-success-soft);
+			color: var(--pg-success);
+			font-size: var(--pg-font-size-xs);
+			font-weight: var(--pg-font-weight-bold);
+			padding: 3px 10px;
+			border-radius: 100px;
+			text-transform: uppercase;
+			font-family: var(--pg-font-family);
+		}
 	}
 
 	.users-header {
@@ -657,9 +787,15 @@
 			}
 		}
 
-		input.pg-input { height: 2.25rem; font-size: var(--pg-font-size-sm); }
+		input.pg-input {
+			height: 2.25rem;
+			font-size: var(--pg-font-size-sm);
+		}
 
-		.field-err { color: var(--pg-input-error); font-size: var(--pg-font-size-xs); }
+		.field-err {
+			color: var(--pg-input-error);
+			font-size: var(--pg-font-size-xs);
+		}
 	}
 
 	.add-user-actions {
@@ -668,14 +804,19 @@
 		margin-top: 1rem;
 	}
 
-	.requests h2 { margin-bottom: 1rem; }
+	.requests h2 {
+		margin-bottom: 1rem;
+	}
 
 	.request-card {
 		border: 1px solid var(--pg-strong-background);
 		border-radius: var(--pg-border-radius-md);
 		padding: 1rem;
 		margin-bottom: 0.75rem;
-		&.pending { border-color: var(--pg-warning); background: var(--pg-warning-soft); }
+		&.pending {
+			border-color: var(--pg-warning);
+			background: var(--pg-warning-soft);
+		}
 	}
 
 	.request-header {
@@ -685,16 +826,26 @@
 		margin-bottom: 0.5rem;
 	}
 
-	.req-field { font-weight: var(--pg-font-weight-bold); font-size: var(--pg-font-size-md); font-family: var(--pg-font-family); }
+	.req-field {
+		font-weight: var(--pg-font-weight-bold);
+		font-size: var(--pg-font-size-md);
+		font-family: var(--pg-font-family);
+	}
 
 	.req-status {
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
 		text-transform: uppercase;
 		font-family: var(--pg-font-family);
-		&.approved { color: var(--pg-success); }
-		&.rejected { color: var(--pg-input-error); }
-		&.pending-status { color: var(--pg-warning); }
+		&.approved {
+			color: var(--pg-success);
+		}
+		&.rejected {
+			color: var(--pg-input-error);
+		}
+		&.pending-status {
+			color: var(--pg-warning);
+		}
 	}
 
 	.req-values {
@@ -704,12 +855,23 @@
 		font-size: var(--pg-font-size-sm);
 		margin-bottom: 0.5rem;
 
-		.old { color: var(--pg-text-secondary); text-decoration: line-through; }
-		.new { color: var(--pg-text); font-weight: var(--pg-font-weight-medium); }
-		:global(svg) { color: var(--pg-text-secondary); }
+		.old {
+			color: var(--pg-text-secondary);
+			text-decoration: line-through;
+		}
+		.new {
+			color: var(--pg-text);
+			font-weight: var(--pg-font-weight-medium);
+		}
+		:global(svg) {
+			color: var(--pg-text-secondary);
+		}
 	}
 
-	.req-date { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); }
+	.req-date {
+		font-size: var(--pg-font-size-xs);
+		color: var(--pg-text-secondary);
+	}
 
 	.review-form {
 		margin-top: 0.75rem;
@@ -717,10 +879,16 @@
 		flex-direction: column;
 		gap: 0.5rem;
 
-		input { height: 2rem; font-size: var(--pg-font-size-sm); }
+		input {
+			height: 2rem;
+			font-size: var(--pg-font-size-sm);
+		}
 	}
 
-	.review-actions { display: flex; gap: 0.5rem; }
+	.review-actions {
+		display: flex;
+		gap: 0.5rem;
+	}
 
 	.action-btn {
 		font-size: var(--pg-font-size-sm);
@@ -729,10 +897,20 @@
 		border-radius: var(--pg-border-radius-sm);
 		font-family: var(--pg-font-family);
 
-		&.approve { background: var(--pg-success-solid); color: #fff; }
-		&.approve:hover { filter: brightness(0.92); }
-		&.reject { background: var(--pg-danger-solid); color: #fff; }
-		&.reject:hover { opacity: 0.9; }
+		&.approve {
+			background: var(--pg-success-solid);
+			color: #fff;
+		}
+		&.approve:hover {
+			filter: brightness(0.92);
+		}
+		&.reject {
+			background: var(--pg-danger-solid);
+			color: #fff;
+		}
+		&.reject:hover {
+			opacity: 0.9;
+		}
 	}
 
 	.review-notes {

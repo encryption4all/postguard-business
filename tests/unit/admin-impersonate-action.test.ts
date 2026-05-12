@@ -55,17 +55,17 @@ describe('admin impersonate action — auth gating', () => {
 			orgId: 'attacker-org-id'
 		};
 
-		await expect(
-			actions.impersonate(buildEvent({ session: portalSession }))
-		).rejects.toMatchObject({ status: 401 });
+		await expect(actions.impersonate(buildEvent({ session: portalSession }))).rejects.toMatchObject(
+			{ status: 401 }
+		);
 
 		expect(setImpersonationMock).not.toHaveBeenCalled();
 	});
 
 	it('rejects an unauthenticated session without touching the database', async () => {
-		await expect(
-			actions.impersonate(buildEvent({ session: null }))
-		).rejects.toMatchObject({ status: 401 });
+		await expect(actions.impersonate(buildEvent({ session: null }))).rejects.toMatchObject({
+			status: 401
+		});
 
 		expect(setImpersonationMock).not.toHaveBeenCalled();
 	});
@@ -93,15 +93,10 @@ describe('admin impersonate action — auth gating', () => {
 		};
 
 		await expect(
-			actions.impersonate(
-				buildEvent({ session: adminSession, orgId: 'target-org-id' })
-			)
+			actions.impersonate(buildEvent({ session: adminSession, orgId: 'target-org-id' }))
 		).rejects.toMatchObject({ status: 303, location: '/portal/dashboard' });
 
 		expect(setImpersonationMock).toHaveBeenCalledTimes(1);
-		expect(setImpersonationMock).toHaveBeenCalledWith(
-			'admin-session-id',
-			'target-org-id'
-		);
+		expect(setImpersonationMock).toHaveBeenCalledWith('admin-session-id', 'target-org-id');
 	});
 });
