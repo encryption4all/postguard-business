@@ -109,7 +109,7 @@
 		color: var(--pg-primary);
 
 		&.verified {
-			color: #16a34a;
+			color: var(--pg-success);
 		}
 	}
 

@@ -171,7 +171,7 @@
 		}
 
 		&.success :global(svg) {
-			color: #16a34a;
+			color: var(--pg-success);
 		}
 
 		&.error :global(svg) {

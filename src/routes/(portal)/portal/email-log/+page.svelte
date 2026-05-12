@@ -197,14 +197,14 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.25rem;
-		color: #16a34a;
+		color: var(--pg-success);
 		font-size: var(--pg-font-size-xs);
 	}
 
 	.active-badge {
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
-		color: #16a34a;
+		color: var(--pg-success);
 	}
 
 	.revoked-badge {
@@ -231,7 +231,7 @@
 		border-radius: var(--pg-border-radius-sm);
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-medium);
-		background: var(--pg-input-error);
+		background: var(--pg-danger-solid);
 		color: #fff;
 	}
 

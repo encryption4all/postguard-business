@@ -157,7 +157,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(182, 22, 22, 0.08);
+		background: var(--pg-danger-soft);
 		border: 1px solid var(--pg-input-error);
 		border-radius: var(--pg-border-radius-md);
 		padding: 0.75rem 1rem;
@@ -213,7 +213,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
-		color: #b45309;
+		color: var(--pg-warning);
 		font-weight: var(--pg-font-weight-medium);
 		font-size: var(--pg-font-size-md);
 		margin-bottom: 1.5rem;

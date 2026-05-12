@@ -127,7 +127,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.5rem;
-		background: #b45309;
+		background: var(--pg-warning-solid);
 		color: #fff;
 		padding: 0.5rem;
 		font-size: var(--pg-font-size-sm);
@@ -139,7 +139,7 @@
 	}
 
 	.stop-btn {
-		background: rgba(255, 255, 255, 0.2);
+		background: rgba(0, 0, 0, 0.3);
 		color: #fff;
 		font-size: var(--pg-font-size-xs);
 		padding: 2px 10px;
@@ -148,7 +148,7 @@
 		font-weight: var(--pg-font-weight-medium);
 
 		&:hover {
-			background: rgba(255, 255, 255, 0.3);
+			background: rgba(0, 0, 0, 0.45);
 		}
 	}
 

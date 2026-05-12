@@ -228,8 +228,8 @@
 		}
 
 		&.accent {
-			background: var(--pg-primary);
-			border-color: var(--pg-primary);
+			background: var(--pg-primary-bg);
+			border-color: var(--pg-primary-bg);
 			color: #fff;
 
 			:global(svg) {

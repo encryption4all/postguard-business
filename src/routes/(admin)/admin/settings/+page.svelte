@@ -134,12 +134,12 @@
 		transition: background 0.15s, color 0.15s;
 
 		&.on {
-			background: rgba(22, 163, 74, 0.15);
-			color: #16a34a;
+			background: var(--pg-success-soft);
+			color: var(--pg-success);
 		}
 
 		&.off {
-			background: rgba(182, 22, 22, 0.1);
+			background: var(--pg-danger-soft);
 			color: var(--pg-input-error);
 		}
 

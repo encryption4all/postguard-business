@@ -194,10 +194,10 @@
 			display: flex;
 			align-items: center;
 			gap: 0.5rem;
-			color: #b45309;
+			color: var(--pg-warning);
 			margin-bottom: 1rem;
 
-			:global(svg) { color: #b45309; }
+			:global(svg) { color: var(--pg-warning); }
 		}
 	}
 
@@ -207,13 +207,13 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		background: rgba(180, 83, 9, 0.06);
-		border: 1px solid rgba(180, 83, 9, 0.2);
+		background: var(--pg-warning-soft);
+		border: 1px solid var(--pg-warning);
 		border-radius: var(--pg-border-radius-md);
 		padding: 0.75rem 1rem;
 		text-decoration: none;
 		transition: background 0.15s;
-		&:hover { background: rgba(180, 83, 9, 0.1); }
+		&:hover { background: var(--pg-warning-soft); filter: brightness(0.95); }
 	}
 
 	.pending-org { font-weight: var(--pg-font-weight-medium); color: var(--pg-text); display: block; }
@@ -250,8 +250,8 @@
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
 		text-transform: uppercase;
-		&.active { color: #16a34a; }
-		&.pending { color: #b45309; }
+		&.active { color: var(--pg-success); }
+		&.pending { color: var(--pg-warning); }
 		&.suspended { color: var(--pg-input-error); }
 	}
 
@@ -262,8 +262,8 @@
 		border-radius: var(--pg-border-radius-sm);
 		font-family: var(--pg-font-family);
 
-		&.approve { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
-		&.approve:hover { background: rgba(22, 163, 74, 0.2); }
+		&.approve { background: var(--pg-success-soft); color: var(--pg-success); }
+		&.approve:hover { background: var(--pg-success-soft); filter: brightness(0.95); }
 	}
 
 	.banner {
@@ -275,8 +275,8 @@
 		margin-bottom: 1rem;
 		font-size: var(--pg-font-size-sm);
 
-		&.success { background: rgba(22, 163, 74, 0.08); border: 1px solid #16a34a; color: #16a34a; }
-		&.error { background: rgba(182, 22, 22, 0.08); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
+		&.success { background: var(--pg-success-soft); border: 1px solid var(--pg-success); color: var(--pg-success); }
+		&.error { background: var(--pg-danger-soft); border: 1px solid var(--pg-input-error); color: var(--pg-input-error); }
 	}
 
 	.create-section { margin-bottom: 1.5rem; }
