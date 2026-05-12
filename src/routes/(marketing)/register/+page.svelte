@@ -340,10 +340,10 @@
 		margin-top: 0.75rem;
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
-		color: #16a34a;
+		color: var(--pg-success);
 
 		:global(svg) {
-			color: #16a34a;
+			color: var(--pg-success);
 		}
 	}
 
@@ -351,7 +351,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(182, 22, 22, 0.08);
+		background: var(--pg-danger-soft);
 		border: 1px solid var(--pg-input-error);
 		border-radius: var(--pg-border-radius-md);
 		padding: 0.75rem 1rem;

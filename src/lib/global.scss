@@ -67,6 +67,19 @@ body {
 	--pg-input-active: #2b343b;
 	--pg-input-error: #b61616;
 
+	/* Status colors — split between subtle (text/border/tinted-bg)
+	 * and -solid (button fill with white text). The two cannot share
+	 * one value because text-on-bg needs 4.5:1 while white-on-button
+	 * needs the bg to be dark. */
+	--pg-success: #166534;
+	--pg-success-soft: rgba(22, 101, 52, 0.1);
+	--pg-success-solid: #15803d;
+	--pg-warning: #92400e;
+	--pg-warning-soft: rgba(146, 64, 14, 0.1);
+	--pg-warning-solid: #92400e;
+	--pg-danger-soft: rgba(182, 22, 22, 0.08);
+	--pg-danger-solid: #b91c1c;
+
 	/* Spacing */
 	--pg-border-radius-sm: 4px;
 	--pg-border-radius-md: 6px;
@@ -84,11 +97,24 @@ body {
 	--pg-soft-background: #0f1e3d;
 	--pg-strong-background: #1e3a6e;
 	--pg-text: #ffffff;
-	--pg-text-secondary: #92a3af;
-	--pg-input-normal: #92a3af;
-	--pg-input-hover: #98a8b3;
+	/* Lightened from #92a3af so secondary text still hits 4.5:1
+	 * when used on --pg-strong-background (badges, disabled state). */
+	--pg-text-secondary: #a8b8c4;
+	--pg-input-normal: #a8b8c4;
+	--pg-input-hover: #b8c8d4;
 	--pg-input-active: #c4cdd4;
-	--pg-input-error: #ef4444;
+	/* Lightened so error text passes 4.5:1 on dark backgrounds.
+	 * Don't use this as a button fill — the bg side needs --pg-danger-solid. */
+	--pg-input-error: #fca5a5;
+
+	--pg-success: #4ade80;
+	--pg-success-soft: rgba(74, 222, 128, 0.15);
+	--pg-success-solid: #15803d;
+	--pg-warning: #fbbf24;
+	--pg-warning-soft: rgba(251, 191, 36, 0.15);
+	--pg-warning-solid: #92400e;
+	--pg-danger-soft: rgba(252, 165, 165, 0.15);
+	--pg-danger-solid: #b91c1c;
 
 	.invert {
 		filter: invert(100%);

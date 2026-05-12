@@ -178,7 +178,7 @@
 		border-radius: var(--pg-border-radius-sm);
 		font-size: var(--pg-font-size-sm);
 		font-weight: var(--pg-font-weight-medium);
-		background: var(--pg-input-error);
+		background: var(--pg-danger-solid);
 		color: #fff;
 	}
 </style>

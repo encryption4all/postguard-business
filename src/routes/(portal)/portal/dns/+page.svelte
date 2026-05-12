@@ -117,11 +117,11 @@
 		margin-bottom: 1.5rem;
 
 		&.verified {
-			border-color: #16a34a;
-			:global(svg) { color: #16a34a; }
+			border-color: var(--pg-success);
+			:global(svg) { color: var(--pg-success); }
 		}
 
-		:global(svg) { color: #b45309; }
+		:global(svg) { color: var(--pg-warning); }
 	}
 
 	.status-header {
@@ -150,15 +150,15 @@
 	}
 
 	.verify-error {
-		background: rgba(182, 22, 22, 0.08);
+		background: var(--pg-danger-soft);
 		border: 1px solid var(--pg-input-error);
 		color: var(--pg-input-error);
 	}
 
 	.verify-success {
-		background: rgba(22, 163, 74, 0.08);
-		border: 1px solid #16a34a;
-		color: #16a34a;
+		background: var(--pg-success-soft);
+		border: 1px solid var(--pg-success);
+		color: var(--pg-success);
 	}
 
 	.instructions { max-width: 650px; }

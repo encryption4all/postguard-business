@@ -147,7 +147,7 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(220, 38, 38, 0.08);
+		background: var(--pg-danger-soft);
 		border: 1px solid var(--pg-input-error);
 		border-radius: var(--pg-border-radius-md);
 		padding: 0.75rem 1rem;
@@ -160,12 +160,12 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: rgba(22, 163, 74, 0.08);
-		border: 1px solid #16a34a;
+		background: var(--pg-success-soft);
+		border: 1px solid var(--pg-success);
 		border-radius: var(--pg-border-radius-md);
 		padding: 0.75rem 1rem;
 		margin-bottom: 1.5rem;
-		color: #16a34a;
+		color: var(--pg-success);
 		font-size: var(--pg-font-size-sm);
 	}
 
@@ -270,8 +270,8 @@
 	.contact-badge {
 		font-size: var(--pg-font-size-xs);
 		font-weight: var(--pg-font-weight-bold);
-		background: rgba(22, 163, 74, 0.12);
-		color: #16a34a;
+		background: var(--pg-success-soft);
+		color: var(--pg-success);
 		padding: 3px 10px;
 		border-radius: 100px;
 		text-transform: uppercase;
@@ -322,7 +322,7 @@
 		border-radius: var(--pg-border-radius-sm);
 		font-size: var(--pg-font-size-sm);
 		font-weight: var(--pg-font-weight-medium);
-		background: var(--pg-input-error);
+		background: var(--pg-danger-solid);
 		color: #fff;
 	}
 </style>
