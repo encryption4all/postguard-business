@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { describe, it, expect } from 'vitest';
 import config from '../../svelte.config.js';
 
@@ -32,8 +34,20 @@ describe('SvelteKit CSP configuration', () => {
 		expect(scriptSrc).not.toContain('unsafe-eval');
 	});
 
+	it('pins a sha256 hash matching the inline <script> in app.html', () => {
+		const appHtml = readFileSync(new URL('../../src/app.html', import.meta.url), 'utf8');
+		const inlineScriptBody = appHtml.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+		expect(inlineScriptBody, 'src/app.html should contain an inline <script>').toBeDefined();
+		const expected = `sha256-${createHash('sha256').update(inlineScriptBody!).digest('base64')}`;
+		expect(csp!.reportOnly!['script-src']).toContain(expected);
+	});
+
 	it('allows data: images for inline icon SVGs', () => {
 		expect(csp!.reportOnly!['img-src']).toContain('data:');
+	});
+
+	it('allows the Iconify API in connect-src for @iconify/svelte icon loading', () => {
+		expect(csp!.reportOnly!['connect-src']).toContain('https://api.iconify.design');
 	});
 
 	it('points violations at the in-app CSP report sink', () => {
