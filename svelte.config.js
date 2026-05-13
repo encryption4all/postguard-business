@@ -1,12 +1,27 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+// SvelteKit's auto-CSP only nonces/hashes scripts it injects; the inline
+// <script> in src/app.html (dark-mode flash prevention) is not covered. We
+// derive its sha256 here so script-src stays in sync with the file content.
+const appHtml = readFileSync(new URL('./src/app.html', import.meta.url), 'utf8');
+const inlineScriptBody = appHtml.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+if (!inlineScriptBody) {
+	throw new Error(
+		'svelte.config.js: could not locate inline <script> in src/app.html for CSP hashing'
+	);
+}
+/** @type {`sha256-${string}`} */
+const inlineScriptHash = `sha256-${createHash('sha256').update(inlineScriptBody).digest('base64')}`;
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: [vitePreprocess()],
 	compilerOptions: {
 		// Force runes mode for the project, except for libraries. Can be removed in svelte 6.
-		runes: ({ filename }) => filename.split(/[/\\]/).includes('node_modules') ? undefined : true
+		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
 	},
 	kit: {
 		adapter: adapter({ out: 'build' }),
@@ -14,11 +29,12 @@ const config = {
 			mode: 'auto',
 			reportOnly: {
 				'default-src': ['self'],
-				'script-src': ['self'],
+				'script-src': ['self', inlineScriptHash],
 				'style-src': ['self', 'unsafe-inline'],
 				'img-src': ['self', 'data:'],
 				'font-src': ['self'],
-				'connect-src': ['self'],
+				// @iconify/svelte fetches MDI icon metadata from the Iconify API at runtime.
+				'connect-src': ['self', 'https://api.iconify.design'],
 				'frame-ancestors': ['none'],
 				'base-uri': ['self'],
 				'form-action': ['self'],
