@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.1](https://github.com/encryption4all/postguard-business/compare/v1.3.0...v1.3.1) (2026-05-16)
+
+
+### Bug Fixes
+
+* **a11y:** use .visually-hidden for skip-link to remove visible 1px sliver ([#75](https://github.com/encryption4all/postguard-business/issues/75)) ([4098376](https://github.com/encryption4all/postguard-business/commit/4098376da3082a655e0a8bcb0f49357b7cd42ab8))
+* **a11y:** WCAG AA contrast fixes for status colors ([d6ee74d](https://github.com/encryption4all/postguard-business/commit/d6ee74d774ffa80aa67624ab069f013e6fbae369))
+* **a11y:** WCAG AA contrast fixes for status colors + restore accent card ([fe29524](https://github.com/encryption4all/postguard-business/commit/fe29524544b6999230816865bf942960f8570e59))
+* **csp:** resolve report-only violations for inline script and Iconify API ([7a151ea](https://github.com/encryption4all/postguard-business/commit/7a151ea8070cf414d995b68217214edf0ab0d504))
+* **csp:** resolve report-only violations for inline script and Iconify API ([cc99255](https://github.com/encryption4all/postguard-business/commit/cc992559bf9be988bca687b983a09e62b6e58bd6)), closes [#60](https://github.com/encryption4all/postguard-business/issues/60)
+* require adminId for impersonate action ([#63](https://github.com/encryption4all/postguard-business/issues/63)) ([2c9c161](https://github.com/encryption4all/postguard-business/commit/2c9c1616080ba221fe636f2656ba93b4dd40b166))
+* require adminId for impersonate action ([#63](https://github.com/encryption4all/postguard-business/issues/63)) ([61a0bf9](https://github.com/encryption4all/postguard-business/commit/61a0bf967f430b0e55635af25e97727c490843fe))
+
 ## [1.3.0](https://github.com/encryption4all/postguard-business/compare/v1.2.0...v1.3.0) (2026-05-07)
 
 
