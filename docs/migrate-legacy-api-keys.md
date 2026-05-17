@@ -117,7 +117,7 @@ All resolved — confirmed by @rubenhensen.
    in postguard#142. No re-keying needed.
 
 2. **Grouping heuristic.** **Resolved:** the `kvk → orgname →
-   email-domain → email` fallback chain is fine.
+email-domain → email` fallback chain is fine.
 
 3. **Synthetic org status.** **Resolved:** migrated orgs are set to
    `active` — these are existing users and should be grandfathered in.

@@ -35,7 +35,10 @@ export const actions: Actions = {
 		if (!email) errors.form = 'Email attribute missing — please verify with Yivi first';
 		if (!contactName) errors.form = 'Name attribute missing — please verify with Yivi first';
 
-		if (domain && !/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.[a-z]{2,}$/.test(domain)) {
+		if (
+			domain &&
+			!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.[a-z]{2,}$/.test(domain)
+		) {
 			errors.domain = 'Invalid domain derived from email';
 		}
 
@@ -71,17 +74,24 @@ export const actions: Actions = {
 				.set({ contactUserId: user.id })
 				.where(eq(organizations.id, org.id));
 		} catch (err: unknown) {
-			const errStr = String(err instanceof Error ? err.stack ?? err.message : err);
-			const cause = (err as any)?.cause;
+			const errStr = String(err instanceof Error ? (err.stack ?? err.message) : err);
+			const cause = (err as { cause?: { message?: string } } | null)?.cause;
 			const causeStr = cause ? String(cause.message ?? cause) : '';
-			if (errStr.includes('unique') || errStr.includes('duplicate key') || causeStr.includes('duplicate key')) {
+			if (
+				errStr.includes('unique') ||
+				errStr.includes('duplicate key') ||
+				causeStr.includes('duplicate key')
+			) {
 				return fail(409, {
 					errors: { domain: 'This domain is already registered' } as Record<string, string>,
 					values: { name }
 				});
 			}
 			return fail(500, {
-				errors: { form: 'An unexpected error occurred. Please try again.' } as Record<string, string>,
+				errors: { form: 'An unexpected error occurred. Please try again.' } as Record<
+					string,
+					string
+				>,
 				values: { name }
 			});
 		}

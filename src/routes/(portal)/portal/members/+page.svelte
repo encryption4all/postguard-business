@@ -44,12 +44,16 @@
 {#if showAddForm}
 	<div class="add-form-card">
 		<h3>{$_('members.addTitle')}</h3>
-		<form method="POST" action="?/add" use:enhance={() => {
-			return async ({ update, result }) => {
-				if (result.type === 'success') showAddForm = false;
-				await update();
-			};
-		}}>
+		<form
+			method="POST"
+			action="?/add"
+			use:enhance={() => {
+				return async ({ update, result }) => {
+					if (result.type === 'success') showAddForm = false;
+					await update();
+				};
+			}}
+		>
 			<div class="form-row">
 				<label for="fullName">{$_('members.fullName')}</label>
 				<input id="fullName" name="fullName" type="text" class="pg-input" required />
@@ -59,12 +63,16 @@
 				<input id="email" name="email" type="email" class="pg-input" required />
 			</div>
 			<div class="form-row">
-				<label for="phone">{$_('members.phone')} <span class="optional">{$_('members.optional')}</span></label>
+				<label for="phone"
+					>{$_('members.phone')} <span class="optional">{$_('members.optional')}</span></label
+				>
 				<input id="phone" name="phone" type="tel" class="pg-input" />
 			</div>
 			<div class="form-actions">
 				<button type="submit" class="primary-btn">{$_('members.addMember')}</button>
-				<button type="button" class="ghost-btn" onclick={() => (showAddForm = false)}>{$_('members.cancel')}</button>
+				<button type="button" class="ghost-btn" onclick={() => (showAddForm = false)}
+					>{$_('members.cancel')}</button
+				>
 			</div>
 		</form>
 	</div>
@@ -89,7 +97,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.members as member}
+				{#each data.members as member (member.id)}
 					<tr>
 						<td class="member-name">{member.fullName}</td>
 						<td>{member.email}</td>
@@ -115,11 +123,17 @@
 									<input type="hidden" name="userId" value={member.id} />
 									<div class="confirm-row">
 										<button type="submit" class="danger-btn">{$_('members.remove')}</button>
-										<button type="button" class="ghost-btn" onclick={() => (confirmRemove = null)}>{$_('members.cancel')}</button>
+										<button type="button" class="ghost-btn" onclick={() => (confirmRemove = null)}
+											>{$_('members.cancel')}</button
+										>
 									</div>
 								</form>
 							{:else if member.id !== data.organization.contactUserId && member.id !== data.user?.id}
-								<button class="ghost-btn danger" onclick={() => (confirmRemove = member.id)} title={$_('members.removeMember')}>
+								<button
+									class="ghost-btn danger"
+									onclick={() => (confirmRemove = member.id)}
+									title={$_('members.removeMember')}
+								>
 									<Icon icon="mdi:delete" width="18" height="18" />
 								</button>
 							{/if}

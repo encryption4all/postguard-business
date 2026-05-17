@@ -36,7 +36,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.keys as item}
+				{#each data.keys as item (item.key.id)}
 					<tr>
 						<td>{item.orgName} <span class="domain">({item.orgDomain})</span></td>
 						<td class="key-name">{item.key.name}</td>
@@ -55,7 +55,9 @@
 									<input type="hidden" name="keyId" value={item.key.id} />
 									<div class="confirm-row">
 										<button type="submit" class="danger-btn">{$_('admin.apiKeys.confirm')}</button>
-										<button type="button" class="ghost-btn" onclick={() => (confirmRevoke = null)}>{$_('admin.apiKeys.cancel')}</button>
+										<button type="button" class="ghost-btn" onclick={() => (confirmRevoke = null)}
+											>{$_('admin.apiKeys.cancel')}</button
+										>
 									</div>
 								</form>
 							{:else}
@@ -73,8 +75,12 @@
 {/if}
 
 <style lang="scss">
-	h1 { margin: 0 0 1.5rem; }
-	.empty { color: var(--pg-text-secondary); }
+	h1 {
+		margin: 0 0 1.5rem;
+	}
+	.empty {
+		color: var(--pg-text-secondary);
+	}
 
 	.key-banner {
 		display: flex;
@@ -89,7 +95,9 @@
 		color: var(--pg-success);
 	}
 
-	.table-wrapper { overflow-x: auto; }
+	.table-wrapper {
+		overflow-x: auto;
+	}
 
 	table {
 		width: 100%;
@@ -113,9 +121,16 @@
 		white-space: nowrap;
 	}
 
-	.domain { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); }
-	.key-name { font-weight: var(--pg-font-weight-medium); }
-	.muted { color: var(--pg-text-secondary); }
+	.domain {
+		font-size: var(--pg-font-size-xs);
+		color: var(--pg-text-secondary);
+	}
+	.key-name {
+		font-weight: var(--pg-font-weight-medium);
+	}
+	.muted {
+		color: var(--pg-text-secondary);
+	}
 
 	code {
 		font-family: monospace;
@@ -125,7 +140,10 @@
 		border-radius: 2px;
 	}
 
-	.confirm-row { display: flex; gap: 0.5rem; }
+	.confirm-row {
+		display: flex;
+		gap: 0.5rem;
+	}
 
 	.ghost-btn {
 		display: inline-flex;
@@ -136,8 +154,12 @@
 		font-size: var(--pg-font-size-xs);
 		color: var(--pg-text-secondary);
 		font-family: var(--pg-font-family);
-		&:hover { background: var(--pg-soft-background); }
-		&.danger { color: var(--pg-input-error); }
+		&:hover {
+			background: var(--pg-soft-background);
+		}
+		&.danger {
+			color: var(--pg-input-error);
+		}
 	}
 
 	.danger-btn {

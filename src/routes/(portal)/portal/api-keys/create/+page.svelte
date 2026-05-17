@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -36,11 +37,13 @@
 				{copied ? $_('apiKeys.create.copied') : $_('apiKeys.create.copy')}
 			</button>
 		</div>
-		<a href="/portal/api-keys" class="secondary-btn back-btn">{$_('apiKeys.create.backToKeys')}</a>
+		<a href={resolve('/portal/api-keys')} class="secondary-btn back-btn"
+			>{$_('apiKeys.create.backToKeys')}</a
+		>
 	</div>
 {:else}
 	<div class="page-header">
-		<a href="/portal/api-keys" class="back-link">
+		<a href={resolve('/portal/api-keys')} class="back-link">
 			<Icon icon="mdi:arrow-left" width="18" height="18" />
 			{$_('apiKeys.create.back')}
 		</a>

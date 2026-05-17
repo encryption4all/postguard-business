@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import { enhance } from '$app/forms';
@@ -13,7 +14,7 @@
 
 <div class="page-header">
 	<h1>{$_('apiKeys.title')}</h1>
-	<a href="/portal/api-keys/create" class="primary-btn">
+	<a href={resolve('/portal/api-keys/create')} class="primary-btn">
 		<Icon icon="mdi:plus" width="18" height="18" />
 		{$_('apiKeys.createKey')}
 	</a>
@@ -24,7 +25,9 @@
 		<Icon icon="mdi:key-variant" width="48" height="48" />
 		<h3>{$_('apiKeys.emptyTitle')}</h3>
 		<p>{$_('apiKeys.emptyDescription')}</p>
-		<a href="/portal/api-keys/create" class="secondary-btn">{$_('apiKeys.createApiKey')}</a>
+		<a href={resolve('/portal/api-keys/create')} class="secondary-btn"
+			>{$_('apiKeys.createApiKey')}</a
+		>
 	</div>
 {:else}
 	<div class="table-wrapper">
@@ -40,7 +43,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.keys as key}
+				{#each data.keys as key (key.id)}
 					<tr>
 						<td class="key-name">{key.name}</td>
 						<td><code>{key.keyPrefix}...</code></td>

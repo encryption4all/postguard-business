@@ -1,11 +1,11 @@
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { adminAccounts } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { isEnabled } from '$lib/feature-flags';
 
-export const load: LayoutServerLoad = async ({ locals, url }) => {
+export const load: LayoutServerLoad = async ({ locals }) => {
 	if (!locals.session || locals.session.userType !== 'admin') {
 		redirect(303, '/auth/login/admin');
 	}

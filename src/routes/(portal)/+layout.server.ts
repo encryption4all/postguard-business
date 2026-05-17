@@ -12,8 +12,7 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 
 	// Allow org users directly, or admins who are impersonating
 	const isOrgUser = locals.session.userType === 'org';
-	const isImpersonating =
-		locals.session.userType === 'admin' && locals.session.impersonatingOrgId;
+	const isImpersonating = locals.session.userType === 'admin' && locals.session.impersonatingOrgId;
 
 	if (!isOrgUser && !isImpersonating) {
 		redirect(303, `/auth/login?redirect=${encodeURIComponent(url.pathname)}`);
@@ -45,13 +44,14 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 	// Load contact person
 	let contactPerson = null;
 	if (org.contactUserId) {
-		const result = await db
-			.select()
-			.from(users)
-			.where(eq(users.id, org.contactUserId))
-			.limit(1);
+		const result = await db.select().from(users).where(eq(users.id, org.contactUserId)).limit(1);
 		contactPerson = result[0]
-			? { id: result[0].id, fullName: result[0].fullName, email: result[0].email, phone: result[0].phone }
+			? {
+					id: result[0].id,
+					fullName: result[0].fullName,
+					email: result[0].email,
+					phone: result[0].phone
+				}
 			: null;
 	}
 

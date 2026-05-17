@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import Icon from '@iconify/svelte';
 	import type { PageData } from './$types';
@@ -21,7 +22,7 @@
 				<p class="stat-value">{data.stats.activeKeys}</p>
 				<p class="stat-label">{$_('dashboard.activeKeys')}</p>
 			</div>
-			<a href="/portal/api-keys" class="stat-link">{$_('dashboard.manage')}</a>
+			<a href={resolve('/portal/api-keys')} class="stat-link">{$_('dashboard.manage')}</a>
 		</div>
 	{/if}
 
@@ -34,7 +35,7 @@
 				<p class="stat-value">{data.stats.emailsThisMonth}</p>
 				<p class="stat-label">{$_('dashboard.emailsMonth')}</p>
 			</div>
-			<a href="/portal/email-log" class="stat-link">{$_('dashboard.viewLog')}</a>
+			<a href={resolve('/portal/email-log')} class="stat-link">{$_('dashboard.viewLog')}</a>
 		</div>
 	{/if}
 
@@ -48,10 +49,12 @@
 				/>
 			</div>
 			<div class="stat-info">
-				<p class="stat-value">{data.stats.dnsVerified ? $_('dashboard.verified') : $_('dashboard.pending')}</p>
+				<p class="stat-value">
+					{data.stats.dnsVerified ? $_('dashboard.verified') : $_('dashboard.pending')}
+				</p>
 				<p class="stat-label">{$_('dashboard.dnsStatus')}</p>
 			</div>
-			<a href="/portal/dns" class="stat-link">{$_('dashboard.configure')}</a>
+			<a href={resolve('/portal/dns')} class="stat-link">{$_('dashboard.configure')}</a>
 		</div>
 	{/if}
 </div>
@@ -60,19 +63,19 @@
 	<h2>{$_('dashboard.quickActions')}</h2>
 	<div class="actions-row">
 		{#if data.featureFlags.apiKeys}
-			<a href="/portal/api-keys/create" class="action-card">
+			<a href={resolve('/portal/api-keys/create')} class="action-card">
 				<Icon icon="mdi:key-plus" width="24" height="24" />
 				<span>{$_('dashboard.createKey')}</span>
 			</a>
 		{/if}
 		{#if data.featureFlags.orgInfo}
-			<a href="/portal/organization" class="action-card">
+			<a href={resolve('/portal/organization')} class="action-card">
 				<Icon icon="mdi:office-building-cog" width="24" height="24" />
 				<span>{$_('dashboard.editOrg')}</span>
 			</a>
 		{/if}
 		{#if data.featureFlags.emailLog}
-			<a href="/portal/email-log" class="action-card">
+			<a href={resolve('/portal/email-log')} class="action-card">
 				<Icon icon="mdi:file-document-outline" width="24" height="24" />
 				<span>{$_('dashboard.exportLog')}</span>
 			</a>
@@ -161,7 +164,9 @@
 		color: var(--pg-text);
 		font-size: var(--pg-font-size-md);
 		font-weight: var(--pg-font-weight-medium);
-		transition: border-color 0.2s, transform 0.2s;
+		transition:
+			border-color 0.2s,
+			transform 0.2s;
 
 		:global(svg) {
 			color: var(--pg-primary);

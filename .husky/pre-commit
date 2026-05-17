@@ -1,5 +1,8 @@
 # Type check Svelte/TypeScript
 npx svelte-kit sync && npx svelte-check --threshold warning
 
+# Lint (Prettier + ESLint, fail on any warning)
+npm run lint
+
 # Check migration files for dangerous patterns
 npx tsx scripts/check-migrations.ts

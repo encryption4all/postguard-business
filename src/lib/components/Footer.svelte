@@ -4,6 +4,7 @@
 
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import pkg from '../../../package.json';
 
 	const year = new Date().getFullYear();
@@ -21,18 +22,22 @@
 		<div class="footer-links">
 			<nav class="link-group" aria-labelledby="footer-product-title">
 				<h2 id="footer-product-title" class="group-title">{$_('footer.product')}</h2>
-				<a href="/pricing">{$_('nav.pricing')}</a>
-				<a href="/register">{$_('nav.register')}</a>
+				<a href={resolve('/pricing')}>{$_('nav.pricing')}</a>
+				<a href={resolve('/register')}>{$_('nav.register')}</a>
 			</nav>
 			<nav class="link-group" aria-labelledby="footer-resources-title">
 				<h2 id="footer-resources-title" class="group-title">{$_('footer.resources')}</h2>
 				<a href="https://postguard.eu" target="_blank" rel="noopener noreferrer">
 					{$_('footer.personal')}
-					<span class="visually-hidden"> ({$_('common.opensInNewWindow', { default: 'opens in new window' })})</span>
+					<span class="visually-hidden">
+						({$_('common.opensInNewWindow', { default: 'opens in new window' })})</span
+					>
 				</a>
 				<a href="https://docs.postguard.eu" target="_blank" rel="noopener noreferrer">
 					{$_('footer.docs')}
-					<span class="visually-hidden"> ({$_('common.opensInNewWindow', { default: 'opens in new window' })})</span>
+					<span class="visually-hidden">
+						({$_('common.opensInNewWindow', { default: 'opens in new window' })})</span
+					>
 				</a>
 			</nav>
 		</div>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import Icon from '@iconify/svelte';
 	import logoLight from '$lib/assets/images/logo-wide.svg';
 	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
@@ -13,90 +14,110 @@
 	const navItems = $derived([
 		...(data.adminPanelEnabled
 			? [
-					{ href: '/admin/organizations', label: $_('nav.organizations'), icon: 'mdi:domain' },
-					{ href: '/admin/api-keys', label: $_('nav.apiKeys'), icon: 'mdi:key-variant' }
+					{
+						href: resolve('/admin/organizations'),
+						label: $_('nav.organizations'),
+						icon: 'mdi:domain'
+					},
+					{
+						href: resolve('/admin/api-keys'),
+						label: $_('nav.apiKeys'),
+						icon: 'mdi:key-variant'
+					}
 				]
 			: []),
 		...(data.adminPanelEnabled && data.adminAuditLogEnabled
-			? [{ href: '/admin/audit-log', label: $_('nav.auditLog'), icon: 'mdi:clipboard-text-clock' }]
+			? [
+					{
+						href: resolve('/admin/audit-log'),
+						label: $_('nav.auditLog'),
+						icon: 'mdi:clipboard-text-clock'
+					}
+				]
 			: []),
-		{ href: '/admin/settings', label: $_('nav.settings'), icon: 'mdi:cog' }
+		{ href: resolve('/admin/settings'), label: $_('nav.settings'), icon: 'mdi:cog' }
 	]);
 </script>
 
 <div class="layout-shell">
-{#if data.impersonatingOrgId}
-	<div class="impersonation-bar">
-		<Icon icon="mdi:eye" width="16" height="16" />
-		<span>{$_('admin.impersonating')}</span>
-		<form method="POST" action="/api/admin/impersonate/stop">
-			<button type="submit" class="stop-btn">{$_('admin.stopImpersonating')}</button>
-		</form>
-	</div>
-{/if}
-
-<div class="admin-layout">
-	<aside id="admin-sidebar" class="sidebar" class:open={sidebarOpen}>
-		<div class="sidebar-header">
-			<a href="/admin/organizations" class="sidebar-logo">
-				<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
-				<span class="logo-badge">Business</span>
-			</a>
-			<button
-				class="sidebar-close desktop-hide"
-				onclick={() => (sidebarOpen = false)}
-				aria-label={$_('nav.closeMenu', { default: 'Close navigation menu' })}
-			>
-				<Icon icon="mdi:close" width="20" height="20" aria-hidden="true" />
-			</button>
-		</div>
-
-		<div class="sidebar-admin">
-			<p class="admin-name">{data.admin.fullName}</p>
-			<p class="admin-email">{data.admin.email}</p>
-		</div>
-
-		<nav class="sidebar-nav">
-			{#each navItems as item}
-				<a href={item.href} class="nav-item" onclick={() => (sidebarOpen = false)}>
-					<Icon icon={item.icon} width="20" height="20" />
-					<span>{item.label}</span>
-				</a>
-			{/each}
-		</nav>
-
-		<div class="sidebar-footer">
-			<form method="POST" action="/auth/logout">
-				<button type="submit" class="nav-item logout-btn">
-					<Icon icon="mdi:logout" width="20" height="20" />
-					<span>{$_('nav.logout')}</span>
-				</button>
+	{#if data.impersonatingOrgId}
+		<div class="impersonation-bar">
+			<Icon icon="mdi:eye" width="16" height="16" />
+			<span>{$_('admin.impersonating')}</span>
+			<form method="POST" action="/api/admin/impersonate/stop">
+				<button type="submit" class="stop-btn">{$_('admin.stopImpersonating')}</button>
 			</form>
 		</div>
-	</aside>
+	{/if}
 
-	<div class="admin-main">
-		<header class="admin-header">
-			<button
-				class="hamburger desktop-hide"
-				onclick={() => (sidebarOpen = true)}
-				aria-label={$_('nav.openMenu', { default: 'Open navigation menu' })}
-				aria-expanded={sidebarOpen}
-				aria-controls="admin-sidebar"
-			>
-				<Icon icon="mdi:menu" width="24" height="24" />
-			</button>
-			<p class="header-title" role="presentation">{$_('nav.adminPanel')}</p>
-			<div class="header-actions">
-				<LocaleSwitcher />
-				<ThemeSwitcher />
+	<div class="admin-layout">
+		<aside id="admin-sidebar" class="sidebar" class:open={sidebarOpen}>
+			<div class="sidebar-header">
+				<a href={resolve('/admin/organizations')} class="sidebar-logo">
+					<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img
+						src={logoDark}
+						alt="PostGuard"
+						class="logo-img dark-only"
+						height="22"
+					/>
+					<span class="logo-badge">Business</span>
+				</a>
+				<button
+					class="sidebar-close desktop-hide"
+					onclick={() => (sidebarOpen = false)}
+					aria-label={$_('nav.closeMenu', { default: 'Close navigation menu' })}
+				>
+					<Icon icon="mdi:close" width="20" height="20" aria-hidden="true" />
+				</button>
 			</div>
-		</header>
-		<main id="main-content" class="admin-content">
-			{@render children()}
-		</main>
+
+			<div class="sidebar-admin">
+				<p class="admin-name">{data.admin.fullName}</p>
+				<p class="admin-email">{data.admin.email}</p>
+			</div>
+
+			<nav class="sidebar-nav">
+				{#each navItems as item (item.href)}
+					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+					<a href={item.href} class="nav-item" onclick={() => (sidebarOpen = false)}>
+						<Icon icon={item.icon} width="20" height="20" />
+						<span>{item.label}</span>
+					</a>
+				{/each}
+			</nav>
+
+			<div class="sidebar-footer">
+				<form method="POST" action="/auth/logout">
+					<button type="submit" class="nav-item logout-btn">
+						<Icon icon="mdi:logout" width="20" height="20" />
+						<span>{$_('nav.logout')}</span>
+					</button>
+				</form>
+			</div>
+		</aside>
+
+		<div class="admin-main">
+			<header class="admin-header">
+				<button
+					class="hamburger desktop-hide"
+					onclick={() => (sidebarOpen = true)}
+					aria-label={$_('nav.openMenu', { default: 'Open navigation menu' })}
+					aria-expanded={sidebarOpen}
+					aria-controls="admin-sidebar"
+				>
+					<Icon icon="mdi:menu" width="24" height="24" />
+				</button>
+				<p class="header-title" role="presentation">{$_('nav.adminPanel')}</p>
+				<div class="header-actions">
+					<LocaleSwitcher />
+					<ThemeSwitcher />
+				</div>
+			</header>
+			<main id="main-content" class="admin-content">
+				{@render children()}
+			</main>
+		</div>
 	</div>
-</div>
 </div>
 
 {#if sidebarOpen}
@@ -127,7 +148,9 @@
 		font-size: var(--pg-font-size-sm);
 		font-family: var(--pg-font-family);
 
-		:global(svg) { color: #fff; }
+		:global(svg) {
+			color: #fff;
+		}
 	}
 
 	.stop-btn {
@@ -139,7 +162,9 @@
 		font-family: var(--pg-font-family);
 		font-weight: var(--pg-font-weight-medium);
 
-		&:hover { background: rgba(0, 0, 0, 0.45); }
+		&:hover {
+			background: rgba(0, 0, 0, 0.45);
+		}
 	}
 
 	.layout-shell {
@@ -170,7 +195,9 @@
 			left: -240px;
 			z-index: 200;
 			transition: left 0.2s ease;
-			&.open { left: 0; }
+			&.open {
+				left: 0;
+			}
 		}
 	}
 
@@ -201,17 +228,30 @@
 		letter-spacing: 0.5px;
 	}
 
-	.sidebar-close { color: var(--pg-text-secondary); }
+	.sidebar-close {
+		color: var(--pg-text-secondary);
+	}
 
 	.sidebar-admin {
 		padding: 1rem 1.25rem;
 		border-bottom: 1px solid var(--pg-strong-background);
 
-		.admin-name { font-weight: var(--pg-font-weight-bold); font-size: var(--pg-font-size-md); margin: 0; }
-		.admin-email { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); margin: 0.15rem 0 0; }
+		.admin-name {
+			font-weight: var(--pg-font-weight-bold);
+			font-size: var(--pg-font-size-md);
+			margin: 0;
+		}
+		.admin-email {
+			font-size: var(--pg-font-size-xs);
+			color: var(--pg-text-secondary);
+			margin: 0.15rem 0 0;
+		}
 	}
 
-	.sidebar-nav { flex: 1; padding: 0.75rem 0; }
+	.sidebar-nav {
+		flex: 1;
+		padding: 0.75rem 0;
+	}
 
 	.nav-item {
 		display: flex;
@@ -223,8 +263,13 @@
 		font-weight: var(--pg-font-weight-medium);
 		color: var(--pg-text-secondary);
 		text-decoration: none;
-		transition: background 0.15s, color 0.15s;
-		&:hover { background: var(--pg-strong-background); color: var(--pg-text); }
+		transition:
+			background 0.15s,
+			color 0.15s;
+		&:hover {
+			background: var(--pg-strong-background);
+			color: var(--pg-text);
+		}
 	}
 
 	.sidebar-footer {
@@ -270,8 +315,13 @@
 		gap: 0.5rem;
 	}
 
-	.header-title { font-size: var(--pg-font-size-lg); margin: 0; }
-	.hamburger { color: var(--pg-text); }
+	.header-title {
+		font-size: var(--pg-font-size-lg);
+		margin: 0;
+	}
+	.hamburger {
+		color: var(--pg-text);
+	}
 
 	.admin-content {
 		flex: 1;

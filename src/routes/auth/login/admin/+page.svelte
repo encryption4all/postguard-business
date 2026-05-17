@@ -3,16 +3,16 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import YiviLogin from '$lib/components/YiviLogin.svelte';
-	import Icon from '@iconify/svelte';
 	import logoLight from '$lib/assets/images/logo-wide.svg';
 	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
 	function handleSuccess() {
-		goto('/admin/organizations');
+		goto(resolve('/admin/organizations'));
 	}
 </script>
 
@@ -20,8 +20,13 @@
 
 <section class="login-page">
 	<div class="login-header">
-		<a href="/" class="logo">
-			<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="22" />
+		<a href={resolve('/')} class="logo">
+			<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="22" /><img
+				src={logoDark}
+				alt="PostGuard"
+				class="logo-img dark-only"
+				height="22"
+			/>
 			<span class="logo-badge">Business</span>
 		</a>
 		<ThemeSwitcher />

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import ThemeSwitcher from './ThemeSwitcher.svelte';
 	import LocaleSwitcher from './LocaleSwitcher.svelte';
 	import Icon from '@iconify/svelte';
@@ -27,31 +28,33 @@
 	}
 
 	const navLinks = $derived([
-		{ href: '/', label: $_('nav.home') },
-		...(showPricing ? [{ href: '/pricing', label: $_('nav.pricing') }] : []),
-		...(showRegister ? [{ href: '/register', label: $_('nav.register') }] : [])
+		{ href: resolve('/'), label: $_('nav.home') },
+		...(showPricing ? [{ href: resolve('/pricing'), label: $_('nav.pricing') }] : []),
+		...(showRegister ? [{ href: resolve('/register'), label: $_('nav.register') }] : [])
 	]);
 </script>
 
 <header>
 	<div class="header-inner">
-		<a href="/" class="logo" aria-label="PostGuard for Business home">
+		<a href={resolve('/')} class="logo" aria-label="PostGuard for Business home">
 			<img src={logoLight} alt="PostGuard" class="logo-img light-only" height="28" />
 			<img src={logoDark} alt="PostGuard" class="logo-img dark-only" height="28" />
 			<span class="logo-badge">Business</span>
 		</a>
 
 		<nav class="desktop-nav" aria-label={$_('nav.mainNav')}>
-			{#each navLinks as link}
+			{#each navLinks as link (link.href)}
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 				<a href={link.href}>{link.label}</a>
 			{/each}
 			{#if auth.loggedIn}
 				{#if auth.email}
 					<span class="nav-user" aria-label="Signed in as {auth.email}">{auth.email}</span>
 				{/if}
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 				<a href={auth.portalHref} class="nav-login">{$_('nav.myPortal')}</a>
 			{:else}
-				<a href="/auth/login" class="nav-login">{$_('nav.login')}</a>
+				<a href={resolve('/auth/login')} class="nav-login">{$_('nav.login')}</a>
 			{/if}
 		</nav>
 
@@ -71,16 +74,18 @@
 
 	{#if menuOpen}
 		<nav class="mobile-nav" aria-label={$_('nav.mobileNav')}>
-			{#each navLinks as link}
+			{#each navLinks as link (link.href)}
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 				<a href={link.href} onclick={() => (menuOpen = false)}>{link.label}</a>
 			{/each}
 			{#if auth.loggedIn}
 				{#if auth.email}
 					<span class="mobile-user">{auth.email}</span>
 				{/if}
+				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 				<a href={auth.portalHref} onclick={() => (menuOpen = false)}>{$_('nav.myPortal')}</a>
 			{:else}
-				<a href="/auth/login" onclick={() => (menuOpen = false)}>{$_('nav.login')}</a>
+				<a href={resolve('/auth/login')} onclick={() => (menuOpen = false)}>{$_('nav.login')}</a>
 			{/if}
 			<LocaleSwitcher />
 		</nav>

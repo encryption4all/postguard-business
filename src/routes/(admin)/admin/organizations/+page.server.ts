@@ -10,10 +10,7 @@ import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ url }) => {
 	if (!isEnabled('adminPanel')) error(404, 'Not found');
-	const [orgs, pendingRequests] = await Promise.all([
-		listOrganizations(),
-		listPendingRequests()
-	]);
+	const [orgs, pendingRequests] = await Promise.all([listOrganizations(), listPendingRequests()]);
 
 	return {
 		organizations: orgs,

@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { sessions, organizations, adminAccounts, users } from '$lib/server/db/schema';
+import { sessions, adminAccounts } from '$lib/server/db/schema';
 import { eq, and, gt } from 'drizzle-orm';
 import { randomBytes, createHash } from 'crypto';
 
@@ -65,10 +65,7 @@ export async function resolveSession(token: string): Promise<SessionData | null>
 	// but the field is only used for coarse-grained admin/audit views, so a
 	// ~5-minute resolution is plenty and avoids a write per request.
 	if (Date.now() - session.lastActiveAt.getTime() > LAST_ACTIVE_THROTTLE_MS) {
-		await db
-			.update(sessions)
-			.set({ lastActiveAt: new Date() })
-			.where(eq(sessions.id, session.id));
+		await db.update(sessions).set({ lastActiveAt: new Date() }).where(eq(sessions.id, session.id));
 	}
 
 	return {
@@ -87,11 +84,7 @@ export async function destroySession(token: string): Promise<void> {
 	await db.delete(sessions).where(eq(sessions.tokenHash, tokenHash));
 }
 
-export async function findAdminByAttributes(
-	email: string,
-	fullName: string,
-	phone: string
-) {
+export async function findAdminByAttributes(email: string, fullName: string, phone: string) {
 	const result = await db
 		.select()
 		.from(adminAccounts)
@@ -107,12 +100,6 @@ export async function findAdminByAttributes(
 	return result[0] ?? null;
 }
 
-export async function setImpersonation(
-	sessionId: string,
-	orgId: string | null
-): Promise<void> {
-	await db
-		.update(sessions)
-		.set({ impersonatingOrgId: orgId })
-		.where(eq(sessions.id, sessionId));
+export async function setImpersonation(sessionId: string, orgId: string | null): Promise<void> {
+	await db.update(sessions).set({ impersonatingOrgId: orgId }).where(eq(sessions.id, sessionId));
 }

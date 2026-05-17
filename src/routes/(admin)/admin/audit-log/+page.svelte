@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { resolve } from '$app/paths';
 	import SEO from '$lib/components/SEO.svelte';
 	import type { PageData } from './$types';
 
@@ -9,7 +10,9 @@
 <SEO title="{$_('admin.auditLog.title')} - Admin" />
 
 <h1>{$_('admin.auditLog.title')}</h1>
-<p class="subtitle">{$_('admin.auditLog.actionsLogged', { values: { count: data.auditLog.total } })}</p>
+<p class="subtitle">
+	{$_('admin.auditLog.actionsLogged', { values: { count: data.auditLog.total } })}
+</p>
 
 {#if data.auditLog.logs.length === 0}
 	<p class="empty">{$_('admin.auditLog.noActions')}</p>
@@ -27,7 +30,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.auditLog.logs as entry}
+				{#each data.auditLog.logs as entry (entry.log.id)}
 					<tr>
 						<td>{entry.adminName}</td>
 						<td><code>{entry.log.action}</code></td>
@@ -56,21 +59,39 @@
 	{#if data.auditLog.totalPages > 1}
 		<div class="pagination">
 			{#if data.auditLog.page > 1}
-				<a href="/admin/audit-log?page={data.auditLog.page - 1}" class="secondary-btn">{$_('admin.auditLog.previous')}</a>
+				<a href={resolve(`/admin/audit-log?page=${data.auditLog.page - 1}`)} class="secondary-btn"
+					>{$_('admin.auditLog.previous')}</a
+				>
 			{/if}
-			<span class="page-info">{$_('admin.auditLog.pageOf', { values: { page: data.auditLog.page, totalPages: data.auditLog.totalPages } })}</span>
+			<span class="page-info"
+				>{$_('admin.auditLog.pageOf', {
+					values: { page: data.auditLog.page, totalPages: data.auditLog.totalPages }
+				})}</span
+			>
 			{#if data.auditLog.page < data.auditLog.totalPages}
-				<a href="/admin/audit-log?page={data.auditLog.page + 1}" class="secondary-btn">{$_('admin.auditLog.next')}</a>
+				<a href={resolve(`/admin/audit-log?page=${data.auditLog.page + 1}`)} class="secondary-btn"
+					>{$_('admin.auditLog.next')}</a
+				>
 			{/if}
 		</div>
 	{/if}
 {/if}
 
 <style lang="scss">
-	h1 { margin: 0 0 0.25rem; }
-	.subtitle { color: var(--pg-text-secondary); font-size: var(--pg-font-size-sm); margin-bottom: 1.5rem; }
-	.empty { color: var(--pg-text-secondary); }
-	.table-wrapper { overflow-x: auto; }
+	h1 {
+		margin: 0 0 0.25rem;
+	}
+	.subtitle {
+		color: var(--pg-text-secondary);
+		font-size: var(--pg-font-size-sm);
+		margin-bottom: 1.5rem;
+	}
+	.empty {
+		color: var(--pg-text-secondary);
+	}
+	.table-wrapper {
+		overflow-x: auto;
+	}
 
 	table {
 		width: 100%;
@@ -102,9 +123,18 @@
 		border-radius: 2px;
 	}
 
-	.target { font-size: var(--pg-font-size-xs); color: var(--pg-text-secondary); }
-	.details { max-width: 250px; overflow: hidden; text-overflow: ellipsis; }
-	.muted { color: var(--pg-text-secondary); }
+	.target {
+		font-size: var(--pg-font-size-xs);
+		color: var(--pg-text-secondary);
+	}
+	.details {
+		max-width: 250px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.muted {
+		color: var(--pg-text-secondary);
+	}
 
 	.pagination {
 		display: flex;
@@ -114,5 +144,8 @@
 		margin-top: 1.5rem;
 	}
 
-	.page-info { font-size: var(--pg-font-size-sm); color: var(--pg-text-secondary); }
+	.page-info {
+		font-size: var(--pg-font-size-sm);
+		color: var(--pg-text-secondary);
+	}
 </style>

@@ -16,7 +16,6 @@ on:
   pull_request:
 
 jobs:
-
   # Check migration files for dangerous patterns (backward compatibility).
   migration-check:
     name: Migration Safety
@@ -43,6 +42,20 @@ jobs:
       - run: npm ci
       - run: npx svelte-kit sync
       - run: npx svelte-check --threshold warning
+
+  # Run Prettier and ESLint (fails on any warning).
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx svelte-kit sync
+      - run: npm run lint
 
   # Run unit and E2E tests.
   test:
