@@ -38,14 +38,14 @@
 		"husky": "^9.1.7",
 		"postgres": "^3.4.9",
 		"prettier": "^3.8.3",
-		"prettier-plugin-svelte": "^3.5.2",
-		"svelte": "^5.55.8",
+		"prettier-plugin-svelte": "^4.0.0",
+		"svelte": "^5.55.9",
 		"svelte-check": "^4.4.8",
 		"tsx": "^4.22.3",
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.59.4",
 		"vite": "^8.0.13",
-		"vitest": "^4.1.6"
+		"vitest": "^4.1.7"
 	},
 	"dependencies": {
 		"@iconify/svelte": "^5.2.1",
