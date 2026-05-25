@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.2](https://github.com/encryption4all/postguard-business/compare/v1.3.1...v1.3.2) (2026-05-25)
+
+
+### Bug Fixes
+
+* log DNS resolver errors and differentiate by code ([#90](https://github.com/encryption4all/postguard-business/issues/90)) ([d7023c4](https://github.com/encryption4all/postguard-business/commit/d7023c48fe635a3ad45b6dca0a2a65502c260d20)), closes [#88](https://github.com/encryption4all/postguard-business/issues/88)
+* reject unknown fieldName in approveChangeRequest ([#91](https://github.com/encryption4all/postguard-business/issues/91)) ([3d9e41a](https://github.com/encryption4all/postguard-business/commit/3d9e41a60920eb2671a054af63e1932214c576ad)), closes [#87](https://github.com/encryption4all/postguard-business/issues/87)
+* unify duplicate-key error detection into single helper ([#92](https://github.com/encryption4all/postguard-business/issues/92)) ([f1bfad2](https://github.com/encryption4all/postguard-business/commit/f1bfad2c73587a6dfb6805ec716fce010b14908b)), closes [#89](https://github.com/encryption4all/postguard-business/issues/89)
+
 ## [1.3.1](https://github.com/encryption4all/postguard-business/compare/v1.3.0...v1.3.1) (2026-05-16)
 
 ### Bug Fixes
