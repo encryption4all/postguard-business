@@ -2,6 +2,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { error, fail } from '@sveltejs/kit';
 import { isEnabled } from '$lib/feature-flags';
 import { listOrgUsers, addUser, removeUser, setContactPerson } from '$lib/server/services/users';
+import { isUniqueViolation } from '$lib/server/services/errors';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	if (!isEnabled('portalMembers')) error(404, 'Not found');
@@ -31,7 +32,7 @@ export const actions: Actions = {
 		try {
 			await addUser(orgId, email, fullName, phone);
 		} catch (err: unknown) {
-			if (err instanceof Error && err.message.includes('unique')) {
+			if (isUniqueViolation(err)) {
 				return fail(409, { error: 'A user with this email already exists' });
 			}
 			throw err;
