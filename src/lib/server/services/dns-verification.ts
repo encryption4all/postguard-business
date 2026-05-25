@@ -62,11 +62,24 @@ export async function verifyDns(orgId: string): Promise<{
 				error: `TXT record "${record.txtRecord}" not found in DNS for ${record.domain}`
 			};
 		}
-	} catch {
+	} catch (err) {
+		const code = (err as NodeJS.ErrnoException)?.code;
+		console.error('[dns-verification] resolve failed', {
+			orgId,
+			domain: record.domain,
+			code,
+			message: err instanceof Error ? err.message : String(err)
+		});
 		await db
 			.update(dnsVerifications)
 			.set({ lastCheckedAt: new Date() })
 			.where(eq(dnsVerifications.id, record.id));
-		return { verified: false, error: `Could not resolve DNS for ${record.domain}` };
+		const userMsg =
+			code === 'ENOTFOUND'
+				? `Domain ${record.domain} not found`
+				: code === 'ENODATA'
+					? `No TXT records found for ${record.domain}`
+					: `Could not resolve DNS for ${record.domain}`;
+		return { verified: false, error: userMsg };
 	}
 }
