@@ -11,6 +11,7 @@ import {
 	addUserToOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
+import { InvalidChangeRequestFieldError } from '$lib/server/services/admin-change-requests';
 import { setImpersonation } from '$lib/server/auth/session';
 import { isEnabled } from '$lib/feature-flags';
 
@@ -35,7 +36,15 @@ export const actions: Actions = {
 
 		if (!requestId) return fail(400, { error: 'Missing request ID' });
 
-		const req = await approveChangeRequest(requestId, adminId, reviewNotes);
+		let req;
+		try {
+			req = await approveChangeRequest(requestId, adminId, reviewNotes);
+		} catch (err) {
+			if (err instanceof InvalidChangeRequestFieldError) {
+				return fail(400, { error: 'invalid_field', fieldName: err.fieldName });
+			}
+			throw err;
+		}
 		if (req) {
 			await logAdminAction(
 				adminId,

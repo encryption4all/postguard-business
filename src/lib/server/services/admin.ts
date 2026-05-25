@@ -8,7 +8,8 @@ import {
 	adminAccounts,
 	sessions
 } from '$lib/server/db/schema';
-import { eq, desc, and, isNull, or, count, sql } from 'drizzle-orm';
+import { eq, desc, and, isNull, or, count } from 'drizzle-orm';
+import { isApprovableField, InvalidChangeRequestFieldError } from './admin-change-requests';
 
 export async function logAdminAction(
 	adminId: string,
@@ -87,20 +88,14 @@ export async function approveChangeRequest(
 	if (!reqs[0]) return null;
 	const req = reqs[0];
 
-	// Apply the change to the organization
-	const fieldMap: Record<string, string> = {
-		name: 'name',
-		domain: 'domain',
-		signingEmail: 'signing_email',
-		kvkNumber: 'kvk_number'
-	};
-
-	if (fieldMap[req.fieldName]) {
-		// Use raw SQL for dynamic column update
-		await db.execute(
-			sql`UPDATE organizations SET ${sql.raw(fieldMap[req.fieldName])} = ${req.newValue}, updated_at = NOW() WHERE id = ${req.orgId}`
-		);
+	if (!isApprovableField(req.fieldName)) {
+		throw new InvalidChangeRequestFieldError(req.fieldName);
 	}
+
+	await db
+		.update(organizations)
+		.set({ [req.fieldName]: req.newValue, updatedAt: new Date() })
+		.where(eq(organizations.id, req.orgId));
 
 	await db
 		.update(changeRequests)
