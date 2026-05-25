@@ -12,6 +12,7 @@ import {
 	logAdminAction
 } from '$lib/server/services/admin';
 import { setImpersonation } from '$lib/server/auth/session';
+import { isUniqueViolation } from '$lib/server/services/errors';
 import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -179,9 +180,7 @@ export const actions: Actions = {
 			);
 			return { userAdded: true, addedUserName: fullName };
 		} catch (err: unknown) {
-			const msg = err instanceof Error ? err.message : '';
-			const cause = (err as { cause?: { message?: string } })?.cause?.message ?? '';
-			if (`${msg}\n${cause}`.match(/duplicate key|unique/i)) {
+			if (isUniqueViolation(err)) {
 				return fail(409, {
 					addUserErrors: { email: 'addUser_duplicate_email' } as Record<string, string>,
 					addUserValues: { email, fullName, phone }

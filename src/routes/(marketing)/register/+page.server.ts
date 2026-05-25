@@ -4,6 +4,7 @@ import { db } from '$lib/server/db';
 import { organizations, users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { isEnabled } from '$lib/feature-flags';
+import { isUniqueViolation } from '$lib/server/services/errors';
 import { error } from '@sveltejs/kit';
 
 export function load() {
@@ -74,14 +75,7 @@ export const actions: Actions = {
 				.set({ contactUserId: user.id })
 				.where(eq(organizations.id, org.id));
 		} catch (err: unknown) {
-			const errStr = String(err instanceof Error ? (err.stack ?? err.message) : err);
-			const cause = (err as { cause?: { message?: string } } | null)?.cause;
-			const causeStr = cause ? String(cause.message ?? cause) : '';
-			if (
-				errStr.includes('unique') ||
-				errStr.includes('duplicate key') ||
-				causeStr.includes('duplicate key')
-			) {
+			if (isUniqueViolation(err)) {
 				return fail(409, {
 					errors: { domain: 'This domain is already registered' } as Record<string, string>,
 					values: { name }

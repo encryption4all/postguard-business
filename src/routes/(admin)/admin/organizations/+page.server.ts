@@ -6,6 +6,7 @@ import {
 	createOrganization,
 	logAdminAction
 } from '$lib/server/services/admin';
+import { isUniqueViolation } from '$lib/server/services/errors';
 import { isEnabled } from '$lib/feature-flags';
 
 export const load: PageServerLoad = async ({ url }) => {
@@ -45,7 +46,7 @@ export const actions: Actions = {
 			);
 			return { created: true, createdName: values.name };
 		} catch (err: unknown) {
-			if (isDuplicateKeyError(err)) {
+			if (isUniqueViolation(err)) {
 				return fail(409, {
 					createErrors: { domain: 'create_duplicate_domain' } as Record<string, string>,
 					createValues: values
@@ -93,17 +94,4 @@ function validateCreateInput(input: CreateInput): Record<string, string> {
 	if (!input.signingEmail) errors.signingEmail = 'create_required_email';
 	else if (!EMAIL_RE.test(input.signingEmail)) errors.signingEmail = 'create_invalid_email';
 	return errors;
-}
-
-function errMessage(value: unknown): string {
-	if (value instanceof Error) return value.message;
-	if (typeof value === 'string') return value;
-	return '';
-}
-
-function isDuplicateKeyError(err: unknown): boolean {
-	const top = errMessage(err);
-	const cause = errMessage((err as { cause?: unknown })?.cause);
-	const haystack = `${top}\n${cause}`;
-	return haystack.includes('duplicate key') || haystack.includes('unique');
 }
