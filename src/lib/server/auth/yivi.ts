@@ -1,8 +1,8 @@
-import { env } from '$env/dynamic/private';
+import { config } from '$lib/server/config';
 
-export const YIVI_SERVER_URL = env.YIVI_SERVER_URL ?? 'http://localhost:8088';
-export const YIVI_SERVER_TOKEN = env.YIVI_SERVER_TOKEN ?? '';
-const USE_DEMO_ATTRS = env.YIVI_DEMO_ATTRIBUTES === 'true';
+export const YIVI_SERVER_URL = config.YIVI_SERVER_URL;
+export const YIVI_SERVER_TOKEN = config.YIVI_SERVER_TOKEN;
+const USE_DEMO_ATTRS = config.YIVI_DEMO_ATTRIBUTES;
 
 // Production attributes (pbdf scheme)
 const PROD_ATTR = {

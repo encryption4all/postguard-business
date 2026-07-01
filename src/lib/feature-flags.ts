@@ -1,5 +1,5 @@
 import { dev } from '$app/environment';
-import { env } from '$env/dynamic/private';
+import { config } from '$lib/server/config';
 
 export type FeatureFlag =
 	| 'pricingPage'
@@ -30,17 +30,17 @@ export const FLAG_LABELS: Record<FeatureFlag, string> = {
 
 /** Flags from environment variables (immutable, set at startup). */
 const envFlags: Record<FeatureFlag, boolean> = {
-	pricingPage: env.FF_PRICING_PAGE === 'true',
-	registration: env.FF_REGISTRATION === 'true',
-	portalApiKeys: env.FF_PORTAL_API_KEYS === 'true',
-	portalOrgInfo: env.FF_PORTAL_ORG_INFO === 'true',
-	portalEmailLog: env.FF_PORTAL_EMAIL_LOG === 'true',
-	portalDns: env.FF_PORTAL_DNS === 'true',
-	portalMembers: env.FF_PORTAL_MEMBERS === 'true',
-	adminPanel: env.FF_ADMIN_PANEL === 'true',
-	adminOrgStatus: env.FF_ADMIN_ORG_STATUS === 'true',
-	adminAuditLog: env.FF_ADMIN_AUDIT_LOG === 'true',
-	adminImpersonation: env.FF_ADMIN_IMPERSONATION === 'true'
+	pricingPage: config.FF_PRICING_PAGE,
+	registration: config.FF_REGISTRATION,
+	portalApiKeys: config.FF_PORTAL_API_KEYS,
+	portalOrgInfo: config.FF_PORTAL_ORG_INFO,
+	portalEmailLog: config.FF_PORTAL_EMAIL_LOG,
+	portalDns: config.FF_PORTAL_DNS,
+	portalMembers: config.FF_PORTAL_MEMBERS,
+	adminPanel: config.FF_ADMIN_PANEL,
+	adminOrgStatus: config.FF_ADMIN_ORG_STATUS,
+	adminAuditLog: config.FF_ADMIN_AUDIT_LOG,
+	adminImpersonation: config.FF_ADMIN_IMPERSONATION
 };
 
 /** Runtime overrides — only used in dev mode. */
