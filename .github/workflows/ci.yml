@@ -172,6 +172,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write # keyless cosign signing via OIDC
     steps:
       - name: Download digests
         uses: actions/download-artifact@v8
@@ -202,3 +203,61 @@ jobs:
           docker buildx imagetools create \
             $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf 'ghcr.io/${{ github.repository }}@sha256:%s ' *)
+      # Sign only on pushes to main/releases — not PRs. Signing every PR would
+      # record throwaway pr-N images in the public Rekor transparency log and
+      # leave orphan .sig tags in GHCR. The cosign path was smoke-tested on the
+      # PR that introduced it (#118).
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v3
+      - name: Sign the published image (keyless)
+        if: github.event_name != 'pull_request'
+        run: |
+          tag=$(jq -cr '.tags[0]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
+          digest=$(docker buildx imagetools inspect "$tag" --format '{{.Manifest.Digest}}')
+          cosign sign --yes "ghcr.io/${{ github.repository }}@${digest}"
+
+  # Build the runtime image and scan it for OS/dependency vulnerabilities.
+  # Non-blocking for now (exit-code 0): findings surface in the Security tab.
+  # Flip exit-code to 1 to gate once the baseline is clean.
+  image-scan:
+    name: Image Scan
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Build image (amd64) for scanning
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/Dockerfile
+          platforms: linux/amd64
+          load: true
+          tags: postguard-business:scan
+          cache-from: type=gha
+      # Run Trivy from its official image rather than the GitHub Action, which
+      # had a supply-chain compromise advisory (GHSA-69fq-xp46-6x23).
+      - name: Trivy vulnerability scan
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$PWD:/work" \
+            aquasec/trivy:0.72.0 image \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --format sarif \
+            --output /work/trivy-results.sarif \
+            --exit-code 0 \
+            postguard-business:scan
+      - name: Upload Trivy results
+        if: hashFiles('trivy-results.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy
