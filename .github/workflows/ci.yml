@@ -203,9 +203,15 @@ jobs:
           docker buildx imagetools create \
             $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf 'ghcr.io/${{ github.repository }}@sha256:%s ' *)
+      # Sign only on pushes to main/releases — not PRs. Signing every PR would
+      # record throwaway pr-N images in the public Rekor transparency log and
+      # leave orphan .sig tags in GHCR. The cosign path was smoke-tested on the
+      # PR that introduced it (#118).
       - name: Install cosign
+        if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@v3
       - name: Sign the published image (keyless)
+        if: github.event_name != 'pull_request'
         run: |
           tag=$(jq -cr '.tags[0]' <<< "$DOCKER_METADATA_OUTPUT_JSON")
           digest=$(docker buildx imagetools inspect "$tag" --format '{{.Manifest.Digest}}')
@@ -216,6 +222,7 @@ jobs:
   # Flip exit-code to 1 to gate once the baseline is clean.
   image-scan:
     name: Image Scan
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -241,7 +248,7 @@ jobs:
           docker run --rm \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -v "$PWD:/work" \
-            aquasec/trivy:latest image \
+            aquasec/trivy:0.72.0 image \
             --severity HIGH,CRITICAL \
             --ignore-unfixed \
             --format sarif \
@@ -249,7 +256,7 @@ jobs:
             --exit-code 0 \
             postguard-business:scan
       - name: Upload Trivy results
-        if: always()
+        if: hashFiles('trivy-results.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif
