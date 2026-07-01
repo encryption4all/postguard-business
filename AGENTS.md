@@ -102,5 +102,5 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
   locale is carried on `event.locals.locale` and applied in `+layout.ts`.
 - The IRMA/Yivi server is reached only through the server proxy `/irma/[...path]`
   (which injects the auth token); the browser never talks to it directly.
-- A leftover `coverage/` directory can trip `prettier --check` locally — it's
-  git-ignored; don't commit it.
+- A leftover `coverage/` directory (e.g. from running `vitest --coverage`) can
+  trip `prettier --check` locally — delete it, and don't commit it.
