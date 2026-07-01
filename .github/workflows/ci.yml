@@ -234,15 +234,20 @@ jobs:
           load: true
           tags: postguard-business:scan
           cache-from: type=gha
+      # Run Trivy from its official image rather than the GitHub Action, which
+      # had a supply-chain compromise advisory (GHSA-69fq-xp46-6x23).
       - name: Trivy vulnerability scan
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: postguard-business:scan
-          format: sarif
-          output: trivy-results.sarif
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: '0'
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$PWD:/work" \
+            aquasec/trivy:latest image \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --format sarif \
+            --output /work/trivy-results.sarif \
+            --exit-code 0 \
+            postguard-business:scan
       - name: Upload Trivy results
         if: always()
         uses: github/codeql-action/upload-sarif@v3
