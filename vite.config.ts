@@ -43,6 +43,21 @@ export default defineConfig({
 		}
 	},
 	test: {
+		coverage: {
+			provider: 'v8',
+			reporter: ['text-summary', 'text', 'lcov'],
+			reportsDirectory: './coverage',
+			include: ['src/lib/**/*.{ts,js}'],
+			exclude: ['src/lib/**/*.{test,spec}.{js,ts}', 'src/lib/**/*.d.ts'],
+			// Baseline (2026-07) is ~33% stmts / 47% branch / 16% funcs. Thresholds
+			// sit just below to prevent regression; ratchet them up over time.
+			thresholds: {
+				statements: 30,
+				branches: 40,
+				functions: 15,
+				lines: 30
+			}
+		},
 		projects: [
 			{
 				extends: './vite.config.ts',
