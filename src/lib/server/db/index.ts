@@ -6,7 +6,7 @@ import { env } from '$env/dynamic/private';
 if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
 
 // Parse a positive-integer env var, falling back to a default when unset/invalid.
-function intFromEnv(value: string | undefined, fallback: number): number {
+export function intFromEnv(value: string | undefined, fallback: number): number {
 	const parsed = Number(value);
 	return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
