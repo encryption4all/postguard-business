@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const { resolveMock, selectLimitMock, updateWhereMock, dbMock } = vi.hoisted(() => {
+const { resolveMock, selectLimitMock, updateWhereMock, dbMock, loggerMock } = vi.hoisted(() => {
 	const selectLimitMock = vi.fn();
 	const updateWhereMock = vi.fn().mockResolvedValue(undefined);
 	const dbMock = {
@@ -18,11 +18,13 @@ const { resolveMock, selectLimitMock, updateWhereMock, dbMock } = vi.hoisted(() 
 		}),
 		insert: vi.fn()
 	};
+	const loggerMock = { error: vi.fn(), warn: vi.fn(), info: vi.fn(), debug: vi.fn() };
 	return {
 		resolveMock: vi.fn(),
 		selectLimitMock,
 		updateWhereMock,
-		dbMock
+		dbMock,
+		loggerMock
 	};
 });
 
@@ -40,6 +42,8 @@ vi.mock('drizzle-orm', () => ({
 	eq: (a: unknown, b: unknown) => ({ a, b })
 }));
 
+vi.mock('$lib/server/logger', () => ({ logger: loggerMock }));
+
 import { verifyDns } from '$lib/server/services/dns-verification';
 
 const record = {
@@ -53,19 +57,18 @@ beforeEach(() => {
 	resolveMock.mockReset();
 	selectLimitMock.mockReset();
 	updateWhereMock.mockClear();
+	loggerMock.error.mockClear();
 	selectLimitMock.mockResolvedValue([record]);
 });
 
 describe('verifyDns', () => {
 	it('returns verified: true when the TXT record matches', async () => {
 		resolveMock.mockResolvedValueOnce([[record.txtRecord]]);
-		const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 		const result = await verifyDns('org-1');
 
 		expect(result).toEqual({ verified: true });
-		expect(errSpy).not.toHaveBeenCalled();
-		errSpy.mockRestore();
+		expect(loggerMock.error).not.toHaveBeenCalled();
 	});
 
 	it('returns the "not found in DNS" message when no TXT matches', async () => {
@@ -84,52 +87,46 @@ describe('verifyDns', () => {
 			code: 'ENOTFOUND'
 		});
 		resolveMock.mockRejectedValueOnce(enotfound);
-		const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 		const result = await verifyDns('org-1');
 
 		expect(result.verified).toBe(false);
 		expect(result.error).toBe(`Domain ${record.domain} not found`);
-		expect(errSpy).toHaveBeenCalledTimes(1);
-		expect(errSpy.mock.calls[0][1]).toMatchObject({
+		expect(loggerMock.error).toHaveBeenCalledTimes(1);
+		expect(loggerMock.error.mock.calls[0][0]).toMatchObject({
 			orgId: 'org-1',
 			domain: record.domain,
 			code: 'ENOTFOUND'
 		});
 		expect(updateWhereMock).toHaveBeenCalledTimes(1);
-		errSpy.mockRestore();
 	});
 
 	it('returns a "no TXT records" message and logs when resolve throws ENODATA', async () => {
 		const enodata = Object.assign(new Error('queryTxt ENODATA example.com'), { code: 'ENODATA' });
 		resolveMock.mockRejectedValueOnce(enodata);
-		const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 		const result = await verifyDns('org-1');
 
 		expect(result.verified).toBe(false);
 		expect(result.error).toBe(`No TXT records found for ${record.domain}`);
-		expect(errSpy).toHaveBeenCalledTimes(1);
-		expect(errSpy.mock.calls[0][1]).toMatchObject({ code: 'ENODATA' });
-		errSpy.mockRestore();
+		expect(loggerMock.error).toHaveBeenCalledTimes(1);
+		expect(loggerMock.error.mock.calls[0][0]).toMatchObject({ code: 'ENODATA' });
 	});
 
 	it('falls back to the generic message and logs when resolve throws a plain Error', async () => {
 		resolveMock.mockRejectedValueOnce(new Error('something else'));
-		const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 		const result = await verifyDns('org-1');
 
 		expect(result.verified).toBe(false);
 		expect(result.error).toBe(`Could not resolve DNS for ${record.domain}`);
-		expect(errSpy).toHaveBeenCalledTimes(1);
-		expect(errSpy.mock.calls[0][1]).toMatchObject({
+		expect(loggerMock.error).toHaveBeenCalledTimes(1);
+		expect(loggerMock.error.mock.calls[0][0]).toMatchObject({
 			orgId: 'org-1',
 			domain: record.domain,
-			message: 'something else'
+			err: 'something else'
 		});
 		expect(updateWhereMock).toHaveBeenCalledTimes(1);
-		errSpy.mockRestore();
 	});
 
 	it('returns the "no verification record" message when none exists for the org', async () => {
