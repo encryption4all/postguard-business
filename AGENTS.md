@@ -49,8 +49,9 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
 ## Config
 
 - Read env via `$env/dynamic/private` (server) — never hardcode.
-- **Feature flags** are `FF_*` env vars resolved in `src/lib/server/feature-flags.ts`;
-  in dev they can also be toggled at runtime from the admin settings page.
+- **Feature flags** are `FF_*` env vars resolved in `src/lib/feature-flags.ts`
+  (imported as `$lib/feature-flags`); in dev they can also be toggled at runtime
+  from the admin settings page.
 - Required vars fail fast at startup (e.g. `DATABASE_URL`).
 
 ## Database & migrations
@@ -74,8 +75,10 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
 - **Demo vs prod attributes**: `YIVI_DEMO_ATTRIBUTES=true` uses the `irma-demo`
   scheme; unset uses the `pbdf` production scheme.
 - **API keys** are SHA-256-hashed; the plaintext prefix is shown once at creation.
-- Security headers + a report-only **CSP** are set in `hooks.server.ts`; CSP
-  violations post to `/api/csp-report`.
+- Non-CSP security headers (X-Frame-Options, X-Content-Type-Options,
+  Referrer-Policy, Permissions-Policy) are set in `hooks.server.ts`. The
+  report-only **CSP** is configured in `svelte.config.js` (`kit.csp.reportOnly`)
+  and posts violations to `/api/csp-report`.
 - **Report vulnerabilities privately** — see [`SECURITY.md`](SECURITY.md), not public issues.
 
 ## Testing
@@ -83,8 +86,6 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
 - Unit tests: `tests/unit/**` (and colocated `*.test.ts`), node env. Mock
   server deps with `vi.mock` + `vi.hoisted` (see `tests/unit/dns-verification.test.ts`).
 - E2E: `tests/e2e/**/*.e2e.ts` (Playwright). CI runs both against a real Postgres.
-- Coverage is gated (`vitest --coverage`) over `src/lib/**` (migrations excluded);
-  keep it above the floor in `vite.config.ts` and ratchet it up when you can.
 
 ## CI / releases
 
