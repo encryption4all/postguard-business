@@ -3,6 +3,7 @@ import { dnsVerifications } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { randomBytes } from 'crypto';
 import { resolve } from 'dns/promises';
+import { logger } from '$lib/server/logger';
 
 export async function getOrCreateDnsVerification(orgId: string, domain: string) {
 	const existing = await db
@@ -64,12 +65,15 @@ export async function verifyDns(orgId: string): Promise<{
 		}
 	} catch (err) {
 		const code = (err as NodeJS.ErrnoException)?.code;
-		console.error('[dns-verification] resolve failed', {
-			orgId,
-			domain: record.domain,
-			code,
-			message: err instanceof Error ? err.message : String(err)
-		});
+		logger.error(
+			{
+				orgId,
+				domain: record.domain,
+				code,
+				err: err instanceof Error ? err.message : String(err)
+			},
+			'dns resolve failed'
+		);
 		await db
 			.update(dnsVerifications)
 			.set({ lastCheckedAt: new Date() })

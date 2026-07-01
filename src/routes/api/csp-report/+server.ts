@@ -1,9 +1,9 @@
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
 	try {
 		const text = await request.text();
-		console.warn('[csp-report]', text.slice(0, 4096));
+		locals.log.warn({ report: text.slice(0, 4096) }, 'csp violation');
 	} catch {
 		// ignore — best-effort
 	}

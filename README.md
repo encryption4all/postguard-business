@@ -323,3 +323,7 @@ Internet → Ingress → business-svc:3000 → business-deployment
 ```
 
 The IRMA/Yivi server is accessed through SvelteKit's backend proxy (`/irma/[...path]`), which adds the authentication token. The browser never communicates directly with the IRMA server.
+
+## License
+
+[MIT](LICENSE) © Encryption 4 All
