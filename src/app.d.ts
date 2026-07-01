@@ -14,6 +14,8 @@ declare global {
 				yiviAttributes: Record<string, string>;
 			} | null;
 			locale: string;
+			requestId: string;
+			log: import('$lib/server/logger').Logger;
 		}
 		// interface PageData {}
 		// interface PageState {}
