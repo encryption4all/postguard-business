@@ -32,4 +32,15 @@ describe('safeRedirect', () => {
 		expect(safeRedirect('/\\evil.example')).toBe(DEFAULT_REDIRECT);
 		expect(safeRedirect('/\\/evil.example')).toBe(DEFAULT_REDIRECT);
 	});
+
+	it('rejects control chars browsers strip before navigating (TAB/LF/CR)', () => {
+		// Browsers drop these, so `/\t/evil.example` etc. would normalise to
+		// `//evil.example` (off-origin) if they slipped past the slash checks.
+		expect(safeRedirect('/\t/evil.example')).toBe(DEFAULT_REDIRECT);
+		expect(safeRedirect('/\n/evil.example')).toBe(DEFAULT_REDIRECT);
+		expect(safeRedirect('/\r/evil.example')).toBe(DEFAULT_REDIRECT);
+		expect(safeRedirect('/\t\\evil.example')).toBe(DEFAULT_REDIRECT);
+		expect(safeRedirect('\t//evil.example')).toBe(DEFAULT_REDIRECT);
+		expect(safeRedirect('/foo\nbar')).toBe(DEFAULT_REDIRECT);
+	});
 });
