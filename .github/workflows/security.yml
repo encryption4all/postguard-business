@@ -9,13 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  # Flags a PR that introduces a dependency with a high+ advisory.
+  # Fails a PR that introduces a dependency with a high+ advisory.
   # Delta-based: gates NEW risk without tripping on pre-existing debt.
-  #
-  # NON-BLOCKING for now: this repo has the GitHub Dependency graph disabled,
-  # so the action cannot run yet. An admin must enable it under
-  # Settings → Code security → Dependency graph. Once enabled, remove
-  # `continue-on-error` below to turn this into a real gate.
   dependency-review:
     name: Dependency Review
     if: github.event_name == 'pull_request'
@@ -26,7 +21,6 @@ jobs:
 
       - name: Dependency review
         uses: actions/dependency-review-action@v4
-        continue-on-error: true
         with:
           fail-on-severity: high
 
