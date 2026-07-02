@@ -8,14 +8,16 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import { safeRedirect } from './safe-redirect';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
 
-	const redirectTo = $derived(page.url.searchParams.get('redirect') ?? '/portal/dashboard');
+	const redirectTo = $derived(page.url.searchParams.get('redirect'));
 
 	function handleSuccess() {
-		goto(resolve(redirectTo as '/portal/dashboard'));
+		// The `redirect` param is attacker-controlled — validate it before navigating.
+		goto(resolve(safeRedirect(redirectTo) as '/portal/dashboard'));
 	}
 </script>
 
