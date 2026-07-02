@@ -1,9 +1,7 @@
 @use '$lib/assets/fonts/overpass-webfont/_overpass' as overpass;
 
 @include overpass.print-overpass-font-face(
-	$styles: (
-		normal
-	),
+	$styles: (normal),
 	$path_to_dist: '$lib/assets/fonts/overpass-webfont/'
 );
 
