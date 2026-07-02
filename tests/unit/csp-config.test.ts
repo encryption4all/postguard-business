@@ -10,9 +10,9 @@ describe('SvelteKit CSP configuration', () => {
 		expect(csp).toBeDefined();
 	});
 
-	it('uses Report-Only mode for the initial rollout', () => {
-		expect(csp?.reportOnly).toBeDefined();
-		expect(csp?.directives).toBeUndefined();
+	it('enforces the policy (directives), not report-only mode', () => {
+		expect(csp?.directives).toBeDefined();
+		expect(csp?.reportOnly).toBeUndefined();
 	});
 
 	it('uses auto mode so SvelteKit picks nonce vs hash per route', () => {
@@ -20,7 +20,7 @@ describe('SvelteKit CSP configuration', () => {
 	});
 
 	it('locks down framing, base-uri, form-action and object-src', () => {
-		const r = csp!.reportOnly!;
+		const r = csp!.directives!;
 		expect(r['frame-ancestors']).toEqual(['none']);
 		expect(r['base-uri']).toEqual(['self']);
 		expect(r['form-action']).toEqual(['self']);
@@ -28,7 +28,7 @@ describe('SvelteKit CSP configuration', () => {
 	});
 
 	it('keeps script-src restricted to same-origin (no unsafe-inline / unsafe-eval)', () => {
-		const scriptSrc = csp!.reportOnly!['script-src'] ?? [];
+		const scriptSrc = csp!.directives!['script-src'] ?? [];
 		expect(scriptSrc).toContain('self');
 		expect(scriptSrc).not.toContain('unsafe-inline');
 		expect(scriptSrc).not.toContain('unsafe-eval');
@@ -39,18 +39,18 @@ describe('SvelteKit CSP configuration', () => {
 		const inlineScriptBody = appHtml.match(/<script>([\s\S]*?)<\/script>/)?.[1];
 		expect(inlineScriptBody, 'src/app.html should contain an inline <script>').toBeDefined();
 		const expected = `sha256-${createHash('sha256').update(inlineScriptBody!).digest('base64')}`;
-		expect(csp!.reportOnly!['script-src']).toContain(expected);
+		expect(csp!.directives!['script-src']).toContain(expected);
 	});
 
 	it('allows data: images for inline icon SVGs', () => {
-		expect(csp!.reportOnly!['img-src']).toContain('data:');
+		expect(csp!.directives!['img-src']).toContain('data:');
 	});
 
 	it('allows the Iconify API in connect-src for @iconify/svelte icon loading', () => {
-		expect(csp!.reportOnly!['connect-src']).toContain('https://api.iconify.design');
+		expect(csp!.directives!['connect-src']).toContain('https://api.iconify.design');
 	});
 
 	it('points violations at the in-app CSP report sink', () => {
-		expect(csp!.reportOnly!['report-uri']).toEqual(['/api/csp-report']);
+		expect(csp!.directives!['report-uri']).toEqual(['/api/csp-report']);
 	});
 });
