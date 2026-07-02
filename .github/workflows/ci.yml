@@ -82,7 +82,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx vitest run
+      - run: npx vitest run --coverage
         env:
           DATABASE_URL: postgres://testuser:testpassword@localhost:5432/postguard_business_test
       - run: npx playwright install --with-deps

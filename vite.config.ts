@@ -43,6 +43,30 @@ export default defineConfig({
 		}
 	},
 	test: {
+		coverage: {
+			provider: 'v8',
+			reporter: ['text-summary', 'text', 'lcov'],
+			reportsDirectory: './coverage',
+			include: ['src/lib/**/*.{ts,js}'],
+			exclude: [
+				'src/lib/**/*.{test,spec}.{js,ts}',
+				'src/lib/**/*.d.ts',
+				// One-off DB migration scripts aren't unit-tested; excluding them keeps
+				// the gate focused on testable lib code (and stops a future untested
+				// migration from tripping it on an unrelated PR).
+				'src/lib/server/migrations/**'
+			],
+			// Baseline (2026-07, migrations excluded) is ~20% stmts / 30% branch /
+			// 9% funcs / 19% lines. Thresholds sit a couple points below to lock in a
+			// no-regression floor without tripping on the current state; ratchet up
+			// as lib coverage improves.
+			thresholds: {
+				statements: 18,
+				branches: 27,
+				functions: 7,
+				lines: 17
+			}
+		},
 		projects: [
 			{
 				extends: './vite.config.ts',
