@@ -27,7 +27,10 @@ const config = {
 		adapter: adapter({ out: 'build' }),
 		csp: {
 			mode: 'auto',
-			reportOnly: {
+			// Enforced CSP (previously report-only while issue #60 collected violations).
+			// `report-uri` is retained so browsers still POST blocked-violation reports
+			// to /api/csp-report even though the policy is now enforced.
+			directives: {
 				'default-src': ['self'],
 				'script-src': ['self', inlineScriptHash],
 				'style-src': ['self', 'unsafe-inline'],

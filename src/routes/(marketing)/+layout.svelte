@@ -11,7 +11,7 @@
 	showRegister={data.marketingFlags.registration}
 	auth={data.auth}
 />
-<main>
+<main id="main-content">
 	{@render children()}
 </main>
 <Footer />
