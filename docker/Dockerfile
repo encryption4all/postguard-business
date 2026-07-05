@@ -7,7 +7,13 @@ COPY static/ static/
 COPY svelte.config.js vite.config.ts tsconfig.json ./
 COPY drizzle/ drizzle/
 COPY scripts/ scripts/
-RUN DATABASE_URL=postgres://build:build@localhost:5432/build npm run build
+# The SvelteKit build validates DATABASE_URL (src/lib/server/config.ts) during
+# the postbuild route-analysis step, but never connects to a database. Pass it
+# as an optional BuildKit secret so it is not persisted in the image. When no
+# secret is supplied (e.g. CI) fall back to a throwaway dummy value.
+RUN --mount=type=secret,id=db_url \
+    DATABASE_URL="$(cat /run/secrets/db_url 2>/dev/null || echo 'postgres://build:build@localhost:5432/build')" \
+    npm run build
 
 FROM node:24-slim
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
