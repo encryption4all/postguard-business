@@ -48,7 +48,14 @@
 					mapping: {
 						sessionPtr: (r) => (r as { sessionPtr: SessionPtr }).sessionPtr,
 						frontendRequest: (r) => (r as { frontendRequest: FrontendRequest }).frontendRequest
-					}
+					},
+					// The result is fetched and verified server-side (via the
+					// requestor token) in the verify step. yivi-client deep-merges a
+					// default result-fetcher over this config, so we must explicitly
+					// disable it — otherwise it hits /session/undefined/result (the
+					// sessionToken is never exposed here), which the proxy allowlist
+					// rejects and yivi.start() then throws on.
+					result: false
 				},
 				state: {
 					serverSentEvents: false,
