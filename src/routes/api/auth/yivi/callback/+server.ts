@@ -1,21 +1,29 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { verifyYiviSession } from '$lib/server/auth/yivi';
+import {
+	verifyYiviSession,
+	parseRequestorTokenCookie,
+	YIVI_RT_COOKIE,
+	YIVI_RT_COOKIE_PATH
+} from '$lib/server/auth/yivi';
 import { createSession, findAdminByAttributes } from '$lib/server/auth/session';
 import { findUserByEmail } from '$lib/server/services/users';
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
-	const body = await request.json();
-	const { irmaSessionToken, type } = body as {
-		irmaSessionToken: string;
-		type: 'org' | 'admin';
-	};
+export const POST: RequestHandler = async ({ cookies }) => {
+	// The requestor token is never sent by the client; it was bound to this
+	// browser server-side when the login session was started. Consume it here.
+	const pending = parseRequestorTokenCookie(cookies.get(YIVI_RT_COOKIE));
+	cookies.delete(YIVI_RT_COOKIE, { path: YIVI_RT_COOKIE_PATH });
 
-	if (!irmaSessionToken || (type !== 'org' && type !== 'admin')) {
-		error(400, 'Missing irmaSessionToken or invalid type');
+	if (!pending || (pending.purpose !== 'login-org' && pending.purpose !== 'login-admin')) {
+		error(400, 'No pending Yivi login session');
 	}
 
-	const result = await verifyYiviSession(irmaSessionToken);
+	// The login kind is fixed by what was disclosed at session start, not by
+	// anything the client sends now.
+	const type: 'org' | 'admin' = pending.purpose === 'login-admin' ? 'admin' : 'org';
+
+	const result = await verifyYiviSession(pending.token);
 
 	if (!result.valid) {
 		error(401, 'Yivi verification failed');

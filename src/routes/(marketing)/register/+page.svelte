@@ -6,9 +6,8 @@
 	import Icon from '@iconify/svelte';
 	import '@privacybydesign/yivi-css';
 	import type { SessionPtr, FrontendRequest } from '@privacybydesign/yivi-core';
-	import type { PageData } from './$types';
 
-	let { data, form }: { data: PageData; form: FormResult | null } = $props();
+	let { form }: { form: FormResult | null } = $props();
 
 	interface FormResult {
 		success?: boolean;
@@ -30,9 +29,6 @@
 			const { YiviWeb } = await import('@privacybydesign/yivi-web');
 			const { YiviClient } = await import('@privacybydesign/yivi-client');
 
-			const attrs = data.yiviAttrs;
-			let irmaToken = '';
-
 			const yivi = new YiviCore({
 				debugging: false,
 				element: '#yivi-register-container',
@@ -40,22 +36,17 @@
 				minimal: true,
 				session: {
 					url: '/irma',
+					// The disclosure session is created server-side with a fixed
+					// request; the client never picks the attributes nor handles the
+					// requestor token.
 					start: {
-						url: (o) => `${o.url}/session`,
+						url: () => '/api/auth/yivi/start',
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							'@context': 'https://irma.app/ld/request/disclosure/v2',
-							disclose: [[[attrs.email]], [[attrs.fullName]], [[attrs.phone]]]
-						})
+						body: JSON.stringify({ purpose: 'register' })
 					},
 					mapping: {
 						sessionPtr: (r) => (r as { sessionPtr: SessionPtr }).sessionPtr,
-						sessionToken: (r) => {
-							const token = (r as { token: string }).token;
-							irmaToken = token;
-							return token;
-						},
 						frontendRequest: (r) => (r as { frontendRequest: FrontendRequest }).frontendRequest
 					}
 				},
@@ -74,12 +65,8 @@
 
 			await yivi.start();
 
-			// Verify the disclosure and get attributes
-			const response = await fetch('/api/auth/yivi/verify', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ irmaSessionToken: irmaToken })
-			});
+			// Verify the disclosure (result fetched server-side via the bound token).
+			const response = await fetch('/api/auth/yivi/verify', { method: 'POST' });
 
 			if (!response.ok) {
 				const err = await response.json();

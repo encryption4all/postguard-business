@@ -1,10 +1,10 @@
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { YIVI_SERVER_URL, YIVI_SERVER_TOKEN } from '$lib/server/auth/yivi';
+import { YIVI_SERVER_URL } from '$lib/server/auth/yivi';
 import { isAllowed } from './allowlist';
 
 const handler: RequestHandler = async ({ params, request }) => {
-	if (!isAllowed(params.path)) {
+	if (!isAllowed(params.path, request.method)) {
 		error(403, 'Forbidden');
 	}
 
@@ -13,7 +13,11 @@ const handler: RequestHandler = async ({ params, request }) => {
 	const headers: Record<string, string> = {};
 	const contentType = request.headers.get('content-type');
 	if (contentType) headers['Content-Type'] = contentType;
-	if (YIVI_SERVER_TOKEN) headers['Authorization'] = YIVI_SERVER_TOKEN;
+	// Forward ONLY the per-session *frontend* token the client already holds.
+	// The privileged requestor token (YIVI_SERVER_TOKEN) is NEVER attached to
+	// these client-reachable endpoints.
+	const authorization = request.headers.get('authorization');
+	if (authorization) headers['Authorization'] = authorization;
 
 	const response = await fetch(url, {
 		method: request.method,
