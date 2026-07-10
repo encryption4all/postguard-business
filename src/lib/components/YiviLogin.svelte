@@ -6,32 +6,23 @@
 
 	let {
 		type = 'org',
-		attrs,
 		onSuccess
 	}: {
 		type: 'org' | 'admin';
-		attrs: { email: string; fullName: string; phone: string };
 		onSuccess: (data: { userType: string }) => void;
 	} = $props();
 
 	let status = $state<'idle' | 'running' | 'success' | 'error'>('idle');
 	let errorMessage = $state('');
-	let irmaToken = $state('');
 
 	async function startYiviFlow() {
 		status = 'running';
 		errorMessage = '';
-		irmaToken = '';
 
 		try {
 			const { YiviCore } = await import('@privacybydesign/yivi-core');
 			const { YiviWeb } = await import('@privacybydesign/yivi-web');
 			const { YiviClient } = await import('@privacybydesign/yivi-client');
-
-			const disclose =
-				type === 'admin'
-					? [[[attrs.email]], [[attrs.fullName]], [[attrs.phone]]]
-					: [[[attrs.email]]];
 
 			const yivi = new YiviCore({
 				debugging: false,
@@ -40,24 +31,26 @@
 				minimal: true,
 				session: {
 					url: '/irma',
+					// The disclosure session is created server-side with a fixed
+					// request — the client can neither pick the attributes nor wield
+					// the requestor token.
 					start: {
-						url: (o) => `${o.url}/session`,
+						url: () => '/api/auth/yivi/start',
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							'@context': 'https://irma.app/ld/request/disclosure/v2',
-							disclose
-						})
+						body: JSON.stringify({ purpose: type === 'admin' ? 'login-admin' : 'login-org' })
 					},
 					mapping: {
 						sessionPtr: (r) => (r as { sessionPtr: SessionPtr }).sessionPtr,
-						sessionToken: (r) => {
-							const token = (r as { token: string }).token;
-							irmaToken = token;
-							return token;
-						},
 						frontendRequest: (r) => (r as { frontendRequest: FrontendRequest }).frontendRequest
-					}
+					},
+					// The result is fetched and verified server-side (via the
+					// requestor token) in the callback. yivi-client deep-merges a
+					// default result-fetcher over this config, so we must explicitly
+					// disable it — otherwise it hits /session/undefined/result (the
+					// sessionToken is never exposed here), which the proxy allowlist
+					// rejects and yivi.start() then throws on.
+					result: false
 				},
 				state: {
 					serverSentEvents: false,
@@ -74,11 +67,9 @@
 
 			await yivi.start();
 
-			const response = await fetch('/api/auth/yivi/callback', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ irmaSessionToken: irmaToken, type })
-			});
+			// The requestor token stays server-side (bound to this browser); the
+			// callback reads it and verifies the disclosure result.
+			const response = await fetch('/api/auth/yivi/callback', { method: 'POST' });
 
 			if (response.ok) {
 				status = 'success';

@@ -7,9 +7,6 @@
 	import logoDark from '$lib/assets/images/logo-wide-dark.svg';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import type { PageData } from './$types';
-
-	let { data }: { data: PageData } = $props();
 
 	function handleSuccess() {
 		goto(resolve('/admin/organizations'));
@@ -38,7 +35,7 @@
 		</p>
 
 		<div class="login-content">
-			<YiviLogin type="admin" attrs={data.yiviAttrs} onSuccess={handleSuccess} />
+			<YiviLogin type="admin" onSuccess={handleSuccess} />
 		</div>
 	</div>
 </section>

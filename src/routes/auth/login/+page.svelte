@@ -9,9 +9,6 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { safeRedirect } from './safe-redirect';
-	import type { PageData } from './$types';
-
-	let { data }: { data: PageData } = $props();
 
 	const redirectTo = $derived(page.url.searchParams.get('redirect'));
 
@@ -44,7 +41,7 @@
 
 		<div class="login-content">
 			<p class="login-hint">{$_('auth.loginHint')}</p>
-			<YiviLogin type="org" attrs={data.yiviAttrs} onSuccess={handleSuccess} />
+			<YiviLogin type="org" onSuccess={handleSuccess} />
 		</div>
 
 		<p class="login-footer">
