@@ -5,7 +5,7 @@
 
 ## Architecture
 - SvelteKit (Svelte 5 runes), `adapter-node` (SSR), TypeScript. Default branch `main`.
-- SCSS + CSS custom properties in `src/lib/global.scss` define the purple business colorway, with a `.dark` class scope for dark-mode overrides on `<html>`.
+- SCSS + CSS custom properties in `src/lib/global.scss` define the navy business colorway, with a `.dark` class scope for dark-mode overrides on `<html>`.
 - Drizzle ORM + postgres.js + PostgreSQL 18.
 - Yivi/IRMA attribute-based auth (`svelte-i18n` for en-US / nl-NL).
 - Feature flags via `FF_*` env vars (`FF_BUSINESS`, `FF_PORTAL_MEMBERS`), default false.
@@ -32,16 +32,16 @@ If verification moves server-side (server-side session start plus an HttpOnly re
 ## Dependency overrides
 Standing transitive vulnerabilities that can't be cleared by bumping the direct dep (it's already at latest):
 - `@sveltejs/kit` pins `cookie ^0.6.0` (vulnerable): override `cookie: ^0.7.2`.
-- `svelte-i18n` and `drizzle-kit` pull vulnerable `esbuild` ranges: override `esbuild: ^0.25.0`.
+- `svelte-i18n` and `@esbuild-kit/core-utils` pull vulnerable `esbuild` ranges: override `esbuild: ^0.25.0`.
 
 Before opening a "bump deps" PR for this repo, confirm the direct dep is not already at its latest published version. An advisory scanner will flag paths that are only reachable transitively, which a version bump can't fix.
 
 ## Color system conventions
-- `--pg-primary` is the accent color (text-on-background, underlines, outlines). In dark mode it's `#a78bfa` so accent text pops on `#0f0a1e`, don't darken it.
-- `--pg-primary-bg` / `--pg-primary-bg-hover` are the purple-background-with-white-text tokens (`#7c3aed` / `#6d28d9` in both themes, tuned for WCAG AA).
-- Rule: any `background: <purple>; color: #fff` pattern must use `var(--pg-primary-bg)`, not `var(--pg-primary)`.
+- `--pg-primary` is the accent color (text-on-background, underlines, outlines): `#1e40af` in light mode, `#93c5fd` in dark mode so accent text pops on the `#0a1428` dark background, don't darken it.
+- `--pg-primary-bg` / `--pg-primary-bg-hover` are the navy-background-with-white-text tokens (`#1e40af` / `#1e3a8a` in both themes, tuned for WCAG AA).
+- Rule: any `background: <navy>; color: #fff` pattern must use `var(--pg-primary-bg)`, not `var(--pg-primary)`.
 - `--pg-primary-contrast` is the hover/pressed variant.
-- Find purple-bg misuse: `grep -rnE "background:\s*var\(--pg-primary\)[;}]" --include="*.svelte" --include="*.scss"`
+- Find navy-bg misuse: `grep -rnE "background:\s*var\(--pg-primary\)[;}]" --include="*.svelte" --include="*.scss"`
 
 ## Accessibility conventions
 - `ThemeSwitcher.svelte` uses radio-buttons-as-toggle with a `.visually-hidden` class. For any icon-only label, add a `.visually-hidden` span with the name and mark the icon `aria-hidden="true"`.
