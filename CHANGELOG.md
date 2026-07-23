@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.4.0](https://github.com/encryption4all/postguard-business/compare/v1.3.1...v1.4.0) (2026-07-23)
+
+
+### Features
+
+* add /readyz readiness probe with database check ([#113](https://github.com/encryption4all/postguard-business/issues/113)) ([36b8dad](https://github.com/encryption4all/postguard-business/commit/36b8dadc387c9431b877c588301d3184e5660669))
+* add structured logging with request correlation ([#115](https://github.com/encryption4all/postguard-business/issues/115)) ([4290278](https://github.com/encryption4all/postguard-business/commit/42902780baac2730975076cbba4dbd3038a62d21))
+* configure explicit Postgres connection pool and timeouts ([#114](https://github.com/encryption4all/postguard-business/issues/114)) ([7d638cb](https://github.com/encryption4all/postguard-business/commit/7d638cb61d8ae306b622c59955a14cfc3f5100f5))
+* validate environment variables at startup with a typed config ([#121](https://github.com/encryption4all/postguard-business/issues/121)) ([e7bc114](https://github.com/encryption4all/postguard-business/commit/e7bc114a3b55c907aeda1f253141581b50317439))
+
+
+### Bug Fixes
+
+* **a11y:** add id=main-content to marketing layout main ([#94](https://github.com/encryption4all/postguard-business/issues/94)) ([096beaa](https://github.com/encryption4all/postguard-business/commit/096beaafffa40952c04e182c9b62170d7d8324e8)), closes [#76](https://github.com/encryption4all/postguard-business/issues/76)
+* **auth:** harden post-login redirect validation ([#125](https://github.com/encryption4all/postguard-business/issues/125)) ([259c5ff](https://github.com/encryption4all/postguard-business/commit/259c5ffd800891fd8f1e7424cfa4333f1aedc980))
+* **csp:** allow Yivi frontend traffic and bundle icons locally ([#133](https://github.com/encryption4all/postguard-business/issues/133)) ([fcb7405](https://github.com/encryption4all/postguard-business/commit/fcb7405a964846fdc800916ceaa9605c2239b6d1))
+* **docker:** pass DATABASE_URL as a BuildKit secret in the build stage ([#128](https://github.com/encryption4all/postguard-business/issues/128)) ([4130229](https://github.com/encryption4all/postguard-business/commit/4130229490295ddd5c679859b2205e3a2c6cdec1))
+* enforce Content-Security-Policy instead of report-only mode ([#126](https://github.com/encryption4all/postguard-business/issues/126)) ([0231588](https://github.com/encryption4all/postguard-business/commit/02315883a36fb51d2a70bf288c88b9a97007d84a)), closes [#124](https://github.com/encryption4all/postguard-business/issues/124)
+* **irma:** harden IRMA proxy request handling ([#130](https://github.com/encryption4all/postguard-business/issues/130)) ([c36994f](https://github.com/encryption4all/postguard-business/commit/c36994f3f250adb1107ade834bd974c1e22db715))
+* log DNS resolver errors and differentiate by code ([#90](https://github.com/encryption4all/postguard-business/issues/90)) ([d7023c4](https://github.com/encryption4all/postguard-business/commit/d7023c48fe635a3ad45b6dca0a2a65502c260d20)), closes [#88](https://github.com/encryption4all/postguard-business/issues/88)
+* reject unknown fieldName in approveChangeRequest ([#91](https://github.com/encryption4all/postguard-business/issues/91)) ([3d9e41a](https://github.com/encryption4all/postguard-business/commit/3d9e41a60920eb2671a054af63e1932214c576ad)), closes [#87](https://github.com/encryption4all/postguard-business/issues/87)
+* unify duplicate-key error detection into single helper ([#92](https://github.com/encryption4all/postguard-business/issues/92)) ([f1bfad2](https://github.com/encryption4all/postguard-business/commit/f1bfad2c73587a6dfb6805ec716fce010b14908b)), closes [#89](https://github.com/encryption4all/postguard-business/issues/89)
+
 ## [1.3.1](https://github.com/encryption4all/postguard-business/compare/v1.3.0...v1.3.1) (2026-05-16)
 
 ### Bug Fixes
