@@ -46,8 +46,10 @@ describe('SvelteKit CSP configuration', () => {
 		expect(csp!.directives!['img-src']).toContain('data:');
 	});
 
-	it('allows the Iconify API in connect-src for @iconify/svelte icon loading', () => {
-		expect(csp!.directives!['connect-src']).toContain('https://api.iconify.design');
+	it('keeps connect-src same-origin only (icons are bundled, Yivi is appended at runtime)', () => {
+		// api.iconify.design must NOT reappear: icons are bundled via $lib/icons.
+		// The Yivi server origin is runtime config, spliced in by hooks.server.ts.
+		expect(csp!.directives!['connect-src']).toEqual(['self']);
 	});
 
 	it('points violations at the in-app CSP report sink', () => {

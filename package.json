@@ -21,11 +21,14 @@
 		"db:migrate": "tsx scripts/migrate.ts",
 		"db:seed": "tsx scripts/seed.ts",
 		"db:studio": "drizzle-kit studio",
-		"db:check": "tsx scripts/check-migrations.ts"
+		"db:check": "tsx scripts/check-migrations.ts",
+		"generate:icons": "tsx scripts/generate-icons.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.1.0",
 		"@eslint/js": "^10.0.1",
+		"@iconify-json/mdi": "^1.2.3",
+		"@iconify/utils": "^3.1.4",
 		"@playwright/test": "^1.61.1",
 		"@sveltejs/adapter-node": "^5.5.7",
 		"@sveltejs/kit": "^2.69.0",
