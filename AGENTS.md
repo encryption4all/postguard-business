@@ -77,8 +77,10 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
 - **API keys** are SHA-256-hashed; the plaintext prefix is shown once at creation.
 - Non-CSP security headers (X-Frame-Options, X-Content-Type-Options,
   Referrer-Policy, Permissions-Policy) are set in `hooks.server.ts`. The
-  report-only **CSP** is configured in `svelte.config.js` (`kit.csp.reportOnly`)
-  and posts violations to `/api/csp-report`.
+  **enforced CSP** is configured in `svelte.config.js` (`kit.csp.directives`)
+  and posts violations to `/api/csp-report`. The Yivi server origin is runtime
+  config, so `hooks.server.ts` appends it to `connect-src` per-response —
+  everything else must stay same-origin.
 - **Report vulnerabilities privately** — see [`SECURITY.md`](SECURITY.md), not public issues.
 
 ## Testing
@@ -100,7 +102,15 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
 - **Don't mutate the global `svelte-i18n` locale in `hooks.server.ts`** — the store
   is process-global and would leak across concurrent requests. The per-request
   locale is carried on `event.locals.locale` and applied in `+layout.ts`.
-- The IRMA/Yivi server is reached only through the server proxy `/irma/[...path]`
-  (which injects the auth token); the browser never talks to it directly.
+- Yivi sessions are created **server-side** (`/api/auth/yivi/start`), but the
+  browser then polls the Yivi server **directly**: the SDK builds its
+  status/cancel URLs from `sessionPtr.u`, which points at the Yivi server's
+  public origin (allowed in `connect-src` at runtime, see above). The
+  `/irma/[...path]` proxy only accepts the per-session frontend endpoints and
+  never attaches the privileged requestor token.
+- **Icons are bundled** — `<Icon icon="mdi:...">` resolves from
+  `src/lib/icons.generated.json`, never from the Iconify API (blocked by CSP).
+  After adding/removing an icon, run `npm run generate:icons` and commit the
+  regenerated JSON (`tests/unit/icons-bundled.test.ts` fails if it is stale).
 - A leftover `coverage/` directory (e.g. from running `vitest --coverage`) can
   trip `prettier --check` locally — delete it, and don't commit it.

@@ -36,8 +36,9 @@ const config = {
 				'style-src': ['self', 'unsafe-inline'],
 				'img-src': ['self', 'data:'],
 				'font-src': ['self'],
-				// @iconify/svelte fetches MDI icon metadata from the Iconify API at runtime.
-				'connect-src': ['self', 'https://api.iconify.design'],
+				// Icons are bundled ($lib/icons), so no Iconify API here. The Yivi
+				// server origin is runtime config and is appended in hooks.server.ts.
+				'connect-src': ['self'],
 				'frame-ancestors': ['none'],
 				'base-uri': ['self'],
 				'form-action': ['self'],

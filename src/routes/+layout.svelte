@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '$lib/global.scss';
+	import '$lib/icons';
 	import { locale } from 'svelte-i18n';
 
 	let { children } = $props();
