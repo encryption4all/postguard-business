@@ -1,9 +1,18 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { resolveSession } from '$lib/server/auth/session';
+import { YIVI_SERVER_URL } from '$lib/server/auth/yivi';
+import { appendConnectSrc } from '$lib/server/csp';
 import { normalizeLocale } from '$lib/i18n';
 import { logger } from '$lib/server/logger';
 
 const REQUEST_ID_MAX = 64;
+
+// The Yivi frontend SDK connects straight to the IRMA server: it builds its
+// status-polling and cancel URLs from `sessionPtr.u`, which points at the
+// server's public origin. That origin is runtime configuration (it differs
+// per environment), so it can't live in the build-time CSP in svelte.config.js
+// and is appended to connect-src per-response instead.
+const YIVI_ORIGIN = new URL(YIVI_SERVER_URL).origin;
 
 // Use a client-supplied X-Request-Id when present (sanitised), otherwise mint
 // one. Keeps correlation across a proxy without trusting arbitrary input.
@@ -39,6 +48,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const start = performance.now();
 	const response = await resolve(event);
 	const durationMs = Math.round(performance.now() - start);
+
+	for (const header of ['content-security-policy', 'content-security-policy-report-only']) {
+		const csp = response.headers.get(header);
+		if (csp) response.headers.set(header, appendConnectSrc(csp, YIVI_ORIGIN));
+	}
 
 	response.headers.set('X-Request-Id', requestId);
 	response.headers.set('X-Frame-Options', 'DENY');
