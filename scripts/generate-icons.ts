@@ -21,6 +21,10 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const srcDir = join(root, 'src');
 const outFile = join(srcDir, 'lib', 'icons.generated.json');
 
+// Matches statically-quoted names only ('mdi:foo' / "mdi:foo"). A dynamically
+// built name (e.g. a `mdi:${x}` template literal) is invisible to this scan
+// AND to the guard test, so it would render blank at runtime — always write
+// icon names as full string literals.
 const ICON_RE = /['"]mdi:([a-z0-9-]+)['"]/g;
 const SCAN_EXTENSIONS = ['.svelte', '.ts', '.js'];
 

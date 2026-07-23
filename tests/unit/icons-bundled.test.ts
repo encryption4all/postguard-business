@@ -16,6 +16,9 @@ const bundled = generated as {
 // blank in production. This test fails when an icon is used in src/ without
 // regenerating the bundle (npm run generate:icons).
 
+// Statically-quoted names only — a `mdi:${x}` template literal evades both
+// this test and the generator scan (see scripts/generate-icons.ts); always
+// write icon names as full string literals.
 const ICON_RE = /['"]mdi:([a-z0-9-]+)['"]/g;
 const SCAN_EXTENSIONS = ['.svelte', '.ts', '.js'];
 
