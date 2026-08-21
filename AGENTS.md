@@ -66,6 +66,10 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
   with a `-- safe:` comment bypasses a specific check — use sparingly.
 - The business portal **shares its Postgres with the PKG server**, so business
   tables are prefixed (e.g. `business_api_keys`, not `api_keys`).
+- **Organizations that predate `0001_add-users-table.sql`** have no `users` row and
+  a NULL `contact_user_id`. They cannot log in until a user row is inserted for
+  them, so anything joining an organization to its contact user has to tolerate
+  that gap.
 
 ## Auth & security
 
@@ -81,6 +85,14 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
   and posts violations to `/api/csp-report`. The Yivi server origin is runtime
   config, so `hooks.server.ts` appends it to `connect-src` per-response —
   everything else must stay same-origin.
+- **A layout load is not an action guard.** Form actions run on POST independently
+  of `+layout.server.ts`, so the redirect in `(admin)/+layout.server.ts` does not
+  stop a non-admin POSTing straight to an admin action. Every action checks
+  `locals.session?.adminId` itself — see
+  `(admin)/admin/organizations/+page.server.ts`.
+- Two gaps are deliberate: the session cookie is `sameSite: 'lax'` (the Yivi login
+  flow needs it), and no HSTS header is set at the app layer — that belongs on the
+  reverse proxy.
 - **Report vulnerabilities privately** — see [`SECURITY.md`](SECURITY.md), not public issues.
 
 ## Testing
@@ -108,9 +120,23 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
   public origin (allowed in `connect-src` at runtime, see above). The
   `/irma/[...path]` proxy only accepts the per-session frontend endpoints and
   never attaches the privileged requestor token.
+- **Keep `result: false` in the Yivi session config.** `@privacybydesign/yivi-client`
+  deep-merges the config over defaults that already include a `result` fetcher, so
+  leaving the key out retains the default instead of disabling it. The client then
+  fetches the result URL itself once a disclosure is `DONE`, the `/irma` allowlist
+  403s it, and `yivi.start()` rejects after a successful scan — with `svelte-check`
+  and the unit tests green, because it only shows up at runtime. Set in
+  `YiviLogin.svelte` and `(marketing)/register/+page.svelte`.
 - **Icons are bundled** — `<Icon icon="mdi:...">` resolves from
   `src/lib/icons.generated.json`, never from the Iconify API (blocked by CSP).
   After adding/removing an icon, run `npm run generate:icons` and commit the
   regenerated JSON (`tests/unit/icons-bundled.test.ts` fails if it is stale).
+- **Icon-only controls need visually-hidden text.** `<Icon>` renders the icon body
+  through `{@html}` and accepts no children and no `title`, so a `<title>` cannot
+  be injected through its props. Mark the icon `aria-hidden="true"` and put the
+  name in a `.visually-hidden` span beside it (see `ThemeSwitcher.svelte`).
+- **Marketing sections should not use `min-height: <N>vh`.** Header and Footer sit
+  outside `<main>` in the marketing layout, so `80vh` plus both overflows many
+  laptop viewports. That layout's `<main>` is a flex column — use `flex: 1`.
 - A leftover `coverage/` directory (e.g. from running `vitest --coverage`) can
   trip `prettier --check` locally — delete it, and don't commit it.
