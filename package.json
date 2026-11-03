@@ -61,7 +61,7 @@
 		"pino": "^10.3.1",
 		"sass": "^1.101.0",
 		"svelte-i18n": "^4.0.1",
-		"zod": "^4.4.3"
+		"zod": "^4.6.6"
 	},
 	"overrides": {
 		"@sveltejs/kit": {
