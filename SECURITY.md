@@ -13,7 +13,7 @@ Instead, use one of these private channels:
 
 1. **GitHub private vulnerability reporting (preferred).** Open a report via the
    repository's **Security** tab → **Report a vulnerability**, or directly at
-   <https://github.com/encryption4all/postguard-business/security/advisories/new>.
+   <https://github.com/privacybydesign/postguard-business/security/advisories/new>.
 2. **Email (fallback).** Send the details to **info@postguard.eu**.
 
 Please include as much of the following as you can:

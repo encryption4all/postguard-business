@@ -217,24 +217,34 @@ docker/
 
 ## CI/CD
 
-### Pipeline (`.github/workflows/ci.yml`)
+### Pipeline
 
-Runs on every push to `main` and on pull requests:
+The workflows build on the shared ones in
+[privacybydesign/github-workflows](https://github.com/privacybydesign/github-workflows).
 
-1. **Migration Safety** — checks SQL migrations for backward-incompatible patterns
-2. **Svelte Check** — TypeScript + Svelte type checking
+**Status checks** (`status-checks.yml`) runs on every pull request and on pushes to `main`. A pull
+request can merge once its final job, `Status checks passed`, is green:
+
+1. **Node** — svelte-check, Prettier and ESLint
+2. **Migration safety** — checks SQL migrations for backward-incompatible patterns
 3. **Tests** — Vitest + Playwright (with PostgreSQL service container)
-4. **Release Please** — creates GitHub releases with semantic versioning (main only)
-5. **Build** — multi-platform Docker images (amd64 + arm64)
-6. **Finalize** — merges into a multi-platform manifest on GHCR
+4. **Secret scan** — TruffleHog on the pushed commits
+5. **Docker** — builds the image and scans it; a fixable critical vulnerability fails the build
+6. **Dependency review** and **workflow lint**
+
+**Delivery** (`delivery.yml`) builds the multi-platform image (amd64 + arm64), scans it, pushes it
+to GHCR and signs it with cosign. **Image rescan** scans the published `edge` image every week,
+and **CodeQL** analyses the code and the workflows.
 
 ### Docker image tags
 
-| Trigger      | Tag     | Example                                           |
-| ------------ | ------- | ------------------------------------------------- |
-| Push to main | `edge`  | `ghcr.io/encryption4all/postguard-business:edge`  |
-| Pull request | `pr-N`  | `ghcr.io/encryption4all/postguard-business:pr-42` |
-| Release      | `X.Y.Z` | `ghcr.io/encryption4all/postguard-business:1.2.0` |
+| Trigger      | Tag     | Example                                            |
+| ------------ | ------- | -------------------------------------------------- |
+| Push to main | `edge`  | `ghcr.io/privacybydesign/postguard-business:edge`  |
+| Release      | `X.Y.Z` | `ghcr.io/privacybydesign/postguard-business:1.5.0` |
+
+Versions up to and including 1.4.0 were published as `ghcr.io/encryption4all/postguard-business`
+and stay available there.
 
 ## Releases
 
@@ -253,14 +263,14 @@ Other prefixes (`chore:`, `docs:`, `refactor:`, `test:`) do not trigger a releas
 ### Release workflow
 
 1. **Write code** using conventional commit messages
-2. **Push to main** — CI builds the `edge` image
+2. **Push to main** — Delivery builds the `edge` image
 3. **Release Please** automatically opens/updates a release PR that:
    - Bumps the version in `package.json`
    - Updates `CHANGELOG.md`
    - Collects all commits since the last release
 4. **Merge the release PR** — this triggers:
    - A GitHub release + git tag
-   - A Docker image tagged with the version (e.g., `1.2.0`)
+   - A Delivery run on that tag, which publishes the image tagged with the version (e.g., `1.5.0`)
 5. **Deploy** — update the image tag in `postguard-ops` and apply Terraform
 
 ### Deploying to staging

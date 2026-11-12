@@ -1,0 +1,146 @@
+# Everything a pull request has to pass. The org ruleset requires the single
+# check "Status checks passed" at the bottom, so jobs can be added or renamed
+# here without touching the ruleset.
+name: Status checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  merge_group:
+  schedule:
+    - cron: '17 6 * * 1' # Mondays: image scan against a fresh vulnerability database
+  workflow_dispatch:
+
+permissions: {}
+
+# A new push to a PR cancels the PR's previous run. Other events get a
+# group of their own (run_id), so they never wait for or cancel each other.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  # svelte-check, then Prettier and ESLint. `check` runs first because it does
+  # the `svelte-kit sync` that lint needs: with install scripts blocked, the
+  # `prepare` script that normally does it never runs.
+  node:
+    uses: privacybydesign/github-workflows/.github/workflows/node-checks.yml@v1
+    permissions:
+      contents: read
+    with:
+      scripts: check lint
+      ignore-scripts: true
+      allowed-scripts: esbuild
+
+  # Check migration files for backward-incompatible patterns.
+  migrations:
+    name: Migration safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx tsx scripts/check-migrations.ts --ci
+
+  # Unit and end-to-end tests against a real Postgres, which the shared Node
+  # workflow cannot provide.
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: postguard_business_test
+        options: >-
+          --health-cmd "pg_isready -U testuser -d postguard_business_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      DATABASE_URL: postgres://testuser:testpassword@localhost:5432/postguard_business_test
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx vitest run --coverage
+      - run: npx playwright install --with-deps
+      - run: npx playwright test
+
+  # Scan the pushed commits for committed secrets.
+  secret-scan:
+    name: Secret scan
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: trufflesecurity/trufflehog@ea68ca03c865c5f324e86e849ced20ed3cf9dbbb # v3.99.8
+        with:
+          extra_args: --results=verified,unknown
+
+  # Build and scan the image without pushing it. A fixable critical fails.
+  docker:
+    if: github.event_name != 'push'
+    uses: privacybydesign/github-workflows/.github/workflows/docker-publish.yml@v1
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+      id-token: write
+      attestations: write
+    with:
+      dockerfile: docker/Dockerfile
+      push-image: false
+
+  dependency-review:
+    uses: privacybydesign/github-workflows/.github/workflows/dependency-review.yml@v1
+    permissions:
+      contents: read
+      pull-requests: write
+
+  workflow-lint:
+    uses: privacybydesign/github-workflows/.github/workflows/workflow-lint.yml@v1
+    permissions:
+      contents: read
+
+  passed:
+    name: Status checks passed
+    if: always()
+    needs: [node, migrations, test, secret-scan, docker, dependency-review, workflow-lint]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: All required jobs succeeded
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if grep -qE '"(failure|cancelled)"' <<< "$RESULTS"; then exit 1; fi

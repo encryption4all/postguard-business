@@ -1,0 +1,36 @@
+# Opens and updates the release PR, and creates the GitHub release and tag when
+# that PR is merged.
+#
+# A release created with GITHUB_TOKEN does not start other workflows, so a
+# `release: published` trigger on Delivery would never fire. workflow_dispatch
+# is exempt from that rule: the second job starts Delivery on the new tag,
+# which publishes the image as :<version>.
+name: Release please
+
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  release-please:
+    uses: privacybydesign/github-workflows/.github/workflows/release-please.yml@v1
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+  publish-release-image:
+    name: Start Delivery on the release tag
+    needs: release-please
+    if: needs.release-please.outputs.release-created == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.release-please.outputs.tag-name }}
+        run: gh workflow run delivery.yml --repo "$GITHUB_REPOSITORY" --ref "$TAG"

@@ -106,8 +106,11 @@ ORM + `postgres.js` on PostgreSQL 18 · Vitest + Playwright · Yivi/IRMA auth.
 - **PR titles must be Conventional Commits** (`feat:`/`fix:`/`docs:`/`ci:`/`chore:`/…) —
   enforced by the `pr-title.yml` check. Releases are automated via release-please.
 - Pre-commit (husky) runs `svelte-check`, `npm run lint`, and `db:check`.
-- CI also runs CodeQL, dependency review, secret scanning, and an image
-  vulnerability scan; published GHCR images are cosign-signed.
+- CI is `status-checks.yml`, built on the shared workflows in
+  `privacybydesign/github-workflows`; the one required check is `Status checks passed`.
+  It also runs dependency review, secret scanning, and an image vulnerability scan
+  that fails on a fixable critical. CodeQL runs separately; published GHCR images
+  are cosign-signed. Third-party actions must be pinned to a commit SHA.
 
 ## Gotchas
 
