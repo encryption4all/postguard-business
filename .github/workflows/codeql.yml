@@ -8,28 +8,14 @@ on:
   schedule:
     - cron: '27 4 * * 1' # Mondays 04:27 UTC
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
-  analyze:
-    name: Analyze
-    runs-on: ubuntu-latest
+  codeql:
+    uses: privacybydesign/github-workflows/.github/workflows/codeql.yml@v1
     permissions:
-      security-events: write
       contents: read
+      security-events: write
       actions: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-          queries: security-extended
-
-      - name: Perform CodeQL analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: '/language:javascript-typescript'
+    with:
+      languages: '["javascript-typescript", "actions"]'
