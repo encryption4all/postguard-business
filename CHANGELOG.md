@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/privacybydesign/postguard-business/compare/v1.4.0...v1.4.1) (2026-11-12)
+
+
+### Bug Fixes
+
+* **ci:** point Dependabot at the docker directory ([#155](https://github.com/privacybydesign/postguard-business/issues/155)) ([c67d24b](https://github.com/privacybydesign/postguard-business/commit/c67d24b1b635ce7c39f5a31be76c6b3639c54e5b))
+
 ## [1.4.0](https://github.com/encryption4all/postguard-business/compare/v1.3.1...v1.4.0) (2026-09-24)
 
 
