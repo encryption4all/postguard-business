@@ -1,4 +1,4 @@
-FROM node:24-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54 AS build
+FROM node:25-slim@sha256:81db02c4b671288a03915da9534dbd54f96d0e7c24d80ccc54f5b36b2e684370 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -26,7 +26,7 @@ RUN rm -rf node_modules/drizzle-kit/node_modules/esbuild \
            node_modules/svelte-i18n/node_modules/esbuild \
            node_modules/svelte-i18n/node_modules/@esbuild
 
-FROM node:24-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
+FROM node:25-slim@sha256:81db02c4b671288a03915da9534dbd54f96d0e7c24d80ccc54f5b36b2e684370
 # The base image lags Debian's security fixes; the image scan fails on a
 # fixable critical, so take the fixes that exist at build time.
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends curl \
