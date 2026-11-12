@@ -53,15 +53,15 @@
 		"vitest": "^4.1.11"
 	},
 	"dependencies": {
-		"@iconify/svelte": "^5.2.2",
-		"@privacybydesign/yivi-client": "^1.0.0",
+		"@iconify/svelte": "^5.2.4",
+		"@privacybydesign/yivi-client": "^1.0.1",
 		"@privacybydesign/yivi-core": "^1.0.0",
 		"@privacybydesign/yivi-css": "^1.0.1",
-		"@privacybydesign/yivi-web": "^1.0.2",
-		"pino": "^10.3.1",
-		"sass": "^1.101.0",
+		"@privacybydesign/yivi-web": "^1.0.3",
+		"pino": "^10.4.0",
+		"sass": "^1.107.1",
 		"svelte-i18n": "^4.0.1",
-		"zod": "^4.4.3"
+		"zod": "^4.6.7"
 	},
 	"overrides": {
 		"@sveltejs/kit": {
